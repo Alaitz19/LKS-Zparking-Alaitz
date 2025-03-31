@@ -7,6 +7,7 @@ public class DataRepository {
     private static DataRepository instance;
     private DataRepository(){
 
+
     }
 
     //Creación de la instancia en caso de que no exista.
