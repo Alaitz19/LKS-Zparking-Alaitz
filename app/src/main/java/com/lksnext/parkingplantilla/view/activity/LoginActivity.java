@@ -1,15 +1,21 @@
 package com.lksnext.parkingplantilla.view.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.lifecycle.ViewModelProvider;
 
 import com.lksnext.parkingplantilla.databinding.ActivityLoginBinding;
 import com.lksnext.parkingplantilla.viewmodel.LoginViewModel;
+import com.lksnext.parkingplantilla.view.activity.BaseActivity;
+import com.lksnext.parkingplantilla.view.activity.MainActivity;
+import com.lksnext.parkingplantilla.view.activity.RegisterActivity;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private ActivityLoginBinding binding;
     private LoginViewModel loginViewModel;
@@ -33,9 +39,30 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         //Acciones a realizar cuando el usuario clica el boton de crear cuenta (se cambia de pantalla)
-        binding.createAccount.setOnClickListener(v -> {
+        binding.btnRegisterButton.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
+        });
+        binding.languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedLanguage = "es"; // Por defecto español
+
+                if (position == 1) {
+                    selectedLanguage = "en";
+                }
+
+                // Guardar idioma en SharedPreferences
+                SharedPreferences prefs = getSharedPreferences("settings", MODE_PRIVATE);
+                prefs.edit().putString("language", selectedLanguage).apply();
+
+                // Reiniciar actividad para aplicar idioma
+                recreate();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         //Observamos la variable logged, la cual nos informara cuando el usuario intente hacer login y se

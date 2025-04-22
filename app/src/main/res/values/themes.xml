@@ -1,23 +1,26 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.ParkingLKS" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/orange</item>
-        <item name="colorPrimaryVariant">@color/orange</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <!-- Primary brand color -->
+        <item name="colorPrimary">#DFD0F8</item>
+        <item name="colorPrimaryVariant">#BFA5E5</item> <!-- tono más oscuro del lila -->
+        <item name="colorOnPrimary">@color/black</item>
+
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">#A0C4FF</item> <!-- azul suave que combina bien -->
+        <item name="colorSecondaryVariant">#89B2FF</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
+
+        <!-- Status bar color -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-        <item name="android:textColorHint">@color/orangeDark</item>
+
+        <!-- Customize your theme here -->
+        <item name="android:textColorHint">#9B8CB6</item> <!-- tono intermedio del lila -->
     </style>
 
     <style name="Theme.ParkingLKS.TextInputLayout">
-        <item name="android:textColorHint">@color/orange</item>
-        <item name="hintTextColor">@color/orangeDark</item>
+        <item name="android:textColorHint">#BFA5E5</item> <!-- tono más oscuro para contraste -->
+        <item name="hintTextColor">#9B8CB6</item>
     </style>
 
 </resources>

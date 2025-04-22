@@ -1,5 +1,33 @@
 <resources>
-    <string name="app_name">ParkingPlantilla</string>
+    <string name="app_name">Zparking</string>
+    <!--Parte de arriba-->
+    <string name="change_language">Cambiar idioma</string>
+    <string-array name="language_options">
+        <item>English</item>
+        <item>Spanish</item>
+        <item>Basque</item>
+        <item>Français</item>
+        <item>Deutsch</item>
+        <item>Chinese</item>
+    </string-array>
+<!--Login-->
+    <string name="label_password">Password</string>
+    <string name="label_email">Email</string>
+    <string name="button_login">Login</string>
+    <string name="text_register">Register</string>
+    <string name="title_welcome">Welcome!</string>
+    <string name="hint_email">Enter your email*</string>
+    <string name="hint_password">Enter your password*</string>
+    <string name="forgot_password"><u>Forgot password?</u></string>
+    <string name ="google_img_description">Boton google</string>
+    <string name ="apple_img_description">Boton apple</string>
+    <string name = "create_account">Create an account</string>"
+
+    <string name="or_text">or</string>
+
+
+
+
 
     <string name="selectDate">Selecciona una fecha</string>
 
