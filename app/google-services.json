@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "315841506138",
-    "project_id": "parkingupinedo",
-    "storage_bucket": "parkingupinedo.appspot.com"
+    "project_number": "399804485494",
+    "project_id": "zparking-alaitz",
+    "storage_bucket": "zparking-alaitz.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:315841506138:android:f0bf95521ba99696c5e163",
+        "mobilesdk_app_id": "1:399804485494:android:725e5c3cf016ccc465b457",
         "android_client_info": {
-          "package_name": "com.lksnext.parkingupinedo"
+          "package_name": "com.lksnext.parkingplantilla"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "315841506138-k1um87oi2pieknfpdq46jl89pjj6phpf.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": ["399804485494-s8nj4m1tn8g5aq4dqq1kfos1bhkd786q.apps.googleusercontent.com"],
       "api_key": [
         {
-          "current_key": "AIzaSyBctHfzFJSw3yZDDtRuzKVf9WthYkw74qM"
+          "current_key": "AIzaSyAsyuJ_ENwyFnadXwTwKHFQobmaexxjG0Q"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "315841506138-k1um87oi2pieknfpdq46jl89pjj6phpf.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

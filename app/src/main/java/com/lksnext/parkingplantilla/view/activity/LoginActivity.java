@@ -1,14 +1,16 @@
 package com.lksnext.parkingplantilla.view.activity;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 
+import android.os.Bundle;
+
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.lksnext.parkingplantilla.databinding.ActivityLoginBinding;
 import com.lksnext.parkingplantilla.viewmodel.LoginViewModel;
 import com.lksnext.parkingplantilla.view.activity.BaseActivity;
@@ -20,6 +22,10 @@ public class LoginActivity extends BaseActivity {
     private ActivityLoginBinding binding;
     private LoginViewModel loginViewModel;
 
+    private GoogleSignInClient googleSignInClient;
+    private FirebaseAuth mAuth;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +36,13 @@ public class LoginActivity extends BaseActivity {
 
         //Asignamos el viewModel de login
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        //forzar teclado
+        binding.emailText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(binding.emailText, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
 
         //Acciones a realizar cuando el usuario clica el boton de login
         binding.loginButton.setOnClickListener(v -> {
@@ -43,27 +56,7 @@ public class LoginActivity extends BaseActivity {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
-        binding.languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedLanguage = "es"; // Por defecto español
 
-                if (position == 1) {
-                    selectedLanguage = "en";
-                }
-
-                // Guardar idioma en SharedPreferences
-                SharedPreferences prefs = getSharedPreferences("settings", MODE_PRIVATE);
-                prefs.edit().putString("language", selectedLanguage).apply();
-
-                // Reiniciar actividad para aplicar idioma
-                recreate();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
 
         //Observamos la variable logged, la cual nos informara cuando el usuario intente hacer login y se
         //cambia de pantalla en caso de login correcto
@@ -77,6 +70,11 @@ public class LoginActivity extends BaseActivity {
                     //Login incorrecto
                 }
             }
+        });
+        //login de google
+        binding.googleSignInButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, GoogleLoginActivity.class);
+            startActivity(intent);
         });
     }
 }

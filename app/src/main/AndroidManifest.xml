@@ -23,6 +23,9 @@
         <activity
             android:name=".view.activity.MainActivity"
             android:exported="true" />
+        <activity
+            android:name=".view.activity.GoogleLoginActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

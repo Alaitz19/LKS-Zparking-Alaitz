@@ -22,9 +22,31 @@
     <string name ="google_img_description">Boton google</string>
     <string name ="apple_img_description">Boton apple</string>
     <string name = "create_account">Create an account</string>"
-
     <string name="or_text">or</string>
+    <!--Recovery-->
+    <string name="reset_password_title">Reset Password</string>
+    <string name="label_phone">Phone</string>
+    <string name="label_code">Code</string>
+    <string name="label_new_password">New Password</string>
+    <string name="label_confirm_password">Confirm Password</string>
+    <string name="send_email_or_sms">Send Email or sms</string>
+    <string name="send_code">Send Code</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="hint_code">Enter your code*</string>
+    <string name="hint_phone">123456789</string>
+    <string name="back_to_login">Back to Login</string>
+    <string name="button_change_password">Change Password</string>
 
+    <string name="hint_new_password">Enter your new password*</string>
+    <string name="hint_confirm_password">Confirm your new password*</string>
+    <string name="password_recovery_success">Password recovery successful</string>
+    <string name="password_recovery_error">Error during password recovery</string>
+    <string name="password_recovery_success_message">A code has been sent to your email or phone</string>
+    <string name="password_recovery_error_message">Please check your email or phone for the code</string>
+
+
+    <!--Oauth-->
+    <string name="default_web_client_id">399804485494-s8nj4m1tn8g5aq4dqq1kfos1bhkd786q.apps.googleusercontent.com</string>
 
 
 
