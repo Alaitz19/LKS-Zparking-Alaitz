@@ -23,6 +23,11 @@
     <string name ="apple_img_description">Boton apple</string>
     <string name = "create_account">Create an account</string>"
     <string name="or_text">or</string>
+
+    <string name="login_error">Login error</string>
+    <string name="login_success">Login successful</string>
+    <string name="login_success_message">Welcome back!</string>
+    <string name="login_error_message">Invalid email or password</string>
     <!--Recovery-->
     <string name="reset_password_title">Reset Password</string>
     <string name="label_phone">Phone</string>

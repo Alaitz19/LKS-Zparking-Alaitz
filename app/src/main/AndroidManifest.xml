@@ -26,6 +26,17 @@
         <activity
             android:name=".view.activity.GoogleLoginActivity"
             android:exported="true" />
+        <activity
+            android:name=".view.activity.PasswordRecoveryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activity.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activity.CodeVerificationActivity"
+            android:exported="false" />
+
+
     </application>
 
 </manifest>
