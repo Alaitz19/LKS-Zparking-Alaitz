@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import androidx.lifecycle.ViewModelProvider;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.lksnext.parkingplantilla.R;
@@ -20,8 +18,6 @@ import com.lksnext.parkingplantilla.viewmodel.LoginViewModel;
 public class LoginActivity extends BaseActivity {
 
     private ActivityLoginBinding binding;
-
-    private GoogleSignInClient googleSignInClient;
     private FirebaseAuth mAuth;
 
 
@@ -34,7 +30,7 @@ public class LoginActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         //Asignamos el viewModel de login
-        LoginViewModel loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        //LoginViewModel loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         //forzar teclado
         binding.emailText.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
@@ -57,24 +53,10 @@ public class LoginActivity extends BaseActivity {
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            // Usuario autenticado correctamente
-                            Toast.makeText(this,getString(R.string.login_success), Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                            mostrarToast(R.string.login_success);
+                            irAMainActivity();
                         } else {
-                            // Manejar el error de autenticación
-                            String errorMessage = task.getException().getMessage();
-                            if (errorMessage != null && errorMessage.contains("The password is invalid")) {
-                                Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
-                            } else if (errorMessage != null && errorMessage.contains("There is no user record corresponding to this identifier")) {
-                                Toast.makeText(this, "Correo electrónico no registrado", Toast.LENGTH_SHORT).show();
-                            } else if (errorMessage != null && errorMessage.contains("The email address is badly formatted")) {
-                                Toast.makeText(this, "Formato de correo electrónico incorrecto", Toast.LENGTH_SHORT).show();
-
-                            }else {
-                                Toast.makeText(this, "Error al iniciar sesión: " + errorMessage, Toast.LENGTH_SHORT).show();
-                            }
+                            manejarErrorDeAutenticacion(task.getException());
                         }
                     });
         });
@@ -99,5 +81,29 @@ public class LoginActivity extends BaseActivity {
             Intent intent = new Intent(LoginActivity.this, GoogleLoginActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void manejarErrorDeAutenticacion(Exception exception) {
+        if (exception != null) {
+            String errorMessage = exception.getMessage();
+            if (errorMessage != null) {
+                Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error de autenticación desconocido", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "Error de autenticación desconocido", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void irAMainActivity() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    private void mostrarToast(int loginSuccess) {
+        Toast.makeText(this, loginSuccess, Toast.LENGTH_SHORT).show();
     }
 }
