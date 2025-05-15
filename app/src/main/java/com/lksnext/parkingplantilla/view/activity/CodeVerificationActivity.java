@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.lksnext.parkingplantilla.R;
 
-public class CodeVerificationActivity extends BaseActivity {
+public class CodeVerificationActivity extends AppCompatActivity {
 
     private EditText inputCode;
     private FirebaseAuth mAuth;

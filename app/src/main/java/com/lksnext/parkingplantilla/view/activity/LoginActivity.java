@@ -2,36 +2,33 @@ package com.lksnext.parkingplantilla.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
-
 import android.os.Bundle;
-
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.databinding.ActivityLoginBinding;
 import com.lksnext.parkingplantilla.viewmodel.LoginViewModel;
 
-
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
-    private FirebaseAuth mAuth;
-
+    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
-        //Asignamos la vista/interfaz login (layout)
+
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //Asignamos el viewModel de login
-        //LoginViewModel loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        //forzar teclado
+        // Iniciar el ViewModel
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
+        // Forzar teclado al entrar en el campo de email
         binding.emailText.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -39,61 +36,47 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        //Acciones a realizar cuando el usuario clica el boton de login
+        // Observador del estado de login
+        loginViewModel.isLogged().observe(this, isLogged -> {
+            if (isLogged == null) return;
+            if (isLogged) {
+                mostrarToast(R.string.login_success);
+                irAMainActivity();
+            } else {
+                mostrarToast(R.string.login_error);
+            }
+        });
+
+        // Botón de login
         binding.loginButton.setOnClickListener(v -> {
             String email = binding.emailText.getText().toString();
             String password = binding.passwordText.getText().toString();
+
             if (email.isEmpty() || password.isEmpty()) {
-                // Validación de campos vacíos
                 Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Verificar si el usuario está en Firebase Authentication
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            mostrarToast(R.string.login_success);
-                            irAMainActivity();
-                        } else {
-                            manejarErrorDeAutenticacion(task.getException());
-                        }
-                    });
+            loginViewModel.loginUser(email, password);
         });
 
-        //Acciones a realizar cuando el usuario clica el boton de crear cuenta (se cambia de pantalla)
+        // Botón de registro
         binding.btnRegisterButton.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
 
-
-
-
+        // Botón de recuperar contraseña
         binding.forgotPasswordButton.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this,  PasswordRecoveryActivity.class);
+            Intent intent = new Intent(LoginActivity.this, PasswordRecoveryActivity.class);
             startActivity(intent);
-                });
+        });
 
-
-        //login de google
+        // Botón de login con Google
         binding.googleSignInButton.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, GoogleLoginActivity.class);
             startActivity(intent);
         });
-    }
-
-    private void manejarErrorDeAutenticacion(Exception exception) {
-        if (exception != null) {
-            String errorMessage = exception.getMessage();
-            if (errorMessage != null) {
-                Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Error de autenticación desconocido", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(this, "Error de autenticación desconocido", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void irAMainActivity() {
@@ -103,7 +86,7 @@ public class LoginActivity extends BaseActivity {
         finish();
     }
 
-    private void mostrarToast(int loginSuccess) {
-        Toast.makeText(this, loginSuccess, Toast.LENGTH_SHORT).show();
+    private void mostrarToast(int messageResId) {
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
 }

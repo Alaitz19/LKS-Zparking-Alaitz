@@ -1,11 +1,13 @@
 package com.lksnext.parkingplantilla.data;
 
 import com.lksnext.parkingplantilla.domain.Callback;
-
+import com.google.firebase.auth.FirebaseAuth;
 public class DataRepository {
 
     private static DataRepository instance;
+    private FirebaseAuth mAuth;
     private DataRepository(){
+        mAuth= FirebaseAuth.getInstance();
 
 
     }
@@ -20,11 +22,13 @@ public class DataRepository {
 
     //Petición del login.
     public void login(String email, String pass, Callback callback){
-        try {
-            //Realizar petición
-            callback.onSuccess();
-        } catch (Exception e){
-            callback.onFailure();
-        }
+        mAuth.signInWithEmailAndPassword(email, pass)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onSuccess();
+                    } else {
+                        callback.onFailure();
+                    }
+                });
     }
 }

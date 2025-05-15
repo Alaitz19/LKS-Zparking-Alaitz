@@ -18,7 +18,7 @@ import com.lksnext.parkingplantilla.R;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class PasswordRecoveryActivity extends BaseActivity {
+public class PasswordRecoveryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
