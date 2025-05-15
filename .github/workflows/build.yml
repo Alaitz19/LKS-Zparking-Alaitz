@@ -37,4 +37,9 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build sonar --info
+        run: ./gradlew build sonarqube \
+          -Dsonar.projectKey=Alaitz19_LKS-Zparking-Alaitz \
+          -Dsonar.organization=alaitz19 \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          --info
