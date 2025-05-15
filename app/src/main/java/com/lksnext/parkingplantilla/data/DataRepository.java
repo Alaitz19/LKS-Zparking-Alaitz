@@ -9,7 +9,6 @@ public class DataRepository {
     private DataRepository(){
         mAuth= FirebaseAuth.getInstance();
 
-
     }
 
     //Creación de la instancia en caso de que no exista.
