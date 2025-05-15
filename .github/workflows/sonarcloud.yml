@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - master
-      -alaitz-front
+      - alaitz-front
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
