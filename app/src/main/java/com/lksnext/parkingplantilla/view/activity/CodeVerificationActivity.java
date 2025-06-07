@@ -24,7 +24,7 @@ public class CodeVerificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_code_verification);
         mAuth = FirebaseAuth.getInstance();
-        inputCode = findViewById(R.id.inputCode);
+        inputCode = findViewById(R.id.codeEditText);
         Button verifyButton = findViewById(R.id.verifyButton);
         TextView resendCode = findViewById(R.id.resendCode);
         Button backButton = findViewById(R.id.backButton);
