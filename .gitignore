@@ -7,6 +7,7 @@ local.properties
 client_secret.json
 secrets.properties
 google-services.json
+.env
 
 # Log/OS Files
 *.log
