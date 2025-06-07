@@ -8,7 +8,13 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.lksnext.parkingplantilla.view.fragment.MainFragment"
-        android:label="@string/fragment_main"
-        tools:layout="@layout/fragment_main">
-    </fragment>
+        android:label="Inicio"
+        tools:layout="@layout/fragment_main" />
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.lksnext.parkingplantilla.view.fragment.MapFragment"
+        android:label="Mapa"
+        tools:layout="@layout/fragment_map" />
+
 </navigation>

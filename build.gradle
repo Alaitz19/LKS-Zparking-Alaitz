@@ -6,20 +6,25 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:8.9.1'
         classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.8.9'
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:6.0.1.5171"
+
+        classpath 'com.google.gms:google-services:4.4.2'
+        classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
     }
 }
-
 plugins {
-    id "org.sonarqube" version "6.0.1.5171"
+    id "org.sonarqube" version "6.2.0.5505"
+
 }
 
-sonarqube {
+sonar {
     properties {
         property "sonar.projectKey", "Alaitz19_LKS-Zparking-Alaitz"
         property "sonar.organization", "alaitz19"
         property "sonar.host.url", "https://sonarcloud.io"
+
     }
+}
+
 
 
 allprojects {
@@ -28,4 +33,6 @@ allprojects {
         mavenCentral()
     }
 }
+
 }
+

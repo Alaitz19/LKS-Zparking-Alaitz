@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            layout="@layout/main_view_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <ImageButton
+            android:id="@+id/buttonAvatar"
+            android:layout_width="263dp"
+            android:layout_height="223dp"
+            android:layout_gravity="center_horizontal"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/generic_avatar" />
+
+        <!-- 1. User Account -->
+        <LinearLayout
+            android:id="@+id/sectionUserAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:id="@+id/headerUserAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="User Account"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="12dp"
+                android:background="#DDDDDD"
+                android:clickable="true"
+                android:focusable="true"
+                android:drawableEnd="@drawable/flecha_abajo"
+                android:drawablePadding="8dp"
+                />
+
+            <LinearLayout
+                android:id="@+id/contentUserAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="12dp"
+                android:background="#F0F0F0">
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 2. Security -->
+        <LinearLayout
+            android:id="@+id/sectionSecurity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:id="@+id/headerSecurity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Security"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="12dp"
+                android:background="#DDDDDD"
+                android:clickable="true"
+                android:focusable="true"
+                android:drawableEnd="@drawable/flecha_abajo"
+                android:drawablePadding="8dp" />
+
+            <LinearLayout
+                android:id="@+id/contentSecurity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="12dp"
+                android:background="#F0F0F0">
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 3. Notifications -->
+        <LinearLayout
+            android:id="@+id/sectionNotifications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:id="@+id/headerNotifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notifications"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="12dp"
+                android:background="#DDDDDD"
+                android:clickable="true"
+                android:focusable="true"
+                android:drawableEnd="@drawable/flecha_abajo"
+                android:drawablePadding="8dp" />
+
+            <LinearLayout
+                android:id="@+id/contentNotifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="12dp"
+                android:background="#F0F0F0">
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 4. Privacy -->
+        <LinearLayout
+            android:id="@+id/sectionPrivacy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:id="@+id/headerPrivacy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Privacy"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="12dp"
+                android:background="#DDDDDD"
+                android:clickable="true"
+                android:focusable="true"
+                android:drawableEnd="@drawable/flecha_abajo"
+                android:drawablePadding="8dp" />
+
+            <LinearLayout
+                android:id="@+id/contentPrivacy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="12dp"
+                android:background="#F0F0F0">
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 5. Payment -->
+        <LinearLayout
+            android:id="@+id/sectionPayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:id="@+id/headerPayment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Payment"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="12dp"
+                android:background="#DDDDDD"
+                android:clickable="true"
+                android:focusable="true"
+                android:drawableEnd="@drawable/flecha_abajo"
+                android:drawablePadding="8dp" />
+
+            <LinearLayout
+                android:id="@+id/contentPayment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="12dp"
+                android:background="#F0F0F0"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 6. Support -->
+        <LinearLayout
+            android:id="@+id/sectionSupport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <LinearLayout
+                android:id="@+id/contentSupport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="12dp"
+                android:background="#F0F0F0">
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/headerSupport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#DDDDDD"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="12dp"
+                android:text="Support"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:drawableEnd="@drawable/flecha_abajo"
+                android:drawablePadding="8dp" />
+        </LinearLayout>
+
+        <!-- 7. About -->
+        <LinearLayout
+            android:id="@+id/sectionAbout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            >
+
+            <TextView
+                android:id="@+id/headerAbout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#DDDDDD"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="12dp"
+                android:text="About"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:drawableEnd="@drawable/flecha_abajo"
+                android:drawablePadding="8dp" />
+
+            <LinearLayout
+                android:id="@+id/contentAbout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F0F0F0"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:visibility="gone">
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

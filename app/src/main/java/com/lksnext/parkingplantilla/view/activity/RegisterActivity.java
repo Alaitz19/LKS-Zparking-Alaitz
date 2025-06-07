@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.lksnext.parkingplantilla.databinding.ActivityRegisterBinding;
 import com.lksnext.parkingplantilla.viewmodel.RegisterViewModel;
 
+import android.content.Intent;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
@@ -22,5 +24,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         //Asignamos el viewModel de register
         registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
+        // Botón para volver al LoginActivity
+        binding.backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish(); // opcional: evita que el usuario vuelva a esta pantalla con el botón de atrás
+        });
     }
 }
