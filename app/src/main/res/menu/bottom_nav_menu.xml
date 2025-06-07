@@ -2,14 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/newres"
-        android:title="Nueva reserva"
+        android:title="@string/newres"
         android:icon="@drawable/ic_newres_foreground"/>
     <item
         android:id="@+id/reservations"
-        android:title="Mis reservas"
+        android:title="@string/reservations"
         android:icon="@drawable/ic_reservations_foreground"/>
     <item
+        android:id="@+id/vehicles"
+        android:icon="@drawable/car"
+        android:title="@string/vehicles" />
+    <item
         android:id="@+id/person"
-        android:title="Perfil"
+        android:title="@string/profile"
         android:icon="@drawable/ic_person_foreground"/>
+
+
 </menu>

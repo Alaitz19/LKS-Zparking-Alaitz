@@ -24,6 +24,7 @@ public class LoginViewModel extends ViewModel {
             public void onSuccess() {
                 //TODO
                 logged.setValue(Boolean.TRUE);
+                userName.setValue(email); // Asignar el nombre de usuario
             }
 
             //En caso de que el login sea incorrecto, que se hace
@@ -31,8 +32,13 @@ public class LoginViewModel extends ViewModel {
             public void onFailure() {
                 //TODO
                 logged.setValue(Boolean.FALSE);
+                userName.setValue(null); // Limpiar el nombre de usuario
             }
         });
+    }
+    private MutableLiveData<String> userName = new MutableLiveData<>();
+    public LiveData<String> getUserName() {
+        return userName;
     }
 }
 

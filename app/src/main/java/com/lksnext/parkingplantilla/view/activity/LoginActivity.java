@@ -41,9 +41,13 @@ public class LoginActivity extends AppCompatActivity {
             if (isLogged == null) return;
             if (isLogged) {
                 mostrarToast(R.string.login_success);
-                irAMainActivity();
+                loginViewModel.getUserName().observe(this, name -> {
+                    if (name != null) {
+                        irAMainActivity(name);
+                    }
+                });
             } else {
-                mostrarToast(R.string.login_error);
+                mostrarToast(R.string.login_failed);
             }
         });
 
@@ -79,8 +83,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void irAMainActivity() {
+    private void irAMainActivity(String userName) {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("USER_NAME", userName);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();

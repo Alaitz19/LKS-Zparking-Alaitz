@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.ParkingLKS" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color -->
-        <item name="colorPrimary">#DFD0F8</item>
+        <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryVariant">@color/black</item> <!-- tono más oscuro del lila -->
         <item name="colorOnPrimary">@color/black</item>
 

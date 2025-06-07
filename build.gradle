@@ -7,10 +7,12 @@ buildscript {
         classpath 'com.android.tools.build:gradle:8.9.1'
         classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.8.9'
         classpath 'com.google.gms:google-services:4.4.2'
+        classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
     }
 }
 plugins {
-    id "org.sonarqube" version "6.0.1.5171"
+    id "org.sonarqube" version "6.2.0.5505"
+
 }
 
 sonar {
