@@ -7,21 +7,21 @@
     android:padding="24dp">
 
     <EditText
-        android:id="@+id/inputCode"
+        android:id="@+id/codeEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Ingresa el código"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:hint="Enter code"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="104dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
     <Button
         android:id="@+id/verifyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Verificar"
-        app:layout_constraintTop_toBottomOf="@id/inputCode"
+        app:layout_constraintTop_toBottomOf="@id/codeEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"/>
