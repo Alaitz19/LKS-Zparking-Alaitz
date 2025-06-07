@@ -6,6 +6,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:8.9.1'
         classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.8.9'
+
         classpath 'com.google.gms:google-services:4.4.2'
         classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
     }
@@ -20,8 +21,11 @@ sonar {
         property "sonar.projectKey", "Alaitz19_LKS-Zparking-Alaitz"
         property "sonar.organization", "alaitz19"
         property "sonar.host.url", "https://sonarcloud.io"
+
     }
 }
+
+
 
 allprojects {
     repositories {
@@ -29,3 +33,6 @@ allprojects {
         mavenCentral()
     }
 }
+
+}
+
