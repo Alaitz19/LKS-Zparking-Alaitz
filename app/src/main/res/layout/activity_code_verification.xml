@@ -21,11 +21,12 @@
         android:id="@+id/verifyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#00BCD4"
         android:text="Verificar"
-        app:layout_constraintTop_toBottomOf="@id/inputCode"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputCode" />
 
     <TextView
         android:id="@+id/resendCode"
