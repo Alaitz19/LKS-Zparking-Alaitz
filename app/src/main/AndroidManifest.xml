@@ -51,6 +51,10 @@
             android:name=".view.activity.ProfileActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".view.activity.ReservationsActivity"
+            android:exported="false" />
+
 
     </application>
 

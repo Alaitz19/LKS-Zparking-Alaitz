@@ -36,8 +36,18 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingV
     public void onBindViewHolder(@NonNull ParkingViewHolder holder, int position) {
         ParkingItem item = parkingList.get(position);
         holder.imageParking.setImageResource(item.getImageID());
+
+        // Si tienes plaza con número
+        if (item.getPlaza() != null) {
+            holder.parkingNumber.setText(String.valueOf(item.getPlaza().getNumero()));
+        } else {
+            holder.parkingNumber.setText("N/A");
+        }
+
         holder.parkingAddress.setText(item.getAddress());
-        holder.parkingTime.setText("Date: " + item.getReserva().getFecha() + "    Remaining: " + item.getReserva().remainingTime() + " min");
+
+        holder.parkingTime.setText(item.getReservaInfo());
+
 
         // Acciones en los botones
         holder.btnView.setOnClickListener(v -> {

@@ -48,6 +48,11 @@ public class ParkingItem {
                 ", reserva=" + reserva +
                 '}';
     }
+    public String getReservaInfo() {
+        if (reserva == null) return "No reserva";
+        return "Date: " + reserva.getFecha() + "    Remaining: " + reserva.remainingTime() + " min";
+    }
+
 
 
 }
