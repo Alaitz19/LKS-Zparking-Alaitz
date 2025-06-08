@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-
-
-
-    <LinearLayout
-        android:orientation="vertical"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/headerLayout"
+        layout="@layout/main_view_header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+       />
 
-        <include
-            layout="@layout/main_view_header"
+    <!-- ScrollView con el contenido scrollable, arriba del BottomNavigationView -->
+    <ScrollView
+        android:id="@+id/scrollViewContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/headerLayout"
+        android:layout_above="@id/bottomNavigation">
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+
 
 
         <ImageButton
@@ -279,4 +288,13 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </ScrollView>
+    <!-- BottomNavigationView fijo abajo -->
+<com.google.android.material.bottomnavigation.BottomNavigationView
+android:id="@+id/bottomNavigation"
+android:layout_width="match_parent"
+android:layout_height="56dp"
+android:layout_alignParentBottom="true"
+app:menu="@menu/bottom_nav_menu" />
+    </RelativeLayout>

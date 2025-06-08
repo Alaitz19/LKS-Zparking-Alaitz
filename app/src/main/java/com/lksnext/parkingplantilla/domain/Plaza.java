@@ -62,4 +62,15 @@ public class Plaza {
         return false;  // no está reservada para ese intervalo
     }
 
+    public char[] getNumero() {
+        String tipo = this.tipo;
+        if (tipo == null || tipo.isEmpty()) {
+            return new char[]{'N', 'A'}; // No disponible
+        }
+        char[] numero = new char[tipo.length()];
+        for (int i = 0; i < tipo.length(); i++) {
+            numero[i] = tipo.charAt(i);
+        }
+        return numero;
+    }
 }
