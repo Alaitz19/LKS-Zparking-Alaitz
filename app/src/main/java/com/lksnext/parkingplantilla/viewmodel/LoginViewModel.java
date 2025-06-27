@@ -40,5 +40,20 @@ public class LoginViewModel extends ViewModel {
     public LiveData<String> getUserName() {
         return userName;
     }
+    public void setUserName(String name) {
+        userName.setValue(name);
+    }
+    public void logout() {
+        // Lógica para cerrar sesión
+        logged.setValue(Boolean.FALSE);
+        userName.setValue(null); // Limpiar el nombre de usuario al cerrar sesión
+    }
+    public void clearUserName() {
+        userName.setValue(null); // Limpiar el nombre de usuario
+    }
+    public void clearLoginStatus() {
+        logged.setValue(null); // Limpiar el estado de inicio de sesión
+    }
+
 }
 

@@ -21,9 +21,7 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <activity
-            android:name=".view.activity.RegisterActivity"
-            android:exported="false" />
+
         <activity
             android:name=".view.activity.LoginActivity"
             android:exported="true">
@@ -35,25 +33,7 @@
         <activity
             android:name=".view.activity.MainActivity"
             android:exported="true" />
-        <activity
-            android:name=".view.activity.GoogleLoginActivity"
-            android:exported="true" />
-        <activity
-            android:name=".view.activity.PasswordRecoveryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.activity.ChangePasswordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.activity.CodeVerificationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.activity.ProfileActivity"
-            android:exported="false" />
 
-        <activity
-            android:name=".view.activity.ReservationsActivity"
-            android:exported="false" />
 
 
     </application>
