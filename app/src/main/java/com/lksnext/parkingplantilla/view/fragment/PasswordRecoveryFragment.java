@@ -1,0 +1,112 @@
+package com.lksnext.parkingplantilla.view.fragment;
+
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.PhoneAuthOptions;
+import com.google.firebase.auth.PhoneAuthProvider;
+import com.lksnext.parkingplantilla.R;
+
+import java.util.concurrent.TimeUnit;
+
+public class PasswordRecoveryFragment extends Fragment {
+
+    private EditText emailText, phoneText;
+    private Button sendEmailSmsButton, backButton;
+    private FirebaseAuth mAuth;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_password_recovery_code, container, false);
+
+        emailText = view.findViewById(R.id.emailText);
+        phoneText = view.findViewById(R.id.phoneText);
+        sendEmailSmsButton = view.findViewById(R.id.sendEmailSmsButton);
+        backButton = view.findViewById(R.id.backButton);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        sendEmailSmsButton.setOnClickListener(v -> {
+            String email = emailText.getText().toString().trim();
+            String phone = phoneText.getText().toString().trim();
+
+            if (TextUtils.isEmpty(email) && TextUtils.isEmpty(phone)) {
+                Toast.makeText(requireContext(), "Introduce un correo o número de teléfono", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!TextUtils.isEmpty(email)) {
+                mAuth.sendPasswordResetEmail(email)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(requireContext(), "Correo de recuperación enviado", Toast.LENGTH_SHORT).show();
+                                Bundle args = new Bundle();
+                                args.putString("email", email);
+                                CodeVerificationFragment fragment = new CodeVerificationFragment();
+                                fragment.setArguments(args);
+                                requireActivity().getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .replace(R.id.bottomNavigationView, fragment)
+                                        .addToBackStack(null)
+                                        .commit();
+                            } else {
+                                Toast.makeText(requireContext(), "Error al enviar el correo", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            } else if (!TextUtils.isEmpty(phone)) {
+                sendVerificationCode(phone);
+            }
+        });
+
+        backButton.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+
+        return view;
+    }
+
+    private void sendVerificationCode(String phoneNumber) {
+        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(FirebaseAuth.getInstance())
+                .setPhoneNumber(phoneNumber)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setActivity(requireActivity())
+                .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                    @Override
+                    public void onVerificationCompleted(com.google.firebase.auth.PhoneAuthCredential phoneAuthCredential) {
+                        Toast.makeText(requireContext(), "Verificación exitosa", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onVerificationFailed(com.google.firebase.FirebaseException e) {
+                        Toast.makeText(requireContext(), "Error al enviar el código", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                        Toast.makeText(requireContext(), "Código de verificación enviado", Toast.LENGTH_SHORT).show();
+                        Bundle args = new Bundle();
+                        args.putString("verificationId", verificationId);
+                        CodeVerificationFragment fragment = new CodeVerificationFragment();
+                        fragment.setArguments(args);
+                        requireActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.bottomNavigationView, fragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                })
+                .build();
+
+        PhoneAuthProvider.verifyPhoneNumber(options);
+    }
+}

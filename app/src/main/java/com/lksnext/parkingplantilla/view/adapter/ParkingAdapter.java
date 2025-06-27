@@ -1,4 +1,4 @@
-package com.lksnext.parkingplantilla.view.fragment;
+package com.lksnext.parkingplantilla.view.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
