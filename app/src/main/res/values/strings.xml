@@ -10,7 +10,7 @@
         <item>Deutsch</item>
         <item>Chinese</item>
     </string-array>
-<!--Login-->
+    <!--Login-->
     <string name="label_password">Password</string>
     <string name="label_email">Email</string>
     <string name="button_login">Login</string>
@@ -19,9 +19,9 @@
     <string name="hint_email">Enter your email*</string>
     <string name="hint_password">Enter your password*</string>
     <string name="forgot_password"><u>Forgot password?</u></string>
-    <string name ="google_img_description">Boton google</string>
-    <string name ="apple_img_description">Boton apple</string>
-    <string name = "create_account">Create an account</string>"
+    <string name="google_img_description">Boton google</string>
+    <string name="apple_img_description">Boton apple</string>
+    <string name="create_account">Create an account</string>"
     <string name="or_text">or</string>
 
     <string name="login_error">Login error</string>
@@ -91,5 +91,6 @@
     <string name="login_failed">Login failed</string>
     <string name="vehicles">Vehicles</string>
     <string name="profile">Profile</string>
+    <string name="title_activity_maps">MapsActivity</string>
 
 </resources>

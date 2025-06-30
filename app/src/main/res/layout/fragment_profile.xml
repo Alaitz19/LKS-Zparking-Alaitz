@@ -5,20 +5,14 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <include
-        android:id="@+id/headerLayout"
-        layout="@layout/main_view_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-       />
+
 
 
     <ScrollView
         android:id="@+id/scrollViewContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/headerLayout"
-        android:layout_above="@id/bottomNavigation">
+       >
 
         <LinearLayout
             android:orientation="vertical"
@@ -248,7 +242,6 @@
                 android:id="@+id/buttonLogout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/bottomNavigation"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
@@ -262,11 +255,5 @@
 
 
 </ScrollView>
-    <!-- BottomNavigationView fijo abajo -->
-<com.google.android.material.bottomnavigation.BottomNavigationView
-android:id="@+id/bottomNavigation"
-android:layout_width="match_parent"
-android:layout_height="56dp"
-android:layout_alignParentBottom="true"
-app:menu="@menu/bottom_nav_menu" />
+
     </RelativeLayout>

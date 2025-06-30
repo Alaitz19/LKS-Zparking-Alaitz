@@ -15,9 +15,14 @@
         android:roundIcon="@drawable/zparking"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkingLKS">
+
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}"/>
+            android:value="YOUR_API_KEY" />
+
+
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -27,15 +32,13 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".view.activity.MainActivity"
             android:exported="true" />
-
-
-
     </application>
 
 </manifest>

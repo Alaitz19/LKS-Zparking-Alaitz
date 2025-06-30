@@ -28,7 +28,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        mapView = view.findViewById(R.id.mapView);
+       // mapView = view.findViewById(R.id.mapView);
 
         // Gestionar el bundle para el estado del MapView
         Bundle mapViewBundle = null;
