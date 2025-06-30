@@ -1,76 +1,55 @@
 package com.lksnext.parkingplantilla.domain;
+import androidx.annotation.NonNull;
 
-import java.util.List;
+
+import com.lksnext.parkingplantilla.domain.enu.PlazaType;
+
+import java.util.Objects;
 
 public class Plaza {
+    private long id;
+    private PlazaType tipoPlaza;
 
-    long id;
-    String tipo;
-
-    double lat;
-    double lon;
-
-    public Plaza() {
+    public Plaza(){
 
     }
 
-    public Plaza(long id, String tipo, double lat, double lon) {
+    public Plaza(long id, PlazaType tipoPlaza) {
         this.id = id;
-        this.tipo = tipo;
-        this.lat = lat;
-        this.lon = lon;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-    public double getLon() {
-        return lon;
-    }
-    public void setLon(double lon) {
-        this.lon = lon;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+        this.tipoPlaza = tipoPlaza;
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-    public boolean estaReservada(Plaza plaza, String fecha, Hora horaBusqueda, List<Reserva> reservas) {
-        for (Reserva r : reservas) {
-            if (r.getPlazaId().getId() == plaza.getId() && r.getFecha().equals(fecha)) {
-                Hora h = r.getHoraInicio();
-                // Comprobar solapamiento
-                if (!(horaBusqueda.getHoraFin() <= h.getHoraInicio() || horaBusqueda.getHoraInicio() >= h.getHoraFin())) {
-                    return true;  // hay solapamiento de horas
-                }
-            }
-        }
-        return false;  // no está reservada para ese intervalo
+    public PlazaType getTipoPlaza() {
+        return tipoPlaza;
     }
 
-    public char[] getNumero() {
-        String tipo = this.tipo;
-        if (tipo == null || tipo.isEmpty()) {
-            return new char[]{'N', 'A'}; // No disponible
-        }
-        char[] numero = new char[tipo.length()];
-        for (int i = 0; i < tipo.length(); i++) {
-            numero[i] = tipo.charAt(i);
-        }
-        return numero;
+    public void setTipoPlaza(PlazaType tipoPlaza) {
+        this.tipoPlaza = tipoPlaza;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Plaza plaza = (Plaza) o;
+        return id == plaza.id && tipoPlaza == plaza.tipoPlaza;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, tipoPlaza);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Plaza{" +
+                "id=" + id +
+                ", tipoPlaza=" + tipoPlaza +
+                '}';
     }
 }

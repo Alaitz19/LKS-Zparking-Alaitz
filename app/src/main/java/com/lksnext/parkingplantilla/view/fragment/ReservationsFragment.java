@@ -32,14 +32,7 @@ public class ReservationsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Añadir un item de prueba para que se muestre algo
-        //TODO: Cambiar por datos reales de la base de datos
-        listaDeItems.add(new ParkingItem(
-                R.drawable.p2,
-                "Zuaztu kalea 5 Nº 2",
-                null,
-                null
-        ));
+
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view_reservations);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
