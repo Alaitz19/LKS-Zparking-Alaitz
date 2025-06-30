@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
        />
 
-    <!-- ScrollView con el contenido scrollable, arriba del BottomNavigationView -->
+
     <ScrollView
         android:id="@+id/scrollViewContent"
         android:layout_width="match_parent"
@@ -24,8 +24,6 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-
 
 
         <ImageButton
@@ -48,21 +46,6 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp">
 
-            <TextView
-                android:id="@+id/headerUserAccount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="User Account"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:padding="12dp"
-                android:background="#DDDDDD"
-                android:clickable="true"
-                android:focusable="true"
-                android:drawableEnd="@drawable/flecha_abajo"
-                android:drawablePadding="8dp"
-                />
-
             <LinearLayout
                 android:id="@+id/contentUserAccount"
                 android:layout_width="match_parent"
@@ -72,6 +55,20 @@
                 android:padding="12dp"
                 android:background="#F0F0F0">
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/headerUserAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#DDDDDD"
+                android:clickable="true"
+                android:drawableEnd="@drawable/flecha_abajo"
+                android:drawablePadding="8dp"
+                android:focusable="true"
+                android:padding="12dp"
+                android:text="User Account"
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <!-- 2. Security -->
@@ -83,20 +80,6 @@
             android:paddingBottom="16dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp">
-
-            <TextView
-                android:id="@+id/headerSecurity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Security"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:padding="12dp"
-                android:background="#DDDDDD"
-                android:clickable="true"
-                android:focusable="true"
-                android:drawableEnd="@drawable/flecha_abajo"
-                android:drawablePadding="8dp" />
 
             <LinearLayout
                 android:id="@+id/contentSecurity"
@@ -123,15 +106,15 @@
                 android:id="@+id/headerNotifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Notifications"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:padding="12dp"
                 android:background="#DDDDDD"
                 android:clickable="true"
-                android:focusable="true"
                 android:drawableEnd="@drawable/flecha_abajo"
-                android:drawablePadding="8dp" />
+                android:drawablePadding="8dp"
+                android:focusable="true"
+                android:padding="12dp"
+                android:text="Notifications"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/contentNotifications"
@@ -154,20 +137,6 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp">
 
-            <TextView
-                android:id="@+id/headerPrivacy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Privacy"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:padding="12dp"
-                android:background="#DDDDDD"
-                android:clickable="true"
-                android:focusable="true"
-                android:drawableEnd="@drawable/flecha_abajo"
-                android:drawablePadding="8dp" />
-
             <LinearLayout
                 android:id="@+id/contentPrivacy"
                 android:layout_width="match_parent"
@@ -177,6 +146,20 @@
                 android:padding="12dp"
                 android:background="#F0F0F0">
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/headerPrivacy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#DDDDDD"
+                android:clickable="true"
+                android:drawableEnd="@drawable/flecha_abajo"
+                android:drawablePadding="8dp"
+                android:focusable="true"
+                android:padding="12dp"
+                android:text="Privacy"
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <!-- 5. Payment -->
@@ -188,20 +171,6 @@
             android:paddingBottom="16dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp">
-
-            <TextView
-                android:id="@+id/headerPayment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Payment"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:padding="12dp"
-                android:background="#DDDDDD"
-                android:clickable="true"
-                android:focusable="true"
-                android:drawableEnd="@drawable/flecha_abajo"
-                android:drawablePadding="8dp" />
 
             <LinearLayout
                 android:id="@+id/contentPayment"
@@ -226,6 +195,20 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp">
 
+            <TextView
+                android:id="@+id/headerAbout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#DDDDDD"
+                android:clickable="true"
+                android:drawableEnd="@drawable/flecha_abajo"
+                android:drawablePadding="8dp"
+                android:focusable="true"
+                android:padding="12dp"
+                android:text="About"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:id="@+id/contentSupport"
                 android:layout_width="match_parent"
@@ -236,19 +219,6 @@
                 android:background="#F0F0F0">
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/headerSupport"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#DDDDDD"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="12dp"
-                android:text="Support"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:drawableEnd="@drawable/flecha_abajo"
-                android:drawablePadding="8dp" />
         </LinearLayout>
 
         <!-- 7. About -->
@@ -262,20 +232,6 @@
             android:paddingEnd="16dp"
             >
 
-            <TextView
-                android:id="@+id/headerAbout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#DDDDDD"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="12dp"
-                android:text="About"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:drawableEnd="@drawable/flecha_abajo"
-                android:drawablePadding="8dp" />
-
             <LinearLayout
                 android:id="@+id/contentAbout"
                 android:layout_width="match_parent"
@@ -284,10 +240,26 @@
                 android:orientation="vertical"
                 android:padding="12dp"
                 android:visibility="gone">
+
             </LinearLayout>
         </LinearLayout>
 
+            <Button
+                android:id="@+id/buttonLogout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/bottomNavigation"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/design_default_color_error"
+                android:text="Log out"
+                android:textColor="@android:color/white" />
+
     </LinearLayout>
+
+
 
 </ScrollView>
     <!-- BottomNavigationView fijo abajo -->

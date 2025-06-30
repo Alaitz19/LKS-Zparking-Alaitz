@@ -1,7 +1,8 @@
+// app/src/main/java/com/lksnext/parkingplantilla/data/DataRepository.java
 package com.lksnext.parkingplantilla.data;
 
 import android.util.Log;
-
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseUser;
 import com.lksnext.parkingplantilla.domain.Callback;
 import com.google.firebase.auth.FirebaseAuth;
@@ -15,7 +16,6 @@ public class DataRepository {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    // Creación de la instancia en caso de que no exista.
     public static synchronized DataRepository getInstance() {
         if (instance == null) {
             instance = new DataRepository();
@@ -23,9 +23,20 @@ public class DataRepository {
         return instance;
     }
 
-    // Petición del login.
     public void login(String email, String pass, Callback callback) {
         mAuth.signInWithEmailAndPassword(email, pass)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onSuccess();
+                    } else {
+                        callback.onFailure();
+                    }
+                });
+    }
+
+    // Login con credenciales OAuth (Google)
+    public void loginWithCredential(AuthCredential credential, Callback callback) {
+        mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         callback.onSuccess();

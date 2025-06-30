@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -43,14 +44,20 @@ public class ChangePasswordFragment extends Fragment {
                 Toast.makeText(requireContext(), "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(requireContext(), "Contraseña actualizada correctamente", Toast.LENGTH_LONG).show();
-                // Redirigir al login
-                startActivity(new Intent(requireContext(), LoginActivity.class));
-                requireActivity().finish();
+
+                requireActivity().getSupportFragmentManager().popBackStack();
+                requireActivity().findViewById(R.id.loginFragmentContainer).setVisibility(View.VISIBLE);
+                requireActivity().findViewById(R.id.mainContent).setVisibility(View.VISIBLE);
             }
         });
 
-        backButton.setOnClickListener(v -> requireActivity().onBackPressed());
+        backButton.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager().popBackStack();
+            requireActivity().findViewById(R.id.loginFragmentContainer).setVisibility(View.GONE);
+            requireActivity().findViewById(R.id.mainContent).setVisibility(View.VISIBLE);
+        });
 
         return view;
     }
+
 }
