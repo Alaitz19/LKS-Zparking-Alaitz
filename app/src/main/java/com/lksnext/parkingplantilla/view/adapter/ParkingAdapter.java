@@ -38,11 +38,11 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingV
         holder.imageParking.setImageResource(item.getImageID());
 
         // Si tienes plaza con número
-        if (item.getPlaza() != null) {
-            holder.parkingNumber.setText(String.valueOf(item.getPlaza().getNumero()));
-        } else {
-            holder.parkingNumber.setText("N/A");
-        }
+       // if (item.getPlaza() != null) {
+       //     holder.parkingNumber.setText(String.valueOf(item.getPlaza().getNumero()));
+       // } else {
+          //  holder.parkingNumber.setText("N/A");
+        //}
 
         holder.parkingAddress.setText(item.getAddress());
 

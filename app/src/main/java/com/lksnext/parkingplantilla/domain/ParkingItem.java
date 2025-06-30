@@ -1,18 +1,19 @@
 package com.lksnext.parkingplantilla.domain;
 
+
 public class ParkingItem {
 
     private  int imageID;
     private String address;
-    private Plaza plaza;
+
     private Reserva reserva;
 
     public ParkingItem() {
     }
-    public ParkingItem(int imageID, String address, Plaza plaza, Reserva reserva) {
+    public ParkingItem(int imageID, String address, Reserva reserva) {
         this.imageID = imageID;
         this.address = address;
-        this.plaza = plaza;
+
         this.reserva = reserva;
     }
     public int getImageID() {
@@ -27,12 +28,8 @@ public class ParkingItem {
     public void setAddress(String address) {
         this.address = address;
     }
-    public Plaza getPlaza() {
-        return plaza;
-    }
-    public void setPlaza(Plaza plaza) {
-        this.plaza = plaza;
-    }
+
+
     public Reserva getReserva() {
         return reserva;
     }
@@ -44,7 +41,7 @@ public class ParkingItem {
         return "ParkingItem{" +
                 "imageID=" + imageID +
                 ", address='" + address + '\'' +
-                ", plaza=" + plaza +
+
                 ", reserva=" + reserva +
                 '}';
     }
