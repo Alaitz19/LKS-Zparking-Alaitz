@@ -9,92 +9,42 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.lksnext.parkingplantilla.R;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment  {
 
-    private MapView mapView;
-    private GoogleMap googleMap;
+    private final OnMapReadyCallback callback = googleMap -> {
+        LatLng sanSebastian = new LatLng(43.3124, -1.9839); // Coordinates for San Sebastian
+        float zoomLevel = 12.0f; // Set desired zoom level
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sanSebastian, zoomLevel));
 
-    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
+        LatLng parqueEmpresarialZuatzu = new LatLng(43.2980445, -2.0072874); // Coordinates for Parque Empresarial de Zuatzu
+        googleMap.addMarker(new MarkerOptions().position(parqueEmpresarialZuatzu).title("Parking del Parque Empresarial de Zuatzu"));
+    };
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
+        return inflater.inflate(R.layout.fragment_map, container, false);
+    }
 
-       // mapView = view.findViewById(R.id.mapView);
-
-        // Gestionar el bundle para el estado del MapView
-        Bundle mapViewBundle = null;
-        if (savedInstanceState != null) {
-            mapViewBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(callback);
         }
-        mapView.onCreate(mapViewBundle);
 
-        mapView.getMapAsync(this);
-
-        return view;
-    }
-
-    @Override
-    public void onMapReady(GoogleMap map) {
-        googleMap = map;
-        // Aquí puedes configurar el mapa (marcadores, cámara, etc.)
-    }
-
-    // Ciclo de vida del MapView -> muy importante para evitar crashes y liberar recursos
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mapView.onResume();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mapView.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mapView.onStop();
-    }
-
-    @Override
-    public void onPause() {
-        mapView.onPause();
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        mapView.onDestroy();
-        super.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        Bundle mapViewBundle = outState.getBundle(MAPVIEW_BUNDLE_KEY);
-        if (mapViewBundle == null) {
-            mapViewBundle = new Bundle();
-            outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
-        }
-        mapView.onSaveInstanceState(mapViewBundle);
     }
 }

@@ -1,6 +1,7 @@
 package com.lksnext.parkingplantilla.view.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -12,7 +13,9 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 import com.lksnext.parkingplantilla.R;
+import com.lksnext.parkingplantilla.data.DataRepository;
 import com.lksnext.parkingplantilla.databinding.ActivityMainBinding;
+import com.lksnext.parkingplantilla.domain.Callback;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +30,19 @@ public class MainActivity extends AppCompatActivity {
 
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        DataRepository.getInstance().crearPlazasIniciales(new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.d("MainActivity", "Plazas creadas o ya existentes.");
+                // Aquí puedes seguir con el flujo normal, como mostrar la UI
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e("MainActivity", "Error creando plazas.");
+                // Puedes mostrar un mensaje de error o intentar de nuevo
+            }
+        });
 
         // Configuración de la navegación inferior
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
@@ -50,4 +66,5 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
+
 }

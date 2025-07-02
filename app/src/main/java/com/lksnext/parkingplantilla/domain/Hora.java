@@ -1,5 +1,7 @@
 package com.lksnext.parkingplantilla.domain;
 
+import java.util.List;
+
 public class Hora {
 
     long horaInicio;
@@ -14,19 +16,18 @@ public class Hora {
         this.horaFin = horaFin;
     }
 
-    public long getHoraInicio() {
-        return horaInicio;
+    private List<String> horas;
+
+    public Hora(List<String> horas) {
+        this.horas = horas;
     }
 
-    public void setHoraInicio(long horaInicio) {
-        this.horaInicio = horaInicio;
+    public String getHoraInicio() {
+        return (horas != null && !horas.isEmpty()) ? horas.get(0) : "";
     }
 
-    public long getHoraFin() {
-        return horaFin;
-    }
+    public String getHoraFin() {
+        return (horas != null && !horas.isEmpty()) ? horas.get(horas.size() - 1) : "";
+    }}
 
-    public void setHoraFin(long horaFin) {
-        this.horaFin = horaFin;
-    }
-}
+

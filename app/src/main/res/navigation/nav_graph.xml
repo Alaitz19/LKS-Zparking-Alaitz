@@ -9,30 +9,88 @@
         android:id="@+id/mainFragment"
         android:name="com.lksnext.parkingplantilla.view.fragment.MainFragment"
         android:label="Inicio"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+
+        <!-- Navegaciones desde mainFragment -->
+        <action
+            android:id="@+id/action_mainFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_reservationsFragment"
+            app:destination="@id/reservationsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_vehiclesFragment"
+            app:destination="@id/vehiclesFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.lksnext.parkingplantilla.view.fragment.MapFragment"
         android:label="Mapa"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_map" >
+        <!-- Acciones desde mapFragment, si quieres -->
+        <action
+            android:id="@+id/action_mapFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_vehiclesFragment"
+            app:destination="@id/vehiclesFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_reservationsFragment"
+            app:destination="@id/reservationsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/reservationsFragment"
         android:name="com.lksnext.parkingplantilla.view.fragment.ReservationsFragment"
         android:label="Reservas"
-        tools:layout="@layout/fragment_reservations" />
+        tools:layout="@layout/fragment_reservations" >
+        <action
+            android:id="@+id/action_reservationsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_reservationsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_reservationsFragment_to_vehiclesFragment"
+            app:destination="@id/vehiclesFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/vehiclesFragment"
         android:name="com.lksnext.parkingplantilla.view.fragment.VehiclesFragment"
         android:label="Vehículos"
-        tools:layout="@layout/fragment_vehicles" />
+        tools:layout="@layout/fragment_vehicles" >
+        <action
+            android:id="@+id/action_vehiclesFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_vehiclesFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_vehiclesFragment_to_reservationsFragment"
+            app:destination="@id/reservationsFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.lksnext.parkingplantilla.view.fragment.ProfileFragment"
         android:label="Perfil"
-        tools:layout="@layout/fragment_profile" />
-
-
-
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_vehiclesFragment"
+            app:destination="@id/vehiclesFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_reservationsFragment"
+            app:destination="@id/reservationsFragment" />
+    </fragment>
 </navigation>

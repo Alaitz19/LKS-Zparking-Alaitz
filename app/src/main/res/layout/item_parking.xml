@@ -1,137 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_reservations"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:layout_height="wrap_content"
+    android:elevation="8dp"
+    android:layout_margin="12dp"
+    android:radius="16dp">
 
-
-
-
-
-    <!-- ScrollView para contenido entre header y nav -->
-    <ScrollView
-        android:id="@+id/scrollViewContent"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/header"
-        android:padding="16dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@android:color/darker_gray">
 
-        <RelativeLayout
+        <!-- Imagen -->
+        <ImageView
+            android:id="@+id/image_parking"
+            android:layout_width="225dp"
+            android:layout_height="216dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="centerCrop"
+            android:src="@drawable/p2" />
+
+        <TextView
+            android:id="@+id/parking_number"
+            android:layout_width="wrap_content"
+            android:layout_height="67dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="#88000000"
+            android:padding="4dp"
+            android:text="2"
+            android:textColor="#FFFFFF"
+            android:textSize="48sp" />
+
+        <TextView
+            android:id="@+id/parking_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zuaztu kalea 5 Nº 2"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp" />
+        <TextView
+            android:id="@+id/parking_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipo: Cubierto"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:layout_marginTop="4dp"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/parking_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date: Now    Remaining: 4h13’"
+            android:textSize="18sp"
+            android:layout_marginTop="4dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="30dp"
-                android:layout_marginBottom="16dp"
-                android:radius="30dp"
-                android:background="@drawable/button_border">
+            <ImageButton
+                android:id="@+id/btn_edit"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="12dp"
+                android:padding="12dp"
+                android:src="@android:drawable/ic_menu_edit"
+                android:background="@drawable/button_border"
+                android:contentDescription="Edit"
+                app:tint="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:layout_margin="30dp"
-                    android:background="@android:color/darker_gray">
+            <ImageButton
+                android:id="@+id/btn_delete"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginEnd="12dp"
+                android:padding="12dp"
+                android:src="@android:drawable/ic_delete"
+                android:background="@drawable/button_border_red"
+                android:backgroundTint="#FF6F6F"
+                android:contentDescription="Delete"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
-                    <!-- Imagen centrada con sombra y fondo -->
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:radius="4dp">
-
-                        <ImageView
-                            android:id="@+id/image_parking"
-                            android:layout_width="225dp"
-                            android:layout_height="216dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/p2" />
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:id="@+id/parking_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="67dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:background="#88000000"
-                        android:padding="4dp"
-                        android:text="2"
-                        android:textColor="#FFFFFF"
-                        android:textSize="48sp" />
-
-                    <!-- Dirección -->
-                    <TextView
-                        android:id="@+id/parking_address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Zuaztu kalea 5 Nº 2"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
-                        android:layout_marginTop="8dp" />
-
-                    <!-- Fecha y tiempo restante -->
-                    <TextView
-                        android:id="@+id/parking_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Date: Now    Remaining: 4h13’"
-                        android:textSize="18sp"
-                        android:layout_marginTop="4dp" />
-
-                    <!-- Iconos: ver, editar, eliminar -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical|start"
-                        android:layout_marginTop="12dp"
-                        android:weightSum="3">
-
-                        <ImageButton
-                            android:id="@+id/btn_view"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="56dp"
-                            android:padding="12dp"
-                            android:background="@drawable/button_border"
-                            android:contentDescription="View"
-                            android:layout_margin="5dp"
-                            android:src="@android:drawable/ic_menu_view"
-                            app:tint="@android:color/white" />
-
-                        <ImageButton
-                            android:id="@+id/btn_edit"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="56dp"
-                            android:padding="12dp"
-                            android:layout_margin="5dp"
-                            android:src="@android:drawable/ic_menu_edit"
-                            android:background="@drawable/button_border"
-                            android:contentDescription="Edit"
-                            app:tint="@android:color/white" />
-
-                        <ImageButton
-                            android:id="@+id/btn_delete"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="56dp"
-                            android:layout_margin="5dp"
-                            android:src="@android:drawable/ic_delete"
-                            android:background="@drawable/button_border_red"
-                            android:backgroundTint="#FF6F6F"
-                            android:contentDescription="Delete" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-        </RelativeLayout>
-    </ScrollView>
-
-</RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
