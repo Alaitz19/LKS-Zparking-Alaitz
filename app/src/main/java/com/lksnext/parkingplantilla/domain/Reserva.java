@@ -1,5 +1,7 @@
 package com.lksnext.parkingplantilla.domain;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
@@ -8,6 +10,7 @@ import com.google.firebase.Timestamp;
 import java.util.Objects;
 
 public class Reserva {
+    private String idReserva;
 
     private Timestamp fecha;
     private String usuario;
@@ -18,13 +21,15 @@ public class Reserva {
     public Reserva() {
     }
 
-    public Reserva(Timestamp fecha, @NonNull String usuario, @NonNull String uuid, @NonNull Plaza plaza, @NonNull Hora hora) {
+    public Reserva( String idReserva, Timestamp fecha, @NonNull String usuario, @NonNull String uuid, @NonNull Plaza plaza, @NonNull Hora hora) {
+        this.idReserva = idReserva;
         this.fecha = fecha;
         this.usuario = usuario;
         this.uuid = uuid;
         this.plaza = plaza;
         this.hora = hora;
     }
+    public String getIdReserva() { return idReserva; }
 
     public Timestamp getFecha() {
         return fecha;
@@ -126,4 +131,14 @@ public class Reserva {
         long minutes = difference / (1000 * 60);
         return String.valueOf(minutes);
     }
+
+    public Object getId() {
+        return uuid;
+    }
+
+    public void borrarReserva(Context context, Callback callback) {
+
+    }
+
+
 }

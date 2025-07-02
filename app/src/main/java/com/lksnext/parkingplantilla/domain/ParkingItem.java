@@ -46,10 +46,24 @@ public class ParkingItem {
                 '}';
     }
     public String getReservaInfo() {
-        if (reserva == null) return "No reserva";
-        return "Date: " + reserva.getFecha() + "    Remaining: " + reserva.remainingTime() + " min";
+        if (reserva == null || reserva.getHora() == null) return "No reserva";
+        String inicio = reserva.getHora().getHoraInicio();
+        String fin = reserva.getHora().getHoraFin();
+        String restante = reserva.remainingTime();
+        return "Inicio: " + inicio + "  Fin: " + fin + "  Restante: " + restante + " min";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ParkingItem)) return false;
+
+        ParkingItem that = (ParkingItem) o;
+
+        if (imageID != that.imageID) return false;
+        if (!address.equals(that.address)) return false;
+        return reserva != null ? reserva.equals(that.reserva) : that.reserva == null;
+    }
 
 
 }

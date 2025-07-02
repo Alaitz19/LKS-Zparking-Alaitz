@@ -1,7 +1,7 @@
 package com.lksnext.parkingplantilla.domain.enu;
 
 public enum PlazaType {
-    NORMAL("Normal"),
+    COCHE("Coche"),
     DISCAPACITADO("Discapacitado"),
     ELECTRICO("Eléctrico"),
     MOTO("Moto");
