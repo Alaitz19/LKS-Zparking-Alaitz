@@ -120,16 +120,41 @@ public class Reserva {
 
 
     public String remainingTime() {
-        long currentTime = System.currentTimeMillis();
-        long reservaTime = fecha.toDate().getTime();
-        long difference = reservaTime - currentTime;
-
-        if (difference <= 0) {
-            return "Reserva caducada";
+        if (hora == null || hora.getHoras().isEmpty() || fecha == null) {
+            return "Sin reserva";
         }
 
-        long minutes = difference / (1000 * 60);
-        return String.valueOf(minutes);
+        try {
+            // Ejemplo: fecha: 2025-07-03, hora fin: "12:00"
+            String fechaStr = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+                    .format(fecha.toDate());
+
+            String horaFinStr = hora.getHoras().get(hora.getHoras().size() - 1); // última hora como fin
+
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault());
+            java.util.Date endDate = sdf.parse(fechaStr + " " + horaFinStr);
+
+            if (endDate == null) {
+                return "Formato inválido";
+            }
+
+            long millisRemaining = endDate.getTime() - System.currentTimeMillis();
+
+            if (millisRemaining <= 0) {
+                return "Reserva terminada";
+            }
+
+            long seconds = millisRemaining / 1000;
+            long hours = seconds / 3600;
+            long minutes = (seconds % 3600) / 60;
+            long secs = seconds % 60;
+
+            return String.format("%02d:%02d:%02d", hours, minutes, secs);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error tiempo";
+        }
     }
 
     public Object getId() {

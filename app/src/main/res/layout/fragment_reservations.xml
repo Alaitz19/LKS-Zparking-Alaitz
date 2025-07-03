@@ -4,18 +4,55 @@
     android:id="@+id/activity_reservations"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
+    <!-- Botones de filtro -->
+    <LinearLayout
+        android:id="@+id/filters_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="8dp">
 
-    <!-- Aquí podrías meter un RecyclerView con tus tarjetas -->
+        <Button
+            android:id="@+id/btn_filter_terminadas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/teal_300"
+            android:textColor="@android:color/white"
+            android:text="Terminadas" />
+
+        <Button
+            android:id="@+id/btn_filter_siguientes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/teal_300"
+            android:textColor="@android:color/white"
+            android:text="Siguientes" />
+
+        <Button
+            android:id="@+id/btn_filter_encurso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:backgroundTint="@color/teal_300"
+            android:textColor="@android:color/white"
+            android:text="En curso" />
+    </LinearLayout>
+
+    <!-- RecyclerView para mostrar reservas -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_reservations"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-     />
-
-
+        android:clipToPadding="false" />
 
 </LinearLayout>
-

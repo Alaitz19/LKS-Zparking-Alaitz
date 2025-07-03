@@ -7,13 +7,13 @@ public class Hora {
     long horaInicio;
     long horaFin;
 
-    public Hora() {
-
-    }
 
     public Hora(long horaInicio, long horaFin) {
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
+    }
+    public List<String> getHoras() {
+        return horas;
     }
 
     private List<String> horas;
@@ -28,6 +28,14 @@ public class Hora {
 
     public String getHoraFin() {
         return (horas != null && !horas.isEmpty()) ? horas.get(horas.size() - 1) : "";
-    }}
+    }
+
+
+    public void setHoras(List<String> nuevaHora){
+
+        this.horas = nuevaHora;
+
+    }
+}
 
 

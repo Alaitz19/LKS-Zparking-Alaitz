@@ -1,9 +1,13 @@
 package com.lksnext.parkingplantilla.view.fragment;
 
+import static com.lksnext.parkingplantilla.util.DialogUtils.setupHoraButtons;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -15,6 +19,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.lksnext.parkingplantilla.R;
@@ -44,8 +49,18 @@ public class ReservationsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         ParkingAdapter adapter = new ParkingAdapter(requireContext(), listaDeItems);
         recyclerView.setAdapter(adapter);
+        Button btnTerminadas = view.findViewById(R.id.btn_filter_terminadas);
+        Button btnSiguientes = view.findViewById(R.id.btn_filter_siguientes);
+        Button btnEnCurso = view.findViewById(R.id.btn_filter_encurso);
+
+
 
         ReservationsViewModel reservationsViewModel = new ViewModelProvider(this).get(ReservationsViewModel.class);
+
+        btnTerminadas.setOnClickListener(v -> reservationsViewModel.filtrarTerminadas());
+        btnSiguientes.setOnClickListener(v -> reservationsViewModel.filtrarSiguientes());
+        btnEnCurso.setOnClickListener(v -> reservationsViewModel.filtrarEnCurso());
+
 
         reservationsViewModel.getReservas().observe(getViewLifecycleOwner(), reservas -> {
             listaDeItems.clear();
@@ -60,6 +75,8 @@ public class ReservationsFragment extends Fragment {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) reservationsViewModel.cargarReservas(user.getUid());
+        adapter.setOnEditClickListener(item -> showEditHoraDialog(item.getReserva(), reservationsViewModel));
+
         adapter.setOnDeleteClickListener((item, position) -> {
             Reserva reserva = item.getReserva();
             if (reserva != null) {
@@ -84,4 +101,51 @@ public class ReservationsFragment extends Fragment {
 
 
     }
+    private void showEditHoraDialog(Reserva reserva, ReservationsViewModel viewModel) {
+        View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_filtro, null);
+
+        dialogView.findViewById(R.id.horizontal_scroll_dias).setVisibility(View.GONE);
+        dialogView.findViewById(R.id.toggle_tipo_plaza).setVisibility(View.GONE);
+
+        GridLayout gridHoras = dialogView.findViewById(R.id.grid_horas);
+
+        List<MaterialButton> horasSeleccionadas = new ArrayList<>();
+        setupHoraButtons(requireContext(), gridHoras, horasSeleccionadas);
+
+        com.google.android.material.button.MaterialButton btnGuardar = dialogView.findViewById(R.id.btn_continuar);
+        btnGuardar.setText("Guardar");
+
+        android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .create();
+
+        btnGuardar.setOnClickListener(v -> {
+            List<String> nuevasHoras = new ArrayList<>();
+            for (MaterialButton btn : horasSeleccionadas) {
+                nuevasHoras.add(btn.getText().toString());
+            }
+            if (nuevasHoras.isEmpty()) {
+                Toast.makeText(requireContext(), "Selecciona al menos una hora", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            viewModel.editarReservaHora(reserva, nuevasHoras, new Callback() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(requireContext(), "Hora actualizada", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onFailure() {
+                    Toast.makeText(requireContext(), "Error al actualizar hora", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+
+        dialog.show();
+    }
+
+
+
 }

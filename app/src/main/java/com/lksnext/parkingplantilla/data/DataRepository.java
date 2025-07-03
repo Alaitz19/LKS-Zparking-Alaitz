@@ -324,4 +324,11 @@ public class DataRepository {
                 })
                 .addOnFailureListener(e -> callback.onFailure());
     }
+    public void updateHoraReserva(String idReserva, List<String> nuevaHora, Callback callback) {
+        db.collection("reservas").document(idReserva)
+                .update("hora", nuevaHora)
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onFailure());
+    }
+
 }

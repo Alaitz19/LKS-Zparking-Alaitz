@@ -1,7 +1,5 @@
 package com.lksnext.parkingplantilla.view.fragment;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,31 +9,25 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
-
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.button.MaterialButton;
 import com.lksnext.parkingplantilla.R;
+import com.lksnext.parkingplantilla.util.DialogUtils;
 import com.lksnext.parkingplantilla.viewmodel.MainViewModel;
 import com.lksnext.parkingplantilla.domain.Callback;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
-public class MainFragment extends Fragment  {
-
-
+public class MainFragment extends Fragment {
 
     private MainViewModel viewModel;
 
@@ -47,13 +39,8 @@ public class MainFragment extends Fragment  {
 
         setupFloatingButton(view);
 
-
-
-
         return view;
     }
-
-
 
     private void setupFloatingButton(View view) {
         View fab = view.findViewById(R.id.btn_new_reservation);
@@ -79,11 +66,12 @@ public class MainFragment extends Fragment  {
         setupDiaButtons(layoutDias, fechaSeleccionada, listaDias);
 
         final List<MaterialButton> horasSeleccionadas = new ArrayList<>();
-        setupHoraButtons(gridHoras, horasSeleccionadas);
+        // ✅ Aquí usamos tu DialogUtils
+        DialogUtils.setupHoraButtons(requireContext(), gridHoras, horasSeleccionadas);
+        // Configuración de los botones de tipo de plaza
 
         final String[] tipoPlaza = {null};
         setupTipoPlazaSelection(dialogView, tipoPlaza);
-
 
         final android.app.AlertDialog dialog = builder.create();
 
@@ -103,7 +91,8 @@ public class MainFragment extends Fragment  {
             String buttonText = formatter.format(date.getTime());
             String fechaISO = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date.getTime());
 
-            MaterialButton button = new MaterialButton(requireContext(), null, com.google.android.material.R.attr.materialButtonOutlinedStyle);
+            MaterialButton button = new MaterialButton(requireContext(), null);
+            button.setBackgroundColor(getResources().getColor(android.R.color.white)); // Desmarcado: blanco
             button.setText(buttonText);
             button.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             button.setTextSize(14);
@@ -119,65 +108,20 @@ public class MainFragment extends Fragment  {
 
             button.setOnClickListener(btn -> {
                 fechaSeleccionada[0] = fechaISO;
-                for (MaterialButton b : listaDias) b.setChecked(false);
+
+                for (MaterialButton b : listaDias) {
+                    b.setChecked(false);
+                    b.setBackgroundColor(getResources().getColor(android.R.color.white)); // Todos a blanco
+                }
+
                 button.setChecked(true);
+                button.setBackgroundColor(android.graphics.Color.parseColor("#CCCCCC")); // Seleccionado: gris
             });
 
             layoutDias.addView(button);
             listaDias.add(button);
 
             if (i == 0) button.performClick(); // Selección por defecto
-        }
-    }
-
-    private void setupHoraButtons(GridLayout gridHoras, List<MaterialButton> horasSeleccionadas) {
-        int columnas = 4;
-        gridHoras.setColumnCount(columnas);
-
-        int inicioMinutos = 8 * 60;
-        int finMinutos = 21 * 60;
-        int intervalo = 30;
-
-        for (int minutos = inicioMinutos; minutos <= finMinutos; minutos += intervalo) {
-            int horas = minutos / 60;
-            int mins = minutos % 60;
-            String texto = String.format(Locale.getDefault(), "%02d:%02d", horas, mins);
-
-            MaterialButton btn = new MaterialButton(requireContext(), null, com.google.android.material.R.attr.materialButtonOutlinedStyle);
-            btn.setText(texto);
-            btn.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            btn.setGravity(android.view.Gravity.CENTER);
-            btn.setTextSize(14);
-            btn.setAllCaps(false);
-            btn.setCheckable(true);
-            btn.setSingleLine(true);
-            btn.setPadding(0, 0, 0, 0);
-
-            int anchor = (int) (getResources().getDisplayMetrics().density * 96);
-            btn.setMinWidth(anchor);
-            btn.setMaxWidth(anchor);
-
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.width = 0;
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
-            btn.setLayoutParams(params);
-
-            btn.setOnClickListener(v -> {
-                if (horasSeleccionadas.contains(btn)) {
-                    btn.setChecked(false);
-                    horasSeleccionadas.remove(btn);
-                } else {
-                    if (horasSeleccionadas.size() < 8) {
-                        btn.setChecked(true);
-                        horasSeleccionadas.add(btn);
-                    } else {
-                        android.widget.Toast.makeText(requireContext(), "Solo puedes seleccionar hasta 8 horas", android.widget.Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
-            gridHoras.addView(btn);
         }
     }
 
@@ -212,7 +156,6 @@ public class MainFragment extends Fragment  {
 
                 NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
 
-
                 NavOptions navOptions = new NavOptions.Builder()
                         .setLaunchSingleTop(true)
                         .setPopUpTo(R.id.mainFragment, false)
@@ -220,12 +163,11 @@ public class MainFragment extends Fragment  {
 
                 navController.navigate(R.id.reservationsFragment, null, navOptions);
             }
+
             @Override
             public void onFailure() {
                 android.widget.Toast.makeText(requireContext(), "La plaza no está disponible en ese horario", android.widget.Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-
 }
