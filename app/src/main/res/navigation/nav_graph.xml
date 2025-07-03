@@ -24,6 +24,7 @@
         <action
             android:id="@+id/action_mainFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+
     </fragment>
 
     <fragment
@@ -51,15 +52,18 @@
         android:name="com.lksnext.parkingplantilla.view.fragment.ReservationsFragment"
         android:label="Reservas"
         tools:layout="@layout/fragment_reservations" >
-        <action
-            android:id="@+id/action_reservationsFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+
         <action
             android:id="@+id/action_reservationsFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
         <action
             android:id="@+id/action_reservationsFragment_to_vehiclesFragment"
             app:destination="@id/vehiclesFragment" />
+        <action
+            android:id="@+id/action_reservationsFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -92,5 +96,15 @@
         <action
             android:id="@+id/action_profileFragment_to_reservationsFragment"
             app:destination="@id/reservationsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
+
+    <fragment android:id="@+id/loginFragment"
+        android:name="com.lksnext.parkingplantilla.view.fragment.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login" />
+
+
 </navigation>

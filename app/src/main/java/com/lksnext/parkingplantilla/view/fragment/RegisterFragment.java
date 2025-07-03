@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.databinding.FragmentRegisterBinding;
 import com.lksnext.parkingplantilla.domain.Callback;
 import com.lksnext.parkingplantilla.viewmodel.RegisterViewModel;
@@ -63,8 +64,6 @@ public class RegisterFragment extends Fragment {
 
         binding.backButton.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().popBackStack();
-            requireActivity().findViewById(com.lksnext.parkingplantilla.R.id.loginFragmentContainer).setVisibility(View.GONE);
-            requireActivity().findViewById(android.R.id.content).setVisibility(View.VISIBLE);
         });
 
         return binding.getRoot();

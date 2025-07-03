@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 
@@ -208,10 +209,17 @@ public class MainFragment extends Fragment  {
             public void onSuccess() {
                 Log.d("MainFragment", "Reserva exitosa");
                 dialog.dismiss();
-                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
-                navController.navigate(R.id.action_mainFragment_to_reservationsFragment);
-            }
 
+                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+
+
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .setPopUpTo(R.id.mainFragment, false)
+                        .build();
+
+                navController.navigate(R.id.reservationsFragment, null, navOptions);
+            }
             @Override
             public void onFailure() {
                 android.widget.Toast.makeText(requireContext(), "La plaza no está disponible en ese horario", android.widget.Toast.LENGTH_SHORT).show();

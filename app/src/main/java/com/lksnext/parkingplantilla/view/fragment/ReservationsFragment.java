@@ -64,8 +64,8 @@ public class ReservationsFragment extends Fragment {
             Reserva reserva = item.getReserva();
             if (reserva != null) {
                 reservationsViewModel.borrarReserva(
-                        reserva.getIdReserva(),               // 🔑 Firestore document ID
-                        reserva.getPlaza().getCodigo(),       // 🔑 ID de la plaza
+                        reserva.getIdReserva(),
+                        reserva.getPlaza().getCodigo(),
                         new Callback() {
                             @Override
                             public void onSuccess() {
@@ -82,12 +82,6 @@ public class ReservationsFragment extends Fragment {
             }
         });
 
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                NavHostFragment.findNavController(ReservationsFragment.this)
-                        .navigate(R.id.action_reservationsFragment_to_mainFragment);
-            }
-        });
+
     }
 }
