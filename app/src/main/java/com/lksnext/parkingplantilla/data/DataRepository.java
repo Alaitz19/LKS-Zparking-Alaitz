@@ -1,13 +1,18 @@
 package com.lksnext.parkingplantilla.data;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.lksnext.parkingplantilla.domain.Callback;
 import com.lksnext.parkingplantilla.domain.CallbackWithResult;
 import com.lksnext.parkingplantilla.domain.Hora;
@@ -61,13 +66,39 @@ public class DataRepository {
         try {
             mAuth.signInWithCredential(credential)
                     .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) callback.onSuccess();
-                        else callback.onFailure();
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                crearUsuarioFirestoreSiNoExiste(user);
+                            }
+                            callback.onSuccess();
+                        } else {
+                            callback.onFailure();
+                        }
                     });
         } catch (Exception e) {
             Log.e("DataRepository", "Error en loginWithCredential: ", e);
             callback.onFailure();
         }
+    }
+    private void crearUsuarioFirestoreSiNoExiste(FirebaseUser user) {
+        DocumentReference userRef = db.collection("users").document(user.getUid());
+        userRef.get().addOnSuccessListener(snapshot -> {
+            if (!snapshot.exists()) {
+                Map<String, Object> userData = new HashMap<>();
+                userData.put("uid", user.getUid());
+                userData.put("nombre", user.getDisplayName() != null ? user.getDisplayName() : "");
+                userData.put("email", user.getEmail() != null ? user.getEmail() : "");
+                userData.put("telefono", "");
+                userData.put("fechaRegistro", FieldValue.serverTimestamp());
+
+                userRef.set(userData)
+                        .addOnSuccessListener(unused -> Log.d("DataRepository", "Usuario creado en Firestore"))
+                        .addOnFailureListener(e -> Log.e("DataRepository", "Error al crear usuario", e));
+            } else {
+                Log.d("DataRepository", "Usuario ya existe en Firestore");
+            }
+        }).addOnFailureListener(e -> Log.e("DataRepository", "Error comprobando usuario Firestore", e));
     }
 
     public void register(String email, String password, String phone, Callback callback) {
@@ -330,5 +361,62 @@ public class DataRepository {
                 .addOnSuccessListener(aVoid -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure());
     }
+
+    public void getCurrentUserData(String uid, CallbackWithResult<Map<String, Object>> callback) {
+        db.collection("users").document(uid).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        callback.onSuccess(documentSnapshot.getData());
+                    } else {
+                        callback.onFailure(new Exception("No user data found"));
+                    }
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
+    public void logout() {
+        try {
+            mAuth.signOut();
+        } catch (Exception e) {
+            Log.e("DataRepository", "Error during logout: ", e);
+        }
+    }
+
+    public void updateUserProfile(String uid, String name, String email, String phone, CallbackWithResult<Boolean> callbackWithResult) {
+        Map<String, Object> userData = new HashMap<>();
+        if (name != null && !name.isEmpty()) userData.put("nombre", name);
+        if (email != null && !email.isEmpty()) userData.put("email", email);
+        if (phone != null && !phone.isEmpty()) userData.put("telefono", phone);
+
+        db.collection("users").document(uid).update(userData)
+                .addOnSuccessListener(aVoid -> callbackWithResult.onSuccess(true))
+                .addOnFailureListener(e -> callbackWithResult.onFailure(e));
+
+    }
+
+    public void uploadProfileImage(String uid, Uri selectedImageUri, CallbackWithResult<String> callbackWithResult) {
+        if (selectedImageUri == null) {
+            callbackWithResult.onFailure(new Exception("Selected image URI is null"));
+            return;
+        }
+
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference()
+                .child("profile_images/" + uid + ".jpg");
+
+        storageRef.putFile(selectedImageUri)
+                .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    String downloadUrl = uri.toString();
+
+                    // ✅ Guarda la URL en Firestore
+                    FirebaseFirestore.getInstance()
+                            .collection("users").document(uid)
+                            .update("imageUrl", downloadUrl)
+                            .addOnSuccessListener(aVoid -> callbackWithResult.onSuccess(downloadUrl))
+                            .addOnFailureListener(callbackWithResult::onFailure);
+
+                }).addOnFailureListener(callbackWithResult::onFailure))
+                .addOnFailureListener(callbackWithResult::onFailure);
+    }
+
 
 }

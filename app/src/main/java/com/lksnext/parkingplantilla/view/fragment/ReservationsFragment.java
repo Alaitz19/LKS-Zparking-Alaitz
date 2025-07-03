@@ -133,6 +133,7 @@ public class ReservationsFragment extends Fragment {
                 @Override
                 public void onSuccess() {
                     Toast.makeText(requireContext(), "Hora actualizada", Toast.LENGTH_SHORT).show();
+                    viewModel.programarNotificaciones(requireContext(), reserva);
                     dialog.dismiss();
                 }
 

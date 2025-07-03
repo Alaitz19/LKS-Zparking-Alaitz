@@ -1,5 +1,7 @@
 package com.lksnext.parkingplantilla.view.activity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +32,16 @@ public class MainActivity extends AppCompatActivity {
 
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            CharSequence name = "ReservasChannel";
+            String description = "Notificaciones para recordatorios de reservas";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("reservas_channel", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
         DataRepository.getInstance().crearPlazasIniciales(new Callback() {
             @Override
             public void onSuccess() {

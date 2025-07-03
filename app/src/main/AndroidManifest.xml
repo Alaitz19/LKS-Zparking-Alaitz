@@ -15,6 +15,10 @@
         android:roundIcon="@drawable/zparking"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkingLKS">
+        <receiver
+            android:name=".receiver.NotificacionReceiver"
+            android:exported="true"/>
+
 
 
         <meta-data

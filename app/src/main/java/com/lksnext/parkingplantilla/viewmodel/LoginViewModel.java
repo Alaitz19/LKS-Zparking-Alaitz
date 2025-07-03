@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseUser;
 import com.lksnext.parkingplantilla.data.DataRepository;
 import com.lksnext.parkingplantilla.domain.Callback;
 
@@ -46,8 +47,13 @@ public class LoginViewModel extends ViewModel {
             @Override
             public void onSuccess() {
                 logged.setValue(Boolean.TRUE);
-                if (DataRepository.getInstance().getCurrentUser() != null) {
-                    userName.setValue(DataRepository.getInstance().getCurrentUser().getEmail());
+
+                FirebaseUser user = DataRepository.getInstance().getCurrentUser();
+                if (user != null) {
+                    userName.setValue(user.getEmail());
+
+                    // 🔑 Crear o actualizar usuario en Firestore
+
                 }
             }
             @Override

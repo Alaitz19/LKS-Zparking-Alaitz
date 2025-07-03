@@ -1,259 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
     <ScrollView
         android:id="@+id/scrollViewContent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-       >
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-        <ImageButton
-            android:id="@+id/buttonAvatar"
-            android:layout_width="263dp"
-            android:layout_height="223dp"
-            android:layout_gravity="center_horizontal"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="8dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/generic_avatar" />
-
-        <!-- 1. User Account -->
-        <LinearLayout
-            android:id="@+id/sectionUserAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
+            android:padding="16dp">
 
+            <!-- Avatar -->
+            <ImageButton
+                android:id="@+id/buttonAvatar"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/generic_avatar" />
+
+            <!-- Sección User Account -->
             <LinearLayout
-                android:id="@+id/contentUserAccount"
+                android:id="@+id/sectionUserAccount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="12dp"
-                android:background="#F0F0F0">
+                android:paddingTop="16dp">
+
+                <!-- Header -->
+                <TextView
+                    android:id="@+id/headerUserAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#DDDDDD"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/flecha_abajo"
+                    android:drawablePadding="8dp"
+                    android:focusable="true"
+                    android:padding="12dp"
+                    android:text="User Account"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Contenido expandible -->
+                <LinearLayout
+                    android:id="@+id/contentUserAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:background="#F0F0F0"
+                    android:visibility="gone">
+
+                    <!-- Nombre -->
+                    <EditText
+                        android:id="@+id/editTextName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Name"
+                        android:inputType="textPersonName"
+                        android:padding="12dp"
+                        android:background="@android:drawable/edit_text"
+                        android:layout_marginBottom="8dp"/>
+
+                    <!-- Email -->
+                    <EditText
+                        android:id="@+id/editEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"
+                        android:padding="12dp"
+                        android:background="@android:drawable/edit_text"
+                        android:layout_marginBottom="8dp"/>
+
+                    <!-- Teléfono -->
+                    <EditText
+                        android:id="@+id/editPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Teléfono"
+                        android:inputType="phone"
+                        android:padding="12dp"
+                        android:background="@android:drawable/edit_text" />
+                    <Button
+                        android:id="@+id/buttonSaveProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:backgroundTint="@color/teal_700"
+                        android:text="Guardar cambios"
+                        android:textColor="@android:color/white"/>
+
+                </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/headerUserAccount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#DDDDDD"
-                android:clickable="true"
-                android:drawableEnd="@drawable/flecha_abajo"
-                android:drawablePadding="8dp"
-                android:focusable="true"
-                android:padding="12dp"
-                android:text="User Account"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- 2. Security -->
-        <LinearLayout
-            android:id="@+id/sectionSecurity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
-
-            <LinearLayout
-                android:id="@+id/contentSecurity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="12dp"
-                android:background="#F0F0F0">
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- 3. Notifications -->
-        <LinearLayout
-            android:id="@+id/sectionNotifications"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
-
-            <TextView
-                android:id="@+id/headerNotifications"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#DDDDDD"
-                android:clickable="true"
-                android:drawableEnd="@drawable/flecha_abajo"
-                android:drawablePadding="8dp"
-                android:focusable="true"
-                android:padding="12dp"
-                android:text="Notifications"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:id="@+id/contentNotifications"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="12dp"
-                android:background="#F0F0F0">
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- 4. Privacy -->
-        <LinearLayout
-            android:id="@+id/sectionPrivacy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
-
-            <LinearLayout
-                android:id="@+id/contentPrivacy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="12dp"
-                android:background="#F0F0F0">
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/headerPrivacy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#DDDDDD"
-                android:clickable="true"
-                android:drawableEnd="@drawable/flecha_abajo"
-                android:drawablePadding="8dp"
-                android:focusable="true"
-                android:padding="12dp"
-                android:text="Privacy"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- 5. Payment -->
-        <LinearLayout
-            android:id="@+id/sectionPayment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
-
-            <LinearLayout
-                android:id="@+id/contentPayment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="12dp"
-                android:background="#F0F0F0"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- 6. Support -->
-        <LinearLayout
-            android:id="@+id/sectionSupport"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
-
-            <TextView
-                android:id="@+id/headerAbout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#DDDDDD"
-                android:clickable="true"
-                android:drawableEnd="@drawable/flecha_abajo"
-                android:drawablePadding="8dp"
-                android:focusable="true"
-                android:padding="12dp"
-                android:text="About"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:id="@+id/contentSupport"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="12dp"
-                android:background="#F0F0F0">
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- 7. About -->
-        <LinearLayout
-            android:id="@+id/sectionAbout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            >
-
-            <LinearLayout
-                android:id="@+id/contentAbout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#F0F0F0"
-                android:orientation="vertical"
-                android:padding="12dp"
-                android:visibility="gone">
-
-            </LinearLayout>
-        </LinearLayout>
-
+            <!-- Botón Logout -->
             <Button
                 android:id="@+id/buttonLogout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="24dp"
                 android:backgroundTint="@color/design_default_color_error"
                 android:text="Log out"
                 android:textColor="@android:color/white" />
 
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
-
-
-</ScrollView>
-
-    </RelativeLayout>
+</RelativeLayout>
