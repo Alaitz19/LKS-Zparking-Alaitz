@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 
 import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.databinding.FragmentRegisterBinding;
@@ -48,9 +49,16 @@ public class RegisterFragment extends Fragment {
             registerViewModel.register(email, password, username, phone, new Callback() {
                 @Override
                 public void onSuccess() {
-                    requireActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), "Registro exitoso", Toast.LENGTH_SHORT).show()
-                    );
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(getContext(), "Registro exitoso", Toast.LENGTH_SHORT).show();
+
+                        requireActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.loginFragmentContainer, new LoginFragment())
+                                .addToBackStack(null)
+                                .commit();
+                    });
+
                 }
 
                 @Override

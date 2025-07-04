@@ -39,9 +39,9 @@ public class ChangePasswordFragment extends Fragment {
             String confirmPassword = Objects.requireNonNull(confirmPasswordInput.getText()).toString().trim();
 
             if (TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
-                Toast.makeText(requireContext(), "Por favor, completa ambos campos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Please complete both parameters", Toast.LENGTH_SHORT).show();
             } else if (!password.equals(confirmPassword)) {
-                Toast.makeText(requireContext(), "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Passwords don't match", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(requireContext(), "Contraseña actualizada correctamente", Toast.LENGTH_LONG).show();
 

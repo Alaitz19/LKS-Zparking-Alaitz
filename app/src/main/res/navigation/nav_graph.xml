@@ -80,5 +80,15 @@
         android:label="Login"
         tools:layout="@layout/fragment_login" />
 
+    <fragment android:id="@+id/registerFragment"
+        android:name="com.lksnext.parkingplantilla.view.fragment.RegisterFragment"
+        android:label="Registro"
+        tools:layout="@layout/fragment_register" > </fragment>
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+        />
+
+
 
 </navigation>
