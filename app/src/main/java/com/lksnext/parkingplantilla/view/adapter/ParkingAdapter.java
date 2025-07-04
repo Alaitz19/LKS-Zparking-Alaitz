@@ -2,7 +2,6 @@ package com.lksnext.parkingplantilla.view.adapter;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +64,7 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingV
 
         holder.parkingAddress.setText(item.getAddress());
 
-        // ✅ Mostrar franja horaria fija
+        // Mostrar franja horaria
         Reserva reserva = item.getReserva();
         if (reserva != null && reserva.getHora() != null) {
             List<String> horas = reserva.getHora().getHoras();
@@ -80,11 +79,18 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingV
             holder.parkingTimeRange.setText("Sin reserva");
         }
 
-        // ⏱️ Inicia el temporizador dinámico
+        // ✅ Mostrar fecha siempre
+        if (reserva != null && reserva.getFecha() != null) {
+            String fechaFormateada = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                    .format(reserva.getFecha().toDate());
+            holder.parkingTime.setText("Fecha: " + fechaFormateada);
+        } else {
+            holder.parkingTime.setText("Fecha: N/A");
+        }
+
         holder.startTimer(item);
 
-        // ✅ Botón editar solo si se puede editar
-        if (sePuedeEditar(item.getReserva())) {
+        if (sePuedeEditar(reserva)) {
             holder.btnEdit.setVisibility(View.VISIBLE);
             holder.btnEdit.setOnClickListener(v -> {
                 if (editClickListener != null) {
@@ -95,11 +101,16 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingV
             holder.btnEdit.setVisibility(View.GONE);
         }
 
-        holder.btnDelete.setOnClickListener(v -> {
-            if (deleteClickListener != null) {
-                deleteClickListener.onDelete(item, position);
-            }
-        });
+        if (sePuedeBorrar(reserva)) {
+            holder.btnDelete.setVisibility(View.VISIBLE);
+            holder.btnDelete.setOnClickListener(v -> {
+                if (deleteClickListener != null) {
+                    deleteClickListener.onDelete(item, position);
+                }
+            });
+        } else {
+            holder.btnDelete.setVisibility(View.GONE);
+        }
     }
 
     private boolean sePuedeEditar(Reserva reserva) {
@@ -113,8 +124,25 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingV
             long now = System.currentTimeMillis();
             long millisFin = sdf.parse(fechaStr + " " + horaFinStr).getTime();
 
-            return millisFin >= now; // En curso o futuras
+            return millisFin >= now;
 
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean sePuedeBorrar(Reserva reserva) {
+        if (reserva == null || reserva.getHora() == null || reserva.getFecha() == null) return false;
+
+        try {
+            String horaFinStr = reserva.getHora().getHoraFin();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+            String fechaStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(reserva.getFecha().toDate());
+
+            long now = System.currentTimeMillis();
+            long millisFin = sdf.parse(fechaStr + " " + horaFinStr).getTime();
+
+            return millisFin >= now;
         } catch (Exception e) {
             return false;
         }
@@ -153,7 +181,7 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingV
             parkingNumber = itemView.findViewById(R.id.parking_number);
             parkingAddress = itemView.findViewById(R.id.parking_address);
             parkingTime = itemView.findViewById(R.id.parking_time);
-            parkingTimeRange = itemView.findViewById(R.id.parking_time_range); // ✅ Nuevo TextView
+            parkingTimeRange = itemView.findViewById(R.id.parking_time_range);
             parkingType = itemView.findViewById(R.id.parking_type);
             btnEdit = itemView.findViewById(R.id.btn_edit);
             btnDelete = itemView.findViewById(R.id.btn_delete);
@@ -185,7 +213,9 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingV
                                 } else if (now < millisFin) {
                                     parkingTime.setText("Tiempo restante: " + formatMillis(millisFin - now));
                                 } else {
-                                    parkingTime.setText("Terminó");
+                                    String fechaFormateada = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                                            .format(reserva.getFecha().toDate());
+                                    parkingTime.setText("Fecha: " + fechaFormateada);
                                 }
 
                             } catch (Exception e) {

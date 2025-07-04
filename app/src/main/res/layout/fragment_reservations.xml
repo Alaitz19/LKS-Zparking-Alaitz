@@ -15,39 +15,42 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_marginBottom="8dp">
-
         <Button
-            android:id="@+id/btn_filter_terminadas"
-            android:layout_width="wrap_content"
+            android:id="@+id/btn_filter_encurso"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginEnd="8dp"
+            android:paddingVertical="12dp"
             android:backgroundTint="@color/teal_300"
             android:textColor="@android:color/white"
-            android:text="Terminadas" />
+            android:text="Actual" />
 
         <Button
             android:id="@+id/btn_filter_siguientes"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginEnd="8dp"
+            android:paddingVertical="12dp"
             android:backgroundTint="@color/teal_300"
             android:textColor="@android:color/white"
-            android:text="Siguientes" />
+            android:text="Next" />
 
         <Button
-            android:id="@+id/btn_filter_encurso"
-            android:layout_width="wrap_content"
+            android:id="@+id/btn_filter_terminadas"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:layout_weight="1"
+            android:paddingVertical="12dp"
             android:backgroundTint="@color/teal_300"
             android:textColor="@android:color/white"
-            android:text="En curso" />
+            android:text="Finished" />
+
+
     </LinearLayout>
 
-    <!-- RecyclerView para mostrar reservas -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_reservations"
         android:layout_width="match_parent"

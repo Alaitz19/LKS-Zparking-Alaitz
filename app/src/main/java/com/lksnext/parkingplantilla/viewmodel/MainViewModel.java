@@ -1,5 +1,6 @@
 package com.lksnext.parkingplantilla.viewmodel;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -29,7 +30,10 @@ public class MainViewModel extends ViewModel {
 
 
 
-    public void reservarSiLibre(String fecha,  List<String> horas, String tipoPlaza, Callback callback) {
-        repository.comprobarYCrearReserva(fecha, horas, tipoPlaza, callback);
+    public void reservarSiLibre(Context context, String fecha, List<String> horas, String tipoPlaza, Callback callback) {
+        repository.comprobarYCrearReserva(context, fecha, horas, tipoPlaza, callback);
     }
+
+
+
 }

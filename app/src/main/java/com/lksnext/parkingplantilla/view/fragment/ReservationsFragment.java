@@ -65,9 +65,31 @@ public class ReservationsFragment extends Fragment {
         reservationsViewModel.getReservas().observe(getViewLifecycleOwner(), reservas -> {
             listaDeItems.clear();
             for (Reserva reserva : reservas) {
-                // Puedes personalizar la imagen y la dirección según la plaza o tipo de plaza
-                int imageId = R.drawable.p2; // Usa la imagen que prefieras
-                String direccion = "Dirección no disponible"; // O busca la dirección real si la tienes
+                // Obtén el tipo de plaza o vehículo
+                String tipoPlaza = reserva.getPlaza().getTipo(); // Asegúrate de que `getTipo()` devuelve "Coche", "Moto", "Bici", etc.
+
+                int imageId;
+                switch (tipoPlaza.toLowerCase()) {
+                    case "coche":
+                        imageId = R.drawable.coche; // Usa tu drawable para coche
+                        break;
+                    case "moto":
+                        imageId = R.drawable.moto; // Usa tu drawable para moto
+                        break;
+                    case "electrico":
+                        imageId = R.drawable.coche_electrico;
+                        break;
+                    case "minusvalido":
+                        imageId = R.drawable.minsuvalidos;
+                        break;
+                    default:
+                        imageId = R.drawable.estacionamiento;
+                }
+
+                String direccion = reserva.getPlaza().getDireccion() != null
+                        ? reserva.getPlaza().getDireccion()
+                        : "Dirección no disponible";
+
                 listaDeItems.add(new ParkingItem(imageId, direccion, reserva));
             }
             adapter.notifyDataSetChanged();

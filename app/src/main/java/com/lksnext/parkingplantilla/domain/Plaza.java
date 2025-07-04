@@ -11,6 +11,8 @@ public class Plaza {
     private boolean ocupada;      // nuevo campo booleano para ocupada
     private PlazaType tipoPlaza;
 
+    private String direccion;
+
     public Plaza() {
     }
 
@@ -76,4 +78,12 @@ public class Plaza {
     }
 
 
+    public String getTipo() {
+        return tipoPlaza != null ? tipoPlaza.getType() : "Desconocido";
+    }
+
+    public String getDireccion() {
+
+        return direccion != null ? direccion : "Dirección no disponible";
+    }
 }

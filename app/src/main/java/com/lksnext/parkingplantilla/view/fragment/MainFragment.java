@@ -66,9 +66,9 @@ public class MainFragment extends Fragment {
         setupDiaButtons(layoutDias, fechaSeleccionada, listaDias);
 
         final List<MaterialButton> horasSeleccionadas = new ArrayList<>();
-        // ✅ Aquí usamos tu DialogUtils
+
         DialogUtils.setupHoraButtons(requireContext(), gridHoras, horasSeleccionadas);
-        // Configuración de los botones de tipo de plaza
+
 
         final String[] tipoPlaza = {null};
         setupTipoPlazaSelection(dialogView, tipoPlaza);
@@ -148,7 +148,7 @@ public class MainFragment extends Fragment {
             return;
         }
 
-        viewModel.reservarSiLibre(fecha, horas, tipoPlaza, new Callback() {
+        viewModel.reservarSiLibre( requireContext(),fecha, horas, tipoPlaza, new Callback() {
             @Override
             public void onSuccess() {
                 Log.d("MainFragment", "Reserva exitosa");

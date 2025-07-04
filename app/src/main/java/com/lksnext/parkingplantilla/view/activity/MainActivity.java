@@ -1,13 +1,19 @@
 package com.lksnext.parkingplantilla.view.activity;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
@@ -33,26 +39,35 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+            }
+        }
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             CharSequence name = "ReservasChannel";
             String description = "Notificaciones para recordatorios de reservas";
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("reservas_channel", name, importance);
+            NotificationChannel channel = new NotificationChannel("ParkingLKS_Channel", name, importance);
             channel.setDescription(description);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+
         DataRepository.getInstance().crearPlazasIniciales(new Callback() {
             @Override
             public void onSuccess() {
                 Log.d("MainActivity", "Plazas creadas o ya existentes.");
-                // Aquí puedes seguir con el flujo normal, como mostrar la UI
+
             }
 
             @Override
             public void onFailure() {
                 Log.e("MainActivity", "Error creando plazas.");
-                // Puedes mostrar un mensaje de error o intentar de nuevo
+
             }
         });
 

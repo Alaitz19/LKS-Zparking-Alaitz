@@ -1,5 +1,9 @@
 package com.lksnext.parkingplantilla.data;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
@@ -23,7 +27,7 @@ import com.lksnext.parkingplantilla.domain.enu.PlazaType;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
+import  com.lksnext.parkingplantilla.receiver.NotificationHelper;
 public class DataRepository {
     private static final String KEY_ID = "idReserva";
     private static final String KEY_FECHA = "fecha";
@@ -202,7 +206,7 @@ public class DataRepository {
         return mAuth.getCurrentUser();
     }
 
-    public void comprobarYCrearReserva(String fecha, List<String> horas, String tipoPlaza, Callback callback) {
+    public void comprobarYCrearReserva(Context context, String fecha, List<String> horas, String tipoPlaza, Callback callback) {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) {
             callback.onFailure();
@@ -224,12 +228,13 @@ public class DataRepository {
                         if (codigo != null) codigosPlazas.add(codigo);
                     }
 
-                    buscarPlazaLibre(codigosPlazas, 0, fecha, horas, callback, user, tipoPlaza);
+                    buscarPlazaLibre(context, codigosPlazas, 0, fecha, horas, callback, user, tipoPlaza);
                 })
                 .addOnFailureListener(e -> callback.onFailure());
     }
 
-    private void buscarPlazaLibre(List<String> codigos, int index, String fecha, List<String> horas, Callback callback, FirebaseUser user, String tipoPlaza) {
+
+    private void buscarPlazaLibre(Context context, List<String> codigos, int index, String fecha, List<String> horas, Callback callback, FirebaseUser user, String tipoPlaza) {
         if (index >= codigos.size()) {
             callback.onFailure();
             return;
@@ -243,11 +248,10 @@ public class DataRepository {
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     if (existeSolapamiento(querySnapshot, horas)) {
-                        buscarPlazaLibre(codigos, index + 1, fecha, horas, callback, user, tipoPlaza);
+                        buscarPlazaLibre(context, codigos, index + 1, fecha, horas, callback, user, tipoPlaza);
                         return;
                     }
 
-                    // Plaza libre, crear reserva
                     Map<String, Object> reserva = new HashMap<>();
                     reserva.put(KEY_FECHA, fecha);
                     reserva.put(KEY_USUARIO, user.getEmail());
@@ -259,13 +263,15 @@ public class DataRepository {
                     db.collection("reservas").add(reserva)
                             .addOnSuccessListener(r -> {
                                 String idGenerado = r.getId();
-                                Log.d("Reserva", "Reserva creada con ID: " + idGenerado);
-
                                 db.collection("reservas").document(idGenerado).update(KEY_ID, idGenerado);
 
                                 db.collection("plazas").document(plazaCodigo)
                                         .update("ocupada", true)
-                                        .addOnSuccessListener(aVoid -> callback.onSuccess())
+                                        .addOnSuccessListener(aVoid -> {
+
+                                            NotificationHelper.programarNotificacionesReserva(context, fecha, horas);
+                                            callback.onSuccess();
+                                        })
                                         .addOnFailureListener(e -> callback.onFailure());
                             })
                             .addOnFailureListener(e -> callback.onFailure());
@@ -407,7 +413,7 @@ public class DataRepository {
                 .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     String downloadUrl = uri.toString();
 
-                    // ✅ Guarda la URL en Firestore
+
                     FirebaseFirestore.getInstance()
                             .collection("users").document(uid)
                             .update("imageUrl", downloadUrl)
@@ -417,6 +423,9 @@ public class DataRepository {
                 }).addOnFailureListener(callbackWithResult::onFailure))
                 .addOnFailureListener(callbackWithResult::onFailure);
     }
+
+
+
 
 
 }
