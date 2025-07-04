@@ -12,16 +12,16 @@ import java.util.List;
 import java.util.Locale;
 
 public class NotificationHelper {
+
     public static void programarNotificacionesReserva(Context context, String fecha, List<String> horas) {
         if (horas == null || horas.isEmpty()) return;
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
 
-            // Ordena las horas por orden ascendente
+            // Ordena horas por orden ascendente
             horas.sort(String::compareTo);
 
-            // Toma la primera hora para la notificación de inicio
             String horaInicio = horas.get(0);
             String horaFin = horas.get(horas.size() - 1);
 
@@ -33,6 +33,7 @@ public class NotificationHelper {
 
             // Resta 30 min al inicio
             calInicio.add(Calendar.MINUTE, -30);
+
             // Resta 15 min al fin
             calFin.add(Calendar.MINUTE, -15);
 
@@ -55,7 +56,7 @@ public class NotificationHelper {
         intent.putExtra("title", title);
         intent.putExtra("message", message);
 
-        int requestCode = (int) System.currentTimeMillis(); // único
+        int requestCode = (int) System.currentTimeMillis(); // único para cada alarma
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
                 requestCode,
@@ -64,7 +65,15 @@ public class NotificationHelper {
         );
 
         if (alarmManager != null) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
+            // ✅ Usa setWindow() en lugar de setExact()
+            long windowLengthMillis = 5 * 60 * 1000; // flexibilidad de 5 min
+
+            alarmManager.setWindow(
+                    AlarmManager.RTC_WAKEUP,
+                    triggerAtMillis,
+                    windowLengthMillis,
+                    pendingIntent
+            );
         }
     }
 }

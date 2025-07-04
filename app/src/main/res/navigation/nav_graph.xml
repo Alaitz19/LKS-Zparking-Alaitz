@@ -12,9 +12,7 @@
         tools:layout="@layout/fragment_main" >
 
         <!-- Navegaciones desde mainFragment -->
-        <action
-            android:id="@+id/action_mainFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
+
         <action
             android:id="@+id/action_mainFragment_to_reservationsFragment"
             app:destination="@id/reservationsFragment" />
@@ -25,26 +23,6 @@
             android:id="@+id/action_mainFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
 
-    </fragment>
-
-    <fragment
-        android:id="@+id/mapFragment"
-        android:name="com.lksnext.parkingplantilla.view.fragment.MapFragment"
-        android:label="Mapa"
-        tools:layout="@layout/fragment_map" >
-        <!-- Acciones desde mapFragment, si quieres -->
-        <action
-            android:id="@+id/action_mapFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-        <action
-            android:id="@+id/action_mapFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-        <action
-            android:id="@+id/action_mapFragment_to_vehiclesFragment"
-            app:destination="@id/vehiclesFragment" />
-        <action
-            android:id="@+id/action_mapFragment_to_reservationsFragment"
-            app:destination="@id/reservationsFragment" />
     </fragment>
 
     <fragment
@@ -61,9 +39,7 @@
             app:destination="@id/vehiclesFragment" />
         <action
             android:id="@+id/action_reservationsFragment_to_mainFragment"
-            app:destination="@id/mainFragment"
-            app:popUpTo="@id/mainFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/mainFragment" />
     </fragment>
 
     <fragment
@@ -96,9 +72,7 @@
         <action
             android:id="@+id/action_profileFragment_to_reservationsFragment"
             app:destination="@id/reservationsFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
+
     </fragment>
 
     <fragment android:id="@+id/loginFragment"

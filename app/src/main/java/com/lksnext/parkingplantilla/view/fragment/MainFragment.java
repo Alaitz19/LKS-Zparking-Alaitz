@@ -157,11 +157,10 @@ public class MainFragment extends Fragment {
                 NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
 
                 NavOptions navOptions = new NavOptions.Builder()
-                        .setLaunchSingleTop(true)
-                        .setPopUpTo(R.id.mainFragment, false)
+                        .setPopUpTo(R.id.mainFragment, true)
                         .build();
+                navController.navigate(R.id.action_mainFragment_to_reservationsFragment, null, navOptions);
 
-                navController.navigate(R.id.reservationsFragment, null, navOptions);
             }
 
             @Override
