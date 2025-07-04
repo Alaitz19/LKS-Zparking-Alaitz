@@ -11,9 +11,6 @@
         >
 
 
-        <!-- Título -->
-
-        <!-- Tarjeta del vehículo -->
 
         <TextView
             android:id="@+id/your_vehicles_title"
@@ -28,58 +25,15 @@
             android:textSize="25sp"
             android:textStyle="bold" />
 
-        <FrameLayout
-            android:layout_width="300dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/rounded_frame"
-            android:clipToOutline="true">
 
-            <ImageView
-                android:id="@+id/vehicle_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                 />
+        <!-- RecyclerView para mostrar los vehículos -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/vehicles_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:nestedScrollingEnabled="false" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="8dp"
-                android:background="#88000000">
-
-                <TextView
-                    android:id="@+id/vehicle_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/vehicle_plate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Plate: 1234ABC"
-                    android:textColor="@android:color/white" />
-
-                <TextView
-                    android:id="@+id/vehicle_size"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Size: 4947 × 2033 × — mm"
-                    android:textColor="@android:color/white" />
-
-                <TextView
-                    android:id="@+id/vehicle_lez"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="LEZ: C"
-                    android:textColor="@android:color/white" />
-            </LinearLayout>
-        </FrameLayout>
 
         <!-- Botón añadir vehículo -->
         <ImageButton

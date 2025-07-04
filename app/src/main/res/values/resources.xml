@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="pollution_types">
+        <item>C</item>
+        <item>0</item>
+        <item>ECO</item>
+        <item>B</item>
+    </string-array>
+    <string-array name="car_type">
+        <item>Car</item>
+        <item>Motor</item>
+        <item>Electric</item>
+        <item>Hybrid</item>
+        <item>Disabled</item>
+    </string-array>
+
+</resources>

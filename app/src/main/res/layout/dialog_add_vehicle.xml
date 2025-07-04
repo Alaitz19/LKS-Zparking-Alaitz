@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+    <ImageView
+        android:id="@+id/imageViewVehicle"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:contentDescription="imagen"
+        android:scaleType="centerCrop"
+        android:src="@drawable/coche"
+        android:background="#CCCCCC"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <EditText
+        android:id="@+id/editTextPlate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:autofillHints=""
+        android:hint="License Plate" />
+
+
+    <Spinner
+        android:id="@+id/spinnerType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:entries="@array/car_type" />
+
+    <Spinner
+        android:id="@+id/spinnerPollution"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/pollution_types" />
+</LinearLayout>

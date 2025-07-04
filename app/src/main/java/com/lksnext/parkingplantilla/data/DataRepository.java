@@ -1,9 +1,7 @@
 package com.lksnext.parkingplantilla.data;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
+
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
@@ -157,11 +155,18 @@ public class DataRepository {
     }
 
     private void crearTodasLasPlazas(Callback callback) {
-        String[] tipos = {"Coche", "Electrico", "Discapacitado", "Moto"};
-        int plazasPorTipo = 50;
+        Map<String, Integer> tipos = new LinkedHashMap<>();
+        tipos.put("Coche", 50);
+        tipos.put("Moto", 25);
+        tipos.put("Discapacitado", 4);
+        tipos.put("Electrico", 4);
+
         var batch = db.batch();
 
-        for (String tipo : tipos) {
+        for (Map.Entry<String, Integer> entry : tipos.entrySet()) {
+            String tipo = entry.getKey();
+            int plazasPorTipo = entry.getValue();
+
             for (int i = 1; i <= plazasPorTipo; i++) {
                 String docId = tipo.substring(0, 3).toUpperCase() + String.format("%03d", i);
 
@@ -184,23 +189,69 @@ public class DataRepository {
         return s == null || s.isEmpty();
     }
 
-    public void addVehiculo(String matricula, String marca, String modelo, String color, Callback callback) {
+    public void addVehiculo(String matricula, String pollutionType, String marca, Uri imageUri, Callback callback) {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) {
+            Log.e("DataRepository", "Usuario no autenticado");
             callback.onFailure();
             return;
         }
 
-        Map<String, Object> vehiculo = new HashMap<>();
-        vehiculo.put("matricula", matricula);
-        vehiculo.put("marca", marca);
-        vehiculo.put("modelo", modelo);
-        vehiculo.put("color", color);
+        if (isNullOrEmpty(matricula)) {
+            Log.e("DataRepository", "Matrícula es null o vacía");
+            callback.onFailure();
+            return;
+        }
 
-        db.collection("users").document(user.getUid()).collection("vehiculos").add(vehiculo)
-                .addOnSuccessListener(documentReference -> callback.onSuccess())
-                .addOnFailureListener(e -> callback.onFailure());
+        if (imageUri == null) {
+            Log.e("DataRepository", "Imagen no seleccionada");
+            callback.onFailure();
+            return;
+        }
+
+        Log.d("DataRepository", "UID: " + user.getUid());
+        Log.d("DataRepository", "Subiendo imagen...");
+
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference()
+                .child("users/" + user.getUid() + "/vehicles/" + matricula + ".jpg");
+
+        storageRef.putFile(imageUri)
+                .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                    Map<String, Object> vehiculo = new HashMap<>();
+                    vehiculo.put("matricula", matricula);
+                    vehiculo.put("pollutionType", pollutionType);
+                    vehiculo.put("marca", marca);
+                    vehiculo.put("imageUrl", downloadUri.toString());
+
+                    Log.d("DataRepository", "Guardando en Firestore: " + vehiculo);
+
+                    db.collection("users")
+                            .document(user.getUid())
+                            .collection("vehiculos")
+                            .document(matricula)
+                            .set(vehiculo)
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d("DataRepository", "Vehículo guardado correctamente");
+                                callback.onSuccess();
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("DataRepository", "Error guardando vehículo: ", e);
+                                callback.onFailure();
+                            });
+
+                }).addOnFailureListener(e -> {
+                    Log.e("DataRepository", "Error obteniendo URL imagen: ", e);
+                    callback.onFailure();
+                }))
+                .addOnFailureListener(e -> {
+                    Log.e("DataRepository", "Error subiendo imagen: ", e);
+                    callback.onFailure();
+                });
     }
+
+
+
+
 
     public FirebaseUser getCurrentUser() {
         return mAuth.getCurrentUser();
