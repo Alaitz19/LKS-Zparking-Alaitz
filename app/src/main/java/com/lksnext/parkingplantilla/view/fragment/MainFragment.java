@@ -57,7 +57,7 @@ public class MainFragment extends Fragment {
         MaterialButton btnContinuar = dialogView.findViewById(R.id.btn_continuar);
 
         if (layoutDias == null || gridHoras == null || btnContinuar == null) {
-            android.widget.Toast.makeText(requireContext(), "Error en el layout del diálogo", android.widget.Toast.LENGTH_SHORT).show();
+            android.widget.Toast.makeText(requireContext(), "Error in the layout", android.widget.Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -137,21 +137,81 @@ public class MainFragment extends Fragment {
         if (btnElectrico != null) btnElectrico.setOnClickListener(b -> tipoPlaza[0] = "Electrico");
     }
 
-    private void handleContinuarClick(String fecha, String tipoPlaza, List<MaterialButton> horasSeleccionadas, android.app.AlertDialog dialog) {
-        List<String> horas = new ArrayList<>();
-        for (MaterialButton b : horasSeleccionadas) {
-            horas.add(b.getText().toString());
+    private void handleContinuarClick(String date, String spotType, List<MaterialButton> selectedButtons, android.app.AlertDialog dialog) {
+        List<String> selectedHours = new ArrayList<>();
+        for (MaterialButton b : selectedButtons) {
+            selectedHours.add(b.getText().toString());
         }
 
-        if (fecha == null || tipoPlaza == null || horas.isEmpty()) {
-            android.widget.Toast.makeText(requireContext(), "Selecciona fecha, tipo de plaza y al menos una hora", android.widget.Toast.LENGTH_SHORT).show();
+        if (date == null || spotType == null || selectedHours.isEmpty()) {
+            android.widget.Toast.makeText(requireContext(),
+                    "Please select a date, spot type, and at least one hour.",
+                    android.widget.Toast.LENGTH_SHORT).show();
             return;
         }
 
-        viewModel.reservarSiLibre( requireContext(),fecha, horas, tipoPlaza, new Callback() {
+        if (selectedHours.size() < 2) {
+            android.widget.Toast.makeText(requireContext(),
+                    "You must select at least two consecutive hours.",
+                    android.widget.Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Sort the hours
+        selectedHours.sort(String::compareTo);
+
+        // Check that the selected hours are consecutive
+        boolean areConsecutive = true;
+        try {
+            for (int i = 0; i < selectedHours.size() - 1; i++) {
+                String[] currentParts = selectedHours.get(i).split(":");
+                String[] nextParts = selectedHours.get(i + 1).split(":");
+
+                int currentMinutes = Integer.parseInt(currentParts[0]) * 60 + Integer.parseInt(currentParts[1]);
+                int nextMinutes = Integer.parseInt(nextParts[0]) * 60 + Integer.parseInt(nextParts[1]);
+
+                if (nextMinutes - currentMinutes != 30) {
+                    areConsecutive = false;
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            areConsecutive = false;
+        }
+
+        if (!areConsecutive) {
+            android.widget.Toast.makeText(requireContext(),
+                    "Selected hours must be consecutive with no gaps.",
+                    android.widget.Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check that the first hour is not in the past
+        try {
+            String startHour = selectedHours.get(0);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+            long startMillis = sdf.parse(date + " " + startHour).getTime();
+
+            long now = System.currentTimeMillis();
+            if (startMillis < now) {
+                android.widget.Toast.makeText(requireContext(),
+                        "You can't reserve a time slot in the past.",
+                        android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+        } catch (Exception e) {
+            android.widget.Toast.makeText(requireContext(),
+                    "Error validating the selected time.",
+                    android.widget.Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // If all checks pass, continue with reservation
+        viewModel.reservarSiLibre(requireContext(), date, selectedHours, spotType, new Callback() {
             @Override
             public void onSuccess() {
-                Log.d("MainFragment", "Reserva exitosa");
+                Log.d("MainFragment", "Reservation successful");
                 dialog.dismiss();
 
                 NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
@@ -160,13 +220,18 @@ public class MainFragment extends Fragment {
                         .setPopUpTo(R.id.mainFragment, true)
                         .build();
                 navController.navigate(R.id.action_mainFragment_to_reservationsFragment, null, navOptions);
-
             }
 
             @Override
             public void onFailure() {
-                android.widget.Toast.makeText(requireContext(), "La plaza no está disponible en ese horario", android.widget.Toast.LENGTH_SHORT).show();
+                android.widget.Toast.makeText(requireContext(),
+                        "The parking spot is not available at the selected time.",
+                        android.widget.Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
+
+
 }
