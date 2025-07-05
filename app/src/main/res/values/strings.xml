@@ -226,6 +226,10 @@
     <string name="vehicle_plate_placeholder">ABC-1234</string>
     <string name="vehicle_type_placeholder">Sedan</string>
     <string name="vehicle_lez_placeholder">LEZ: Allowed</string>
+    <!-- VehiclesFragment strings -->
+    <string name="vehicle_deleted_success">Vehicle deleted correctly</string>
+    <string name="vehicle_deleted_failure">Error trying to delete vehicle</string>
+
 
 
 

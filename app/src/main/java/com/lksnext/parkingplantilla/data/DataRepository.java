@@ -65,6 +65,24 @@ public class DataRepository {
         }
     }
 
+    public void deleteVehiculo(String vehicleId, Callback callback) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            callback.onFailure();
+            return;
+        }
+
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(user.getUid())
+                .collection("vehiculos")
+                .document(vehicleId)
+                .delete()
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onFailure());
+    }
+
+
     public void loginWithCredential(AuthCredential credential, Callback callback) {
         try {
             mAuth.signInWithCredential(credential)

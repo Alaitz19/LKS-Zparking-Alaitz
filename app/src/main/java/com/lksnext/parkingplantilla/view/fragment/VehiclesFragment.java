@@ -47,21 +47,30 @@ public class VehiclesFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_vehicles, container, false);
 
-        // Configura RecyclerView + Adapter + ViewModel
         RecyclerView recyclerView = view.findViewById(R.id.vehicles_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        VehicleAdapter adapter = new VehicleAdapter(new ArrayList<>());
+        VehicleAdapter adapter = new VehicleAdapter(new ArrayList<>(), vehicle -> {
+            DataRepository.getInstance().deleteVehiculo(vehicle.getMatricula(), new Callback() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(requireContext(), getString(R.string.vehicle_deleted_success), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure() {
+                    Toast.makeText(requireContext(), getString(R.string.vehicle_deleted_failure), Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
         recyclerView.setAdapter(adapter);
 
         VehiclesViewModel viewModel = new ViewModelProvider(this).get(VehiclesViewModel.class);
         viewModel.getVehicles().observe(getViewLifecycleOwner(), adapter::setVehicles);
 
-        // Botón ➕ para añadir vehículo
         View addVehicleButton = view.findViewById(R.id.add_vehicle_button);
         addVehicleButton.setOnClickListener(v -> showAddVehicleDialog());
 
-        // Launcher para abrir galería
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {

@@ -9,7 +9,8 @@ public class Vehicle {
     private String imageUrl;
 
 
-    public Vehicle() {}
+    public Vehicle() {
+    }
 
     public String getMatricula() {
         return matricula;
@@ -72,3 +73,4 @@ public class Vehicle {
         }
     }
 }
+

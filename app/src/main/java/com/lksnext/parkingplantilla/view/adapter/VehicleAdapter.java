@@ -3,6 +3,7 @@ package com.lksnext.parkingplantilla.view.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,9 +20,16 @@ import java.util.List;
 public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleViewHolder> {
 
     private List<Vehicle> vehicles = new ArrayList<>();
+    private OnDeleteClickListener deleteClickListener;
 
-    public VehicleAdapter(List<Vehicle> vehicles) {
+    // Interfaz para manejar clics de eliminación
+    public interface OnDeleteClickListener {
+        void onDeleteClick(Vehicle vehicle);
+    }
+
+    public VehicleAdapter(List<Vehicle> vehicles, OnDeleteClickListener deleteClickListener) {
         this.vehicles = vehicles;
+        this.deleteClickListener = deleteClickListener;
     }
 
     @NonNull
@@ -44,7 +52,7 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleV
                 holder.itemView.getContext().getString(R.string.vehicle_lez_label, vehicle.getLez())
         );
 
-        holder.vehicletype.setText(
+        holder.vehicleType.setText(
                 holder.itemView.getContext().getString(R.string.vehicle_type_label, vehicle.getMarca())
         );
 
@@ -53,6 +61,13 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleV
                 .placeholder(R.drawable.ic_launcher_background)
                 .centerCrop()
                 .into(holder.vehicleImage);
+
+        // Configura el botón de eliminar
+        holder.btnDelete.setOnClickListener(v -> {
+            if (deleteClickListener != null) {
+                deleteClickListener.onDeleteClick(vehicle);
+            }
+        });
     }
 
     @Override
@@ -68,14 +83,16 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleV
     static class VehicleViewHolder extends RecyclerView.ViewHolder {
 
         ImageView vehicleImage;
-        TextView vehicletype, vehiclePlate, vehicleLez;
+        TextView vehicleType, vehiclePlate, vehicleLez;
+        ImageButton btnDelete;
 
         public VehicleViewHolder(@NonNull View itemView) {
             super(itemView);
             vehicleImage = itemView.findViewById(R.id.vehicle_image);
             vehiclePlate = itemView.findViewById(R.id.vehicle_plate);
             vehicleLez = itemView.findViewById(R.id.vehicle_lez);
-            vehicletype = itemView.findViewById(R.id.vehicle_type);
+            vehicleType = itemView.findViewById(R.id.vehicle_type);
+            btnDelete = itemView.findViewById(R.id.btn_delete);
         }
     }
 }
