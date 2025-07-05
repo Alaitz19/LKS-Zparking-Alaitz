@@ -21,7 +21,7 @@ import java.util.Locale;
 public class ReservationsViewModel extends ViewModel {
 
     private final MutableLiveData<List<Reserva>> reservas = new MutableLiveData<>(new ArrayList<>());
-    private List<Reserva> todasLasReservas = new ArrayList<>();
+    public List<Reserva> todasLasReservas = new ArrayList<>();
 
     private final DataRepository repo;
 

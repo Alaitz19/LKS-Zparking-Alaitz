@@ -214,12 +214,12 @@ public class DataRepository {
         return ocupadas;
     }
 
-    private int getNowMinutes() {
+    public int getNowMinutes() {
         Calendar now = Calendar.getInstance();
         return now.get(Calendar.HOUR_OF_DAY) * 60 + now.get(Calendar.MINUTE);
     }
 
-    private List<String> safeCastHoras(Object horasObj) {
+    public List<String> safeCastHoras(Object horasObj) {
         if (horasObj instanceof List<?> rawList) {
             List<String> result = new ArrayList<>();
             for (Object item : rawList) {
@@ -230,7 +230,7 @@ public class DataRepository {
         return Collections.emptyList();
     }
 
-    private boolean isHoraValidaEnRango(String hora, int nowMinutes) {
+    public boolean isHoraValidaEnRango(String hora, int nowMinutes) {
         String[] parts = hora.split(":");
         if (parts.length != 2) return false;
         int total = Integer.parseInt(parts[0]) * 60 + Integer.parseInt(parts[1]);
@@ -243,7 +243,7 @@ public class DataRepository {
         if (plaza != null && !ocupadas.contains(plaza)) ocupadas.add(plaza);
     }
 
-    private Map<String, Integer> contarPlazasLibresPorTipo(List<Plaza> plazas, List<String> ocupadas) {
+    public Map<String, Integer> contarPlazasLibresPorTipo(List<Plaza> plazas, List<String> ocupadas) {
         Map<String, Integer> resumen = new HashMap<>();
         for (Plaza p : plazas) {
             if (!ocupadas.contains(p.getCodigo())) {
@@ -369,7 +369,7 @@ public class DataRepository {
     }
 
 
-    private Timestamp parseFecha(Object fecha) {
+    public Timestamp parseFecha(Object fecha) {
         if (fecha instanceof Timestamp timestamp) return timestamp;
         if (fecha instanceof String fechaStr) {
             try {
@@ -382,7 +382,7 @@ public class DataRepository {
         return null;
     }
 
-    private PlazaType parseTipoPlaza(String str) {
+    public PlazaType parseTipoPlaza(String str) {
         if (str == null) return PlazaType.COCHE;
         return switch (str.toLowerCase()) {
             case "electrico" -> PlazaType.ELECTRICO;
@@ -392,7 +392,7 @@ public class DataRepository {
         };
     }
 
-    private String safeString(String value) {
+    public String safeString(String value) {
         return value != null ? value : "";
     }
 

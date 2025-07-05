@@ -50,7 +50,7 @@ public class VehiclesViewModel extends ViewModel {
     }
 
     @Override
-    protected void onCleared() {
+    public void onCleared() {
         super.onCleared();
         repository.removeVehiclesListener();
     }
