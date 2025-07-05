@@ -14,13 +14,12 @@ import com.bumptech.glide.Glide;
 import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.domain.Vehicle;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleViewHolder> {
 
-    private List<Vehicle> vehicles = new ArrayList<>();
-    private OnDeleteClickListener deleteClickListener;
+    private List<Vehicle> vehicles;
+    private final OnDeleteClickListener deleteClickListener;
 
     // Interfaz para manejar clics de eliminación
     public interface OnDeleteClickListener {
@@ -83,7 +82,9 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleV
     static class VehicleViewHolder extends RecyclerView.ViewHolder {
 
         ImageView vehicleImage;
-        TextView vehicleType, vehiclePlate, vehicleLez;
+        TextView vehicleType;
+        TextView vehiclePlate;
+        TextView vehicleLez;
         ImageButton btnDelete;
 
         public VehicleViewHolder(@NonNull View itemView) {

@@ -18,6 +18,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.data.DataRepository;
 import com.lksnext.parkingplantilla.databinding.ActivityMainBinding;
@@ -28,34 +30,23 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         FirebaseApp.initializeApp(this);
 
+
+        DataRepository repository = new DataRepository(FirebaseFirestore.getInstance(), FirebaseAuth.getInstance());
+
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
-            }
-        }
+        checkAndRequestNotificationPermission();
+        createNotificationChannel();
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.reservas_channel_name);
-            String description = getString(R.string.reservas_channel_description);
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("ParkingLKS_Channel", name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        DataRepository.getInstance().crearPlazasIniciales(new Callback() {
+        repository.crearPlazasIniciales(new Callback() {
             @Override
             public void onSuccess() {
                 Log.d("MainActivity", "Plazas creadas o ya existentes.");
@@ -67,7 +58,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Configuración de la navegación inferior
+        setupNavigation(binding);
+    }
+
+    private void checkAndRequestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+            }
+
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.reservas_channel_name);
+            String description = getString(R.string.reservas_channel_description);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+
+            NotificationChannel channel = new NotificationChannel(
+                    "ParkingLKS_Channel", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void setupNavigation(ActivityMainBinding binding) {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
         if (navHostFragment != null) {
@@ -89,5 +107,4 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
-
 }

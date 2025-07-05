@@ -3,6 +3,7 @@ package com.lksnext.parkingplantilla.viewmodel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseUser;
 import com.lksnext.parkingplantilla.data.DataRepository;
@@ -10,10 +11,17 @@ import com.lksnext.parkingplantilla.domain.Callback;
 
 public class LoginViewModel extends ViewModel {
 
-    MutableLiveData<Boolean> logged = new MutableLiveData<>(null);
-    private MutableLiveData<String> userName = new MutableLiveData<>();
+    private final DataRepository repository;
 
-    public LiveData<Boolean> isLogged(){
+    private final MutableLiveData<Boolean> logged = new MutableLiveData<>(null);
+    private final MutableLiveData<String> userName = new MutableLiveData<>(null);
+
+    // ✅ Constructor inyectable
+    public LoginViewModel(DataRepository repository) {
+        this.repository = repository;
+    }
+
+    public LiveData<Boolean> isLogged() {
         return logged;
     }
 
@@ -21,46 +29,36 @@ public class LoginViewModel extends ViewModel {
         return userName;
     }
 
-    public void setUserName(String name) {
-        userName.setValue(name);
-    }
-
     public void loginUser(String email, String password) {
-        DataRepository.getInstance().login(email, password, new Callback() {
+        repository.login(email, password, new Callback() {
             @Override
             public void onSuccess() {
-                logged.setValue(Boolean.TRUE);
-                userName.setValue(email);
+                logged.postValue(Boolean.TRUE);
+                userName.postValue(email);
             }
+
             @Override
             public void onFailure() {
-                logged.setValue(Boolean.FALSE);
-                userName.setValue(null);
+                logged.postValue(Boolean.FALSE);
+                userName.postValue(null);
             }
         });
     }
-
 
     public void loginWithGoogle(AuthCredential credential) {
-        DataRepository.getInstance().loginWithCredential(credential, new Callback() {
+        repository.loginWithCredential(credential, new Callback() {
             @Override
             public void onSuccess() {
-                logged.setValue(Boolean.TRUE);
-
-                FirebaseUser user = DataRepository.getInstance().getCurrentUser();
-                if (user != null) {
-                    userName.setValue(user.getEmail());
-
-                }
+                logged.postValue(Boolean.TRUE);
+                FirebaseUser user = repository.getCurrentUser();
+                userName.postValue(user != null ? user.getEmail() : null);
             }
+
             @Override
             public void onFailure() {
-                logged.setValue(Boolean.FALSE);
-                userName.setValue(null);
+                logged.postValue(Boolean.FALSE);
+                userName.postValue(null);
             }
         });
     }
-
-
-
 }

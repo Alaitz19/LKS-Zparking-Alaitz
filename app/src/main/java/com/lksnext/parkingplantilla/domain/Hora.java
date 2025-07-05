@@ -4,14 +4,6 @@ import java.util.List;
 
 public class Hora {
 
-    long horaInicio;
-    long horaFin;
-
-
-    public Hora(long horaInicio, long horaFin) {
-        this.horaInicio = horaInicio;
-        this.horaFin = horaFin;
-    }
     public List<String> getHoras() {
         return horas;
     }

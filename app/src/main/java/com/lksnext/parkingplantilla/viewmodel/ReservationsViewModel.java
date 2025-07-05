@@ -1,9 +1,6 @@
 package com.lksnext.parkingplantilla.viewmodel;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -13,7 +10,6 @@ import com.lksnext.parkingplantilla.data.DataRepository;
 import com.lksnext.parkingplantilla.domain.Callback;
 import com.lksnext.parkingplantilla.domain.CallbackWithResult;
 import com.lksnext.parkingplantilla.domain.Reserva;
-import com.lksnext.parkingplantilla.receiver.NotificacionReceiver;
 import com.lksnext.parkingplantilla.receiver.NotificationHelper;
 
 import java.text.SimpleDateFormat;
@@ -26,7 +22,12 @@ public class ReservationsViewModel extends ViewModel {
 
     private final MutableLiveData<List<Reserva>> reservas = new MutableLiveData<>(new ArrayList<>());
     private List<Reserva> todasLasReservas = new ArrayList<>();
-    private final DataRepository repo = DataRepository.getInstance();
+
+    private final DataRepository repo;
+
+    public ReservationsViewModel(DataRepository repo) {
+        this.repo = repo;
+    }
 
     public LiveData<List<Reserva>> getReservas() {
         return reservas;
@@ -37,7 +38,7 @@ public class ReservationsViewModel extends ViewModel {
             @Override
             public void onSuccess(List<Reserva> result) {
                 todasLasReservas = result;
-                reservas.postValue(result);
+                reservas.postValue(new ArrayList<>(result));
             }
 
             @Override
@@ -51,7 +52,7 @@ public class ReservationsViewModel extends ViewModel {
         repo.borrarReservaYLiberarPlaza(reservaId, plazaId, new Callback() {
             @Override
             public void onSuccess() {
-                todasLasReservas.removeIf(r -> r.getIdReserva().equals(reservaId));
+                todasLasReservas.removeIf(r -> reservaId.equals(r.getIdReserva()));
                 reservas.postValue(new ArrayList<>(todasLasReservas));
                 callback.onSuccess();
             }
@@ -88,8 +89,7 @@ public class ReservationsViewModel extends ViewModel {
         List<Reserva> filtradas = new ArrayList<>();
         long now = System.currentTimeMillis();
         for (Reserva reserva : todasLasReservas) {
-            long endMillis = calcularFinMillis(reserva);
-            if (endMillis < now) {
+            if (calcularFinMillis(reserva) < now) {
                 filtradas.add(reserva);
             }
         }
@@ -100,8 +100,7 @@ public class ReservationsViewModel extends ViewModel {
         List<Reserva> filtradas = new ArrayList<>();
         long now = System.currentTimeMillis();
         for (Reserva reserva : todasLasReservas) {
-            long startMillis = calcularInicioMillis(reserva);
-            if (startMillis > now) {
+            if (calcularInicioMillis(reserva) > now) {
                 filtradas.add(reserva);
             }
         }
@@ -112,9 +111,9 @@ public class ReservationsViewModel extends ViewModel {
         List<Reserva> filtradas = new ArrayList<>();
         long now = System.currentTimeMillis();
         for (Reserva reserva : todasLasReservas) {
-            long startMillis = calcularInicioMillis(reserva);
-            long endMillis = calcularFinMillis(reserva);
-            if (startMillis <= now && endMillis >= now) {
+            long start = calcularInicioMillis(reserva);
+            long end = calcularFinMillis(reserva);
+            if (start <= now && end >= now) {
                 filtradas.add(reserva);
             }
         }
@@ -122,33 +121,26 @@ public class ReservationsViewModel extends ViewModel {
     }
 
     private long calcularInicioMillis(Reserva reserva) {
-        try {
-            String horaInicioStr = reserva.getHora().getHoraInicio();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-            String fechaStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(reserva.getFecha().toDate());
-            Date date = sdf.parse(fechaStr + " " + horaInicioStr);
-            return date != null ? date.getTime() : 0L;
-        } catch (Exception e) {
-            return 0L;
-        }
+        return parseFechaHoraMillis(reserva.getFecha().toDate(), reserva.getHora().getHoraInicio());
     }
 
     private long calcularFinMillis(Reserva reserva) {
+        return parseFechaHoraMillis(reserva.getFecha().toDate(), reserva.getHora().getHoraFin());
+    }
+
+    private long parseFechaHoraMillis(Date fecha, String hora) {
         try {
-            String horaFinStr = reserva.getHora().getHoraFin();
+            String fechaStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(fecha);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-            String fechaStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(reserva.getFecha().toDate());
-            Date date = sdf.parse(fechaStr + " " + horaFinStr);
-            return date != null ? date.getTime() : 0L;
+            Date date = sdf.parse(fechaStr + " " + hora);
+            return (date != null) ? date.getTime() : 0L;
         } catch (Exception e) {
             return 0L;
         }
     }
+
     public void programarNotificaciones(Context context, Reserva reserva) {
         NotificationHelper.programarNotificaciones(context, reserva);
     }
-
-
-
 
 }

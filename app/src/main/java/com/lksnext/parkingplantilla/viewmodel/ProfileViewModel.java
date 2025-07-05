@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.lksnext.parkingplantilla.data.DataRepository;
 import com.lksnext.parkingplantilla.domain.CallbackWithResult;
 
@@ -19,16 +20,16 @@ public class ProfileViewModel extends AndroidViewModel {
     private final DataRepository repo;
     private final MutableLiveData<Map<String, Object>> userData = new MutableLiveData<>();
 
-    public ProfileViewModel(@NonNull Application application) {
+    public ProfileViewModel(@NonNull Application application, DataRepository repository) {
         super(application);
-        repo = DataRepository.getInstance();
+        this.repo = repository;
         loadUserData();
     }
 
     public void loadUserData() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = repo.getCurrentUser();
         if (user != null) {
-            repo.getCurrentUserData(user.getUid(), new CallbackWithResult<Map<String, Object>>() {
+            repo.getCurrentUserData(user.getUid(), new CallbackWithResult<>() {
                 @Override
                 public void onSuccess(Map<String, Object> result) {
                     userData.postValue(result);
@@ -39,6 +40,8 @@ public class ProfileViewModel extends AndroidViewModel {
                     userData.postValue(null);
                 }
             });
+        } else {
+            userData.postValue(null);
         }
     }
 
@@ -50,45 +53,21 @@ public class ProfileViewModel extends AndroidViewModel {
         repo.logout();
     }
 
-    public boolean isLoggedIn() {
-        return repo.getCurrentUser() != null;
-    }
-
     public void updateUserProfile(String name, String email, String phone, CallbackWithResult<Boolean> callback) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = repo.getCurrentUser();
         if (user != null) {
-            repo.updateUserProfile(user.getUid(), name, email, phone, new CallbackWithResult<Boolean>() {
-                @Override
-                public void onSuccess(Boolean result) {
-                    callback.onSuccess(result);
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    callback.onFailure(e);
-                }
-            });
+            repo.updateUserProfile(user.getUid(), name, email, phone, callback);
         } else {
             callback.onFailure(new Exception("No user logged in"));
         }
     }
 
-    public void uploadProfileImage(Uri selectedImageUri, CallbackWithResult<String> imagenActualizadaCorrectamente) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    public void uploadProfileImage(Uri selectedImageUri, CallbackWithResult<String> callback) {
+        FirebaseUser user = repo.getCurrentUser();
         if (user != null) {
-            repo.uploadProfileImage(user.getUid(), selectedImageUri, new CallbackWithResult<String>() {
-                @Override
-                public void onSuccess(String imageUrl) {
-                    imagenActualizadaCorrectamente.onSuccess(imageUrl);
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    imagenActualizadaCorrectamente.onFailure(e);
-                }
-            });
+            repo.uploadProfileImage(user.getUid(), selectedImageUri, callback);
         } else {
-            imagenActualizadaCorrectamente.onFailure(new Exception("No user logged in"));
+            callback.onFailure(new Exception("No user logged in"));
         }
     }
 }

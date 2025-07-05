@@ -4,64 +4,54 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.*;
-
+import com.lksnext.parkingplantilla.data.DataRepository;
+import com.lksnext.parkingplantilla.domain.Callback;
+import com.lksnext.parkingplantilla.domain.CallbackWithResult;
 import com.lksnext.parkingplantilla.domain.Vehicle;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class VehiclesViewModel extends ViewModel {
 
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final DataRepository repository;
+    private final MutableLiveData<List<Vehicle>> vehicles = new MutableLiveData<>();
 
-    private final MutableLiveData<List<Vehicle>> vehiclesLiveData = new MutableLiveData<>();
-    private ListenerRegistration listenerRegistration;
-
-    public VehiclesViewModel() {
-        vehiclesLiveData.setValue(new ArrayList<>());
-        startListeningForVehicles();
+    public VehiclesViewModel(DataRepository repository) {
+        this.repository = repository;
+        listenForVehicles();
     }
 
     public LiveData<List<Vehicle>> getVehicles() {
-        return vehiclesLiveData;
+        return vehicles;
     }
 
-    private void startListeningForVehicles() {
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user == null) return;
+    private void listenForVehicles() {
+        repository.listenForVehicles(new CallbackWithResult<>() {
+            @Override
+            public void onSuccess(List<Vehicle> result) {
+                vehicles.postValue(result);
+            }
 
-        listenerRegistration = db.collection("users")
-                .document(user.getUid())
-                .collection("vehiculos")
-                .addSnapshotListener((value, error) -> {
-                    if (error != null) {
-                        vehiclesLiveData.setValue(new ArrayList<>());
-                        return;
-                    }
+            @Override
+            public void onFailure(Exception e) {
+                vehicles.postValue(null);
+            }
+        });
+    }
 
-                    if (value != null && !value.isEmpty()) {
-                        List<Vehicle> list = new ArrayList<>();
-                        for (DocumentSnapshot doc : value) {
-                            Vehicle vehicle = doc.toObject(Vehicle.class);
-                            if (vehicle != null) {
-                                vehicle.setId(doc.getId());
-                                list.add(vehicle);
-                            }
-                        }
-                        vehiclesLiveData.setValue(list);
-                    } else {
-                        vehiclesLiveData.setValue(new ArrayList<>());
-                    }
-                });
+
+    public void addVehiculo(String plate, String pollutionType, String selectedType,
+                            android.net.Uri imageUri, Callback callback) {
+        repository.addVehiculo(plate, pollutionType, selectedType, imageUri, callback);
+    }
+
+    public void deleteVehiculo(String matricula, Callback callback) {
+        repository.deleteVehiculo(matricula, callback);
     }
 
     @Override
     protected void onCleared() {
         super.onCleared();
-        if (listenerRegistration != null) listenerRegistration.remove();
+        repository.removeVehiclesListener();
     }
 }

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -33,12 +34,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.lksnext.parkingplantilla.R;
+import com.lksnext.parkingplantilla.data.DataRepository;
 import com.lksnext.parkingplantilla.domain.CallbackWithReserva;
 import com.lksnext.parkingplantilla.domain.Plaza;
 import com.lksnext.parkingplantilla.domain.Reserva;
 import com.lksnext.parkingplantilla.util.DialogUtils;
 import com.lksnext.parkingplantilla.viewmodel.MainViewModel;
+import com.lksnext.parkingplantilla.viewmodel.factory.MainViewModelFactory;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -47,6 +52,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class MainFragment extends Fragment {
 
@@ -81,7 +87,13 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        DataRepository repository = new DataRepository(
+                FirebaseFirestore.getInstance(),
+                FirebaseAuth.getInstance()
+        );
+        MainViewModelFactory factory = new MainViewModelFactory(repository);
+
+        viewModel = new ViewModelProvider(this, factory).get(MainViewModel.class);
 
         searchView = view.findViewById(R.id.searchView);
         setupSearchView();
@@ -98,6 +110,14 @@ public class MainFragment extends Fragment {
         mapFragment.getMapAsync(callback);
 
         setupFloatingButton(view);
+
+        TextView tvWelcome = view.findViewById(R.id.tvWelcomeUser);
+
+        viewModel.getUserName().observe(getViewLifecycleOwner(), name -> {
+            String welcomeText = getString(R.string.welcome_user) + " " + name;
+            tvWelcome.setText(welcomeText);
+        });
+        viewModel.cargarUserName();
 
         viewModel.getPlazasLibres().observe(getViewLifecycleOwner(), plazas -> {
             if (plazas != null && mMap != null) {
@@ -148,15 +168,17 @@ public class MainFragment extends Fragment {
         });
     }
 
+    private static final String TAG = MainFragment.class.getSimpleName();
+
     private void geoLocate(String locationName) {
         if (locationName == null || locationName.isEmpty()) {
-            Toast.makeText(getContext(),
+            Toast.makeText(requireContext(),
                     getString(R.string.geo_enter_address),
                     Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
         try {
             List<Address> addressList = geocoder.getFromLocationName(locationName, 1);
             if (addressList != null && !addressList.isEmpty()) {
@@ -166,17 +188,18 @@ public class MainFragment extends Fragment {
                 mMap.addMarker(new MarkerOptions().position(latLng).title(locationName));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
             } else {
-                Toast.makeText(getContext(),
+                Toast.makeText(requireContext(),
                         getString(R.string.geo_address_not_found),
                         Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(getContext(),
+            Log.e(TAG, "Error while geocoding address: " + locationName, e);
+            Toast.makeText(requireContext(),
                     getString(R.string.geo_address_search_error),
                     Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void setupFloatingButton(View view) {
         View fab = view.findViewById(R.id.btn_new_reservation);
@@ -228,7 +251,7 @@ public class MainFragment extends Fragment {
             String fechaISO = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date.getTime());
 
             MaterialButton button = new MaterialButton(requireContext(), null);
-            button.setBackgroundColor(getResources().getColor(android.R.color.white));
+            button.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.white));
             button.setText(buttonText);
             button.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             button.setTextSize(14);
@@ -246,7 +269,8 @@ public class MainFragment extends Fragment {
                 fechaSeleccionada[0] = fechaISO;
                 for (MaterialButton b : listaDias) {
                     b.setChecked(false);
-                    b.setBackgroundColor(getResources().getColor(android.R.color.white));
+                    b.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.white));
+
                 }
                 button.setChecked(true);
                 button.setBackgroundColor(android.graphics.Color.parseColor("#CCCCCC"));
@@ -319,7 +343,7 @@ public class MainFragment extends Fragment {
         try {
             String startHour = selectedHours.get(0);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-            long startMillis = sdf.parse(date + " " + startHour).getTime();
+            long startMillis = Objects.requireNonNull(sdf.parse(date + " " + startHour)).getTime();
             long now = System.currentTimeMillis();
 
             if (startMillis < now) {
@@ -357,7 +381,8 @@ public class MainFragment extends Fragment {
     }
 
     private BitmapDescriptor createPlazaMarker(int numero) {
-        View markerView = getLayoutInflater().inflate(R.layout.marker_plaza, null);
+        ViewGroup root = (ViewGroup) requireView();
+        View markerView = getLayoutInflater().inflate(R.layout.marker_plaza, root, false);
         TextView tvNumero = markerView.findViewById(R.id.tv_plaza_numero);
         tvNumero.setText(String.valueOf(numero));
         markerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
@@ -382,10 +407,10 @@ public class MainFragment extends Fragment {
     }
 
     private LatLng obtenerUbicacionPlaza(String codigo) {
-        switch (codigo) {
-            case "COC001": return new LatLng(43.2981, -2.0072);
-            case "COC002": return new LatLng(43.2982, -2.0073);
-            default: return null;
-        }
+        return switch (codigo) {
+            case "COC001" -> new LatLng(43.2981, -2.0072);
+            case "COC002" -> new LatLng(43.2982, -2.0073);
+            default -> null;
+        };
     }
 }

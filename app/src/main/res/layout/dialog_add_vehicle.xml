@@ -4,25 +4,38 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="24dp">
+
+    <TextView
+        android:id="@+id/editTextVehicleName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:hint="@string/add_image_hint"
+        android:inputType="text" />
+
+    <!-- Imagen más pequeña -->
+
     <ImageView
         android:id="@+id/imageViewVehicle"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:contentDescription="imagen"
-        android:scaleType="centerCrop"
-        android:src="@drawable/coche"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
         android:background="#CCCCCC"
         android:clickable="true"
-        android:focusable="true" />
+        android:contentDescription="@string/imagen"
+        android:focusable="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/coche" />
 
     <EditText
         android:id="@+id/editTextPlate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:autofillHints=""
-        android:hint="License Plate" />
-
+        android:layout_marginTop="8dp"
+        android:hint="@string/license_plate"
+        android:inputType="text" />
 
     <Spinner
         android:id="@+id/spinnerType"
@@ -37,4 +50,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/pollution_types" />
+
 </LinearLayout>

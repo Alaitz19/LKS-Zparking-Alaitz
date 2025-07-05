@@ -19,15 +19,13 @@ import java.util.Objects;
 
 public class ChangePasswordFragment extends Fragment {
 
-    private TextInputEditText passwordInput, confirmPasswordInput;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_change_password, container, false);
 
-        passwordInput = view.findViewById(R.id.passwordInput);
-        confirmPasswordInput = view.findViewById(R.id.confirmPasswordInput);
+        TextInputEditText  passwordInput = view.findViewById(R.id.passwordInput);
+        TextInputEditText confirmPasswordInput = view.findViewById(R.id.confirmPasswordInput);
         Button changePasswordButton = view.findViewById(R.id.changePasswordButton);
         Button backButton = view.findViewById(R.id.backButton);
 

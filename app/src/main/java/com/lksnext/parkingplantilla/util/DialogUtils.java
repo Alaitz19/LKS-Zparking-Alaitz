@@ -17,6 +17,10 @@ import java.util.Locale;
 
 public class DialogUtils {
 
+    private DialogUtils() {
+
+    }
+
     public static void setupHoraButtons(Context context, GridLayout gridHoras, List<MaterialButton> horasSeleccionadas) {
         int columnas = 4;
         gridHoras.setColumnCount(columnas);

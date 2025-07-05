@@ -20,13 +20,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.lksnext.parkingplantilla.R;
+import com.lksnext.parkingplantilla.data.DataRepository;
 import com.lksnext.parkingplantilla.domain.Callback;
 import com.lksnext.parkingplantilla.domain.ParkingItem;
 import com.lksnext.parkingplantilla.domain.Reserva;
 import com.lksnext.parkingplantilla.receiver.NotificationHelper;
 import com.lksnext.parkingplantilla.view.adapter.ParkingAdapter;
 import com.lksnext.parkingplantilla.viewmodel.ReservationsViewModel;
+import com.lksnext.parkingplantilla.viewmodel.factory.ReservationsViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,11 +52,18 @@ public class ReservationsFragment extends Fragment {
         ParkingAdapter adapter = new ParkingAdapter(requireContext(), listaDeItems);
         recyclerView.setAdapter(adapter);
 
+        DataRepository repo = new DataRepository(
+                FirebaseFirestore.getInstance(),
+                FirebaseAuth.getInstance()
+        );
+        ReservationsViewModelFactory factory = new ReservationsViewModelFactory(repo);
+        ReservationsViewModel reservationsViewModel = new ViewModelProvider(this, factory).get(ReservationsViewModel.class);
+
         Button btnTerminadas = view.findViewById(R.id.btn_filter_terminadas);
         Button btnSiguientes = view.findViewById(R.id.btn_filter_siguientes);
         Button btnEnCurso = view.findViewById(R.id.btn_filter_encurso);
 
-        ReservationsViewModel reservationsViewModel = new ViewModelProvider(this).get(ReservationsViewModel.class);
+
 
         btnTerminadas.setOnClickListener(v -> reservationsViewModel.filtrarTerminadas());
         btnSiguientes.setOnClickListener(v -> reservationsViewModel.filtrarSiguientes());
@@ -64,23 +74,13 @@ public class ReservationsFragment extends Fragment {
             for (Reserva reserva : reservas) {
                 String tipoPlaza = reserva.getPlaza().getTipo();
 
-                int imageId;
-                switch (tipoPlaza.toLowerCase()) {
-                    case "coche":
-                        imageId = R.drawable.coche;
-                        break;
-                    case "moto":
-                        imageId = R.drawable.moto;
-                        break;
-                    case "electrico":
-                        imageId = R.drawable.coche_electrico;
-                        break;
-                    case "minusvalido":
-                        imageId = R.drawable.minsuvalidos;
-                        break;
-                    default:
-                        imageId = R.drawable.estacionamiento;
-                }
+                int imageId = switch (tipoPlaza.toLowerCase()) {
+                    case "coche" -> R.drawable.coche;
+                    case "moto" -> R.drawable.moto;
+                    case "electrico" -> R.drawable.coche_electrico;
+                    case "minusvalido" -> R.drawable.minsuvalidos;
+                    default -> R.drawable.estacionamiento;
+                };
 
                 String direccion = reserva.getPlaza().getDireccion() != null
                         ? reserva.getPlaza().getDireccion()
@@ -94,10 +94,10 @@ public class ReservationsFragment extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) reservationsViewModel.cargarReservas(user.getUid());
 
-        adapter.setOnEditClickListener(item -> showEditHoraDialog(item.getReserva(), reservationsViewModel));
+        adapter.setOnEditClickListener(item -> showEditHoraDialog(item.reserva(), reservationsViewModel));
 
         adapter.setOnDeleteClickListener((item, position) -> {
-            Reserva reserva = item.getReserva();
+            Reserva reserva = item.reserva();
             if (reserva != null) {
                 reservationsViewModel.borrarReserva(
                         reserva.getIdReserva(),

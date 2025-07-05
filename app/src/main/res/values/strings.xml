@@ -102,7 +102,7 @@
     <string name="available_days_description">Available days for booking</string>
 
     <!-- Main Map -->
-    <string name="welcome_user">Welcome user!</string>
+    <string name="welcome_user">Welcome</string>
     <string name="search_hint">Search location</string>
     <string name="available_spots">Available spots</string>
     <string name="new_reservation_description">New reservation</string>
@@ -121,6 +121,17 @@
     <string name="notification_start_message">Your reservation starts in 15 minutes</string>
     <string name="notification_end30_message">Your reservation ends in 30 minutes</string>
     <string name="notification_end15_message">Your reservation ends in 15 minutes</string>
+
+    <string name="verification_code_empty">Please enter the code</string>
+    <string name="verification_email_missing">No valid email found</string>
+    <string name="verification_code_resent">Code resent to: %1$s</string>
+    <string name="verification_code_resend_error">Error resending the code</string>
+    <string name="verification_code_verified">Code verified: %1$s</string>
+
+    <!-- Common texts if needed -->
+    <string name="back">Back</string>
+    <string name="verify">Verify</string>
+    <string name="resend_code">Resend Code</string>
 
     <!-- DialogUtils -->
     <string name="max_hours_limit_message">Maximum 8 hours</string>
@@ -229,8 +240,10 @@
     <!-- VehiclesFragment strings -->
     <string name="vehicle_deleted_success">Vehicle deleted correctly</string>
     <string name="vehicle_deleted_failure">Error trying to delete vehicle</string>
-
-
+    <string name="login_empty_fields">Login fields empty</string>
+    <string name="imagen">imagen</string>
+    <string name="license_plate">License Plate</string>
+    <string name="add_image_hint">Add vehicle imagen\n</string>
 
 
 </resources>

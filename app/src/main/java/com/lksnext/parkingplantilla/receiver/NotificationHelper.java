@@ -4,64 +4,69 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
 
 import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.domain.Reserva;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
-public class NotificationHelper {
+public final class NotificationHelper {
+
+    private NotificationHelper() {
+    }
+
 
     public static void programarNotificaciones(Context context, Reserva reserva) {
-        long startMillis = calcularInicioMillis(reserva);
-        long endMillis = calcularFinMillis(reserva);
+        long now = System.currentTimeMillis();
+        long startMillis = calcularMillis(reserva, true);
+        long endMillis = calcularMillis(reserva, false);
 
-        long notificacionInicio = startMillis - 15 * 60 * 1000;
-        if (notificacionInicio > System.currentTimeMillis()) {
-            programarAlarma(
-                    context,
-                    reserva,
-                    notificacionInicio,
-                    context.getString(R.string.notification_start_message),
-                    "START"
-            );
-        }
+        programarNotificacionSiProcede(context, reserva, startMillis - minutos(15),
+                context.getString(R.string.notification_start_message), "START", now);
+        programarNotificacionSiProcede(context, reserva, endMillis - minutos(30),
+                context.getString(R.string.notification_end30_message), "END30", now);
+        programarNotificacionSiProcede(context, reserva, endMillis - minutos(15),
+                context.getString(R.string.notification_end15_message), "END15", now);
+    }
 
-        long notificacionFin30 = endMillis - 30 * 60 * 1000;
-        if (notificacionFin30 > System.currentTimeMillis()) {
-            programarAlarma(
-                    context,
-                    reserva,
-                    notificacionFin30,
-                    context.getString(R.string.notification_end30_message),
-                    "END30"
-            );
-        }
 
-        long notificacionFin15 = endMillis - 15 * 60 * 1000;
-        if (notificacionFin15 > System.currentTimeMillis()) {
-            programarAlarma(
-                    context,
-                    reserva,
-                    notificacionFin15,
-                    context.getString(R.string.notification_end15_message),
-                    "END15"
-            );
+    public static void cancelarNotificaciones(Context context, Reserva reserva) {
+        cancelarAlarma(context, reserva, "START");
+        cancelarAlarma(context, reserva, "END30");
+        cancelarAlarma(context, reserva, "END15");
+    }
+
+
+    private static void programarNotificacionSiProcede(
+            Context context,
+            Reserva reserva,
+            long triggerAtMillis,
+            String mensaje,
+            String tipoNotificacion,
+            long now
+    ) {
+        if (triggerAtMillis > now) {
+            programarAlarma(context, reserva, triggerAtMillis, mensaje, tipoNotificacion);
         }
     }
 
-    private static void programarAlarma(Context context, Reserva reserva, long triggerAtMillis, String mensaje, String tipoNotificacion) {
+    private static void programarAlarma(
+            Context context,
+            Reserva reserva,
+            long triggerAtMillis,
+            String mensaje,
+            String tipoNotificacion
+    ) {
         Intent intent = new Intent(context, NotificacionReceiver.class);
         intent.putExtra("title", context.getString(R.string.notification_title_default));
         intent.putExtra("message", mensaje);
 
-        int requestCode = generarRequestCode(reserva, tipoNotificacion);
-
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
-                requestCode,
+                generarRequestCode(reserva, tipoNotificacion),
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
@@ -70,48 +75,26 @@ public class NotificationHelper {
         if (alarmManager != null) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
                 if (alarmManager.canScheduleExactAlarms()) {
-                    alarmManager.setExactAndAllowWhileIdle(
-                            AlarmManager.RTC_WAKEUP,
-                            triggerAtMillis,
-                            pendingIntent
-                    );
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
                 } else {
-                    alarmManager.setWindow(
-                            AlarmManager.RTC_WAKEUP,
-                            triggerAtMillis,
-                            5 * 60 * 1000,
-                            pendingIntent
-                    );
-
-                    Intent settingsIntent = new Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                    alarmManager.setWindow(AlarmManager.RTC_WAKEUP, triggerAtMillis, minutos(5), pendingIntent);
+                    Intent settingsIntent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
                     settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(settingsIntent);
                 }
             } else {
-                alarmManager.setExactAndAllowWhileIdle(
-                        AlarmManager.RTC_WAKEUP,
-                        triggerAtMillis,
-                        pendingIntent
-                );
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
             }
         }
-    }
-
-    public static void cancelarNotificaciones(Context context, Reserva reserva) {
-        cancelarAlarma(context, reserva, "START");
-        cancelarAlarma(context, reserva, "END30");
-        cancelarAlarma(context, reserva, "END15");
     }
 
     private static void cancelarAlarma(Context context, Reserva reserva, String tipoNotificacion) {
         Intent intent = new Intent(context, NotificacionReceiver.class);
         intent.putExtra("title", context.getString(R.string.notification_title_default));
 
-        int requestCode = generarRequestCode(reserva, tipoNotificacion);
-
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
-                requestCode,
+                generarRequestCode(reserva, tipoNotificacion),
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
@@ -122,56 +105,24 @@ public class NotificationHelper {
         }
     }
 
+
+    private static long calcularMillis(Reserva reserva, boolean inicio) {
+        try {
+            String hora = inicio ? reserva.getHora().getHoraInicio() : reserva.getHora().getHoraFin();
+            String fecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    .format(reserva.getFecha().toDate());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+            return Objects.requireNonNull(sdf.parse(fecha + " " + hora)).getTime();
+        } catch (Exception e) {
+            return 0L;
+        }
+    }
+
     private static int generarRequestCode(Reserva reserva, String tipoNotificacion) {
         return reserva.getIdReserva().hashCode() + tipoNotificacion.hashCode();
     }
 
-    private static long calcularInicioMillis(Reserva reserva) {
-        try {
-            String horaInicioStr = reserva.getHora().getHoraInicio();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-            String fechaStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    .format(reserva.getFecha().toDate());
-            return sdf.parse(fechaStr + " " + horaInicioStr).getTime();
-        } catch (Exception e) {
-            return 0L;
-        }
-    }
-
-    private static long calcularFinMillis(Reserva reserva) {
-        try {
-            String horaFinStr = reserva.getHora().getHoraFin();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-            String fechaStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    .format(reserva.getFecha().toDate());
-            return sdf.parse(fechaStr + " " + horaFinStr).getTime();
-        } catch (Exception e) {
-            return 0L;
-        }
-    }
-
-    public static void programarNotificacionesReserva(Context context, String fecha, List<String> horas) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-            long startMillis = sdf.parse(fecha + " " + horas.get(0)).getTime();
-            long endMillis = sdf.parse(fecha + " " + horas.get(horas.size() - 1)).getTime();
-
-            long notificacionInicio = startMillis - 15 * 60 * 1000;
-            if (notificacionInicio > System.currentTimeMillis()) {
-                // Aquí podrías reutilizar programarNotificaciones(context, reserva)
-            }
-
-            long notificacionFin30 = endMillis - 30 * 60 * 1000;
-            if (notificacionFin30 > System.currentTimeMillis()) {
-                // Igual aquí
-            }
-
-            long notificacionFin15 = endMillis - 15 * 60 * 1000;
-            if (notificacionFin15 > System.currentTimeMillis()) {
-                // Igual aquí
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private static long minutos(int minutos) {
+        return minutos * 60 * 1000L;
     }
 }

@@ -2,6 +2,7 @@ package com.lksnext.parkingplantilla.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,38 +26,42 @@ public class LoginFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState
+    ) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         loginViewModel = new ViewModelProvider(requireActivity()).get(LoginViewModel.class);
 
+        setupListeners();
+        observeLoginState();
+
+        return binding.getRoot();
+    }
+
+    private void setupListeners() {
         binding.loginButton.setOnClickListener(v -> {
-            String email = binding.email.getEditText().getText().toString();
-            String password = binding.password.getEditText().getText().toString();
+            String email = getTrimmedText(binding.email.getEditText());
+            String password = getTrimmedText(binding.password.getEditText());
+
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+                Toast.makeText(requireContext(), getString(R.string.login_empty_fields), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             loginViewModel.loginUser(email, password);
         });
 
-        binding.btnRegisterButton.setOnClickListener(v -> {
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.loginFragmentContainer, new RegisterFragment())
-                    .addToBackStack(null)
-                    .commit();
-        });
+        binding.btnRegisterButton.setOnClickListener(v -> navigateTo(new RegisterFragment()));
+        binding.forgotPasswordButton.setOnClickListener(v -> navigateTo(new PasswordRecoveryFragment()));
 
-        binding.forgotPasswordButton.setOnClickListener(v -> {
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.loginFragmentContainer, new PasswordRecoveryFragment())
-                    .addToBackStack(null)
-                    .commit();
-        });
+        binding.googleSignInButton.setOnClickListener(v ->
+                ((LoginActivity) requireActivity()).launchGoogleSignIn()
+        );
+    }
 
-        binding.googleSignInButton.setOnClickListener(v -> {
-            ((LoginActivity) requireActivity()).launchGoogleSignIn();
-        });
-
+    private void observeLoginState() {
         loginViewModel.isLogged().observe(getViewLifecycleOwner(), logged -> {
             if (Boolean.TRUE.equals(logged)) {
                 Toast.makeText(requireContext(),
@@ -72,7 +77,23 @@ public class LoginFragment extends Fragment {
                         Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
-        return binding.getRoot();
+    private void navigateTo(Fragment fragment) {
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.loginFragmentContainer, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private String getTrimmedText(android.widget.EditText editText) {
+        return editText != null ? editText.getText().toString().trim() : "";
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Evita fugas de memoria
     }
 }

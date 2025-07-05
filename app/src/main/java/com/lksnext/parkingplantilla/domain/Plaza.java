@@ -7,8 +7,8 @@ import com.lksnext.parkingplantilla.domain.enu.PlazaType;
 import java.util.Objects;
 
 public class Plaza {
-    private String codigo;        // antes era long id, ahora String código
-    private boolean ocupada;      // nuevo campo booleano para ocupada
+    private String codigo;
+    private boolean ocupada;
     private PlazaType tipoPlaza;
 
     private String direccion;
@@ -24,7 +24,7 @@ public class Plaza {
 
     public Plaza(String idPlaza, PlazaType tipoPlaza) {
         this.codigo = idPlaza;
-        this.ocupada = false; // Por defecto, una plaza nueva no está ocupada
+        this.ocupada = false;
         this.tipoPlaza = tipoPlaza;
     }
 
@@ -32,31 +32,24 @@ public class Plaza {
         return codigo;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
-    public boolean isOcupada() {
-        return ocupada;
-    }
-
-    public void setOcupada(boolean ocupada) {
-        this.ocupada = ocupada;
-    }
 
     public PlazaType getTipoPlaza() {
         return tipoPlaza;
     }
-
-    public void setTipoPlaza(PlazaType tipoPlaza) {
-        this.tipoPlaza = tipoPlaza;
+    public String getTipo() {
+        return tipoPlaza != null ? tipoPlaza.getType() : "Desconocido";
     }
+
+    public String getDireccion() {
+
+        return direccion != null ? direccion : "Dirección no disponible";
+    }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Plaza)) return false;
-        Plaza plaza = (Plaza) o;
+        if (!(o instanceof Plaza plaza)) return false;
         return ocupada == plaza.ocupada &&
                 Objects.equals(codigo, plaza.codigo) &&
                 tipoPlaza == plaza.tipoPlaza;
@@ -75,15 +68,5 @@ public class Plaza {
                 ", ocupada=" + ocupada +
                 ", tipoPlaza=" + tipoPlaza +
                 '}';
-    }
-
-
-    public String getTipo() {
-        return tipoPlaza != null ? tipoPlaza.getType() : "Desconocido";
-    }
-
-    public String getDireccion() {
-
-        return direccion != null ? direccion : "Dirección no disponible";
     }
 }

@@ -22,21 +22,23 @@ import java.util.concurrent.TimeUnit;
 
 public class PasswordRecoveryFragment extends Fragment {
 
-    private EditText emailText, phoneText;
-    private Button sendEmailSmsButton, backButton;
-    private FirebaseAuth mAuth;
+
+
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        EditText emailText;
+        EditText phoneText;
         View view = inflater.inflate(R.layout.fragment_password_recovery_code, container, false);
 
         emailText = view.findViewById(R.id.emailText);
         phoneText = view.findViewById(R.id.phoneText);
-        sendEmailSmsButton = view.findViewById(R.id.sendEmailSmsButton);
-        backButton = view.findViewById(R.id.backButton);
+        Button sendEmailSmsButton = view.findViewById(R.id.sendEmailSmsButton);
+        Button backButton = view.findViewById(R.id.backButton);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         sendEmailSmsButton.setOnClickListener(v -> {
             String email = emailText.getText().toString().trim();
@@ -88,21 +90,21 @@ public class PasswordRecoveryFragment extends Fragment {
                 .setActivity(requireActivity())
                 .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     @Override
-                    public void onVerificationCompleted(com.google.firebase.auth.PhoneAuthCredential phoneAuthCredential) {
+                    public void onVerificationCompleted(@NonNull com.google.firebase.auth.PhoneAuthCredential phoneAuthCredential) {
                         Toast.makeText(requireContext(),
                                 getString(R.string.recovery_verification_success),
                                 Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void onVerificationFailed(com.google.firebase.FirebaseException e) {
+                    public void onVerificationFailed(@NonNull com.google.firebase.FirebaseException e) {
                         Toast.makeText(requireContext(),
                                 getString(R.string.recovery_code_error),
                                 Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                    public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                         Toast.makeText(requireContext(),
                                 getString(R.string.recovery_code_sent),
                                 Toast.LENGTH_SHORT).show();

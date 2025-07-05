@@ -1,8 +1,11 @@
 package com.lksnext.parkingplantilla.view.fragment;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,7 +91,7 @@ public class MapFragment extends Fragment {
             return;
         }
 
-        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
         try {
             List<Address> addressList = geocoder.getFromLocationName(locationName, 1);
             if (addressList != null && !addressList.isEmpty()) {
@@ -103,7 +106,7 @@ public class MapFragment extends Fragment {
                         Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error while geocoding address: " + locationName, e);
             Toast.makeText(getContext(),
                     getString(R.string.geo_address_search_error),
                     Toast.LENGTH_SHORT).show();
