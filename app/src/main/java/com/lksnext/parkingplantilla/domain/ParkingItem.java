@@ -45,13 +45,6 @@ public class ParkingItem {
                 ", reserva=" + reserva +
                 '}';
     }
-    public String getReservaInfo() {
-        if (reserva == null || reserva.getHora() == null) return "No reserva";
-        String inicio = reserva.getHora().getHoraInicio();
-        String fin = reserva.getHora().getHoraFin();
-        String restante = reserva.remainingTime();
-        return "Inicio: " + inicio + "  Fin: " + fin + "  Restante: " + restante + " min";
-    }
 
     @Override
     public boolean equals(Object o) {

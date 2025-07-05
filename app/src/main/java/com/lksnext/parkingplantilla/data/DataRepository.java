@@ -526,6 +526,77 @@ public class DataRepository {
                 }).addOnFailureListener(callbackWithResult::onFailure))
                 .addOnFailureListener(callbackWithResult::onFailure);
     }
+    public void getPlazasLibres(CallbackWithResult<List<Plaza>> callback) {
+        db.collection("plazas")
+                .whereEqualTo("ocupada", false)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<Plaza> plazas = new ArrayList<>();
+                    for (var doc : querySnapshot) {
+                        String codigo = doc.getId();
+                        String tipo = doc.getString("tipoPlaza");
+                        plazas.add(new Plaza(codigo, parseTipoPlaza(tipo)));
+                    }
+                    callback.onSuccess(plazas);
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+    public void getResumenPlazasLibresAhora(CallbackWithResult<Map<String, Integer>> callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // 1) Obtén todas las plazas
+        db.collection("plazas").get().addOnSuccessListener(plazasSnapshot -> {
+            List<Plaza> todasPlazas = new ArrayList<>();
+            for (var doc : plazasSnapshot) {
+                String codigo = doc.getId();
+                String tipo = doc.getString("tipoPlaza");
+                todasPlazas.add(new Plaza(codigo, parseTipoPlaza(tipo)));
+            }
+
+            // 2) Obtén reservas activas para hoy y ahora
+            String fechaHoy = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+            db.collection("reservas")
+                    .whereEqualTo("fecha", fechaHoy)
+                    .get()
+                    .addOnSuccessListener(reservasSnapshot -> {
+                        List<String> plazasOcupadasAhora = new ArrayList<>();
+
+                        Calendar now = Calendar.getInstance();
+                        int nowHour = now.get(Calendar.HOUR_OF_DAY);
+                        int nowMinute = now.get(Calendar.MINUTE);
+
+                        for (var doc : reservasSnapshot) {
+                            List<String> horas = (List<String>) doc.get("hora");
+                            if (horas == null) continue;
+
+                            for (String hora : horas) {
+                                String[] parts = hora.split(":");
+                                int h = Integer.parseInt(parts[0]);
+                                int m = Integer.parseInt(parts[1]);
+                                int diff = (h * 60 + m) - (nowHour * 60 + nowMinute);
+                                if (diff >= 0 && diff < 30) {
+                                    String plaza = (String) doc.get("plaza");
+                                    if (plaza != null) plazasOcupadasAhora.add(plaza);
+                                }
+                            }
+                        }
+
+
+                        Map<String, Integer> resumen = new HashMap<>();
+                        for (Plaza p : todasPlazas) {
+                            if (!plazasOcupadasAhora.contains(p.getCodigo())) {
+                                String tipo = p.getTipoPlaza().name();
+                                resumen.put(tipo, resumen.getOrDefault(tipo, 0) + 1);
+                            }
+                        }
+                        callback.onSuccess(resumen);
+
+                    }).addOnFailureListener(callback::onFailure);
+
+        }).addOnFailureListener(callback::onFailure);
+    }
+
+
 
 
 

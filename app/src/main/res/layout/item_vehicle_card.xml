@@ -16,26 +16,37 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="8dp"
-        android:background="#88000000">
+        android:padding="16dp"
+        android:background="#80000000"
+        android:gravity="bottom">
 
         <TextView
             android:id="@+id/vehicle_plate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white" />
+            android:text="ABC-1234"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/vehicle_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Sedán"
             android:textColor="@android:color/white"
-            android:textStyle="bold" />
+            android:textSize="16sp"
+            android:textStyle="normal" />
 
         <TextView
             android:id="@+id/vehicle_lez"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white" />
+            android:layout_marginTop="2dp"
+            android:text="LEZ: Permitido"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
     </LinearLayout>
 </FrameLayout>

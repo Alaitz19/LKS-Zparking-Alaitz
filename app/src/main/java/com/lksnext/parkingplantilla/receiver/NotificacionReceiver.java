@@ -36,7 +36,7 @@ public class NotificacionReceiver extends BroadcastReceiver {
             }
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.zparking) // Asegúrate de que sea un icono válido
+                    .setSmallIcon(R.drawable.zparking)
                     .setContentTitle(title != null ? title : "ParkingLKS")
                     .setContentText(message != null ? message : "Tu reserva está por terminar.")
                     .setPriority(NotificationCompat.PRIORITY_HIGH)

@@ -1,5 +1,7 @@
 package com.lksnext.parkingplantilla.view.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -19,8 +21,11 @@ import androidx.navigation.Navigation;
 
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,6 +36,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.domain.Callback;
 import com.lksnext.parkingplantilla.domain.CallbackWithReserva;
+import com.lksnext.parkingplantilla.domain.Plaza;
 import com.lksnext.parkingplantilla.domain.Reserva;
 import com.lksnext.parkingplantilla.util.DialogUtils;
 import com.lksnext.parkingplantilla.viewmodel.MainViewModel;
@@ -41,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MainFragment extends Fragment {
 
@@ -59,6 +66,9 @@ public class MainFragment extends Fragment {
         googleMap.addMarker(new MarkerOptions()
                 .position(parqueEmpresarialZuatzu)
                 .title("Parking del Parque Empresarial de Zuatzu"));
+        viewModel.cargarPlazasLibres();
+        viewModel.cargarResumenPlazasAhora();
+
     };
 
     @Nullable
@@ -94,7 +104,42 @@ public class MainFragment extends Fragment {
 
         // FloatingActionButton
         setupFloatingButton(view);
+        viewModel.getPlazasLibres().observe(getViewLifecycleOwner(), plazas -> {
+            if (plazas != null && mMap != null) {
+                mostrarPlazasDisponibles(plazas); // ya tienes esto para el mapa
+
+            }
+        });
+        viewModel.getResumenPlazas().observe(getViewLifecycleOwner(), resumen -> {
+            if (resumen != null) {
+                mostrarResumenPlazas(resumen);
+            }
+        });
+        viewModel.cargarResumenPlazasAhora();
+
+
     }
+
+    private void mostrarResumenPlazas(Map<String, Integer> resumen) {
+        LinearLayout layoutResumen = requireView().findViewById(R.id.layout_resumen_plazas);
+        layoutResumen.removeAllViews();
+
+        LayoutInflater inflater = LayoutInflater.from(requireContext());
+
+        for (Map.Entry<String, Integer> entry : resumen.entrySet()) {
+            View itemView = inflater.inflate(R.layout.item_resumen_plaza, layoutResumen, false);
+
+            TextView tvNumero = itemView.findViewById(R.id.tv_numero_libres);
+            TextView tvTipo = itemView.findViewById(R.id.tv_tipo_plaza);
+
+            tvNumero.setText(String.valueOf(entry.getValue()));
+            tvTipo.setText(entry.getKey());
+
+            layoutResumen.addView(itemView);
+        }
+    }
+
+
 
     private void setupSearchView() {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -316,4 +361,43 @@ public class MainFragment extends Fragment {
             }
         });
     }
+    private BitmapDescriptor createPlazaMarker(int numero) {
+        View markerView = getLayoutInflater().inflate(R.layout.marker_plaza, null);
+
+        TextView tvNumero = markerView.findViewById(R.id.tv_plaza_numero);
+        tvNumero.setText(String.valueOf(numero));
+
+        markerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        markerView.layout(0, 0, markerView.getMeasuredWidth(), markerView.getMeasuredHeight());
+
+        Bitmap bitmap = Bitmap.createBitmap(markerView.getMeasuredWidth(), markerView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        markerView.draw(canvas);
+
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+    private void mostrarPlazasDisponibles(List<Plaza> plazas) {
+        for (int i = 0; i < plazas.size(); i++) {
+            Plaza plaza = plazas.get(i);
+
+            LatLng ubicacion = obtenerUbicacionPlaza(plaza.getCodigo());
+            if (ubicacion == null) continue;
+
+            mMap.addMarker(new MarkerOptions()
+                    .position(ubicacion)
+                    .icon(createPlazaMarker(i + 1))
+                    .title("Plaza: " + plaza.getCodigo()));
+        }
+    }
+
+    private LatLng obtenerUbicacionPlaza(String codigo) {
+        switch (codigo) {
+            case "COC001": return new LatLng(43.2981, -2.0072);
+            case "COC002": return new LatLng(43.2982, -2.0073);
+            default: return null;
+        }
+    }
+
+
+
 }
