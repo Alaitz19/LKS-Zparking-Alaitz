@@ -34,7 +34,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.lksnext.parkingplantilla.R;
-import com.lksnext.parkingplantilla.domain.Callback;
 import com.lksnext.parkingplantilla.domain.CallbackWithReserva;
 import com.lksnext.parkingplantilla.domain.Plaza;
 import com.lksnext.parkingplantilla.domain.Reserva;
@@ -68,7 +67,6 @@ public class MainFragment extends Fragment {
                 .title("Parking del Parque Empresarial de Zuatzu"));
         viewModel.cargarPlazasLibres();
         viewModel.cargarResumenPlazasAhora();
-
     };
 
     @Nullable
@@ -83,14 +81,11 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // ViewModel
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
-        // SearchView
         searchView = view.findViewById(R.id.searchView);
         setupSearchView();
 
-        // Mapa embebido dinámico
         SupportMapFragment mapFragment = (SupportMapFragment)
                 getChildFragmentManager().findFragmentById(R.id.map_container);
         if (mapFragment == null) {
@@ -102,22 +97,21 @@ public class MainFragment extends Fragment {
         }
         mapFragment.getMapAsync(callback);
 
-        // FloatingActionButton
         setupFloatingButton(view);
+
         viewModel.getPlazasLibres().observe(getViewLifecycleOwner(), plazas -> {
             if (plazas != null && mMap != null) {
-                mostrarPlazasDisponibles(plazas); // ya tienes esto para el mapa
-
+                mostrarPlazasDisponibles(plazas);
             }
         });
+
         viewModel.getResumenPlazas().observe(getViewLifecycleOwner(), resumen -> {
             if (resumen != null) {
                 mostrarResumenPlazas(resumen);
             }
         });
+
         viewModel.cargarResumenPlazasAhora();
-
-
     }
 
     private void mostrarResumenPlazas(Map<String, Integer> resumen) {
@@ -139,8 +133,6 @@ public class MainFragment extends Fragment {
         }
     }
 
-
-
     private void setupSearchView() {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -158,7 +150,9 @@ public class MainFragment extends Fragment {
 
     private void geoLocate(String locationName) {
         if (locationName == null || locationName.isEmpty()) {
-            Toast.makeText(getContext(), "Por favor, introduce una dirección", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),
+                    getString(R.string.geo_enter_address),
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -172,11 +166,15 @@ public class MainFragment extends Fragment {
                 mMap.addMarker(new MarkerOptions().position(latLng).title(locationName));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
             } else {
-                Toast.makeText(getContext(), "No se encontró la dirección", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),
+                        getString(R.string.geo_address_not_found),
+                        Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(getContext(), "Error al buscar la dirección", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),
+                    getString(R.string.geo_address_search_error),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -195,7 +193,9 @@ public class MainFragment extends Fragment {
         MaterialButton btnContinuar = dialogView.findViewById(R.id.btn_continuar);
 
         if (layoutDias == null || gridHoras == null || btnContinuar == null) {
-            Toast.makeText(requireContext(), "Error in the layout", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(),
+                    getString(R.string.reservation_error_layout),
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -204,7 +204,6 @@ public class MainFragment extends Fragment {
         setupDiaButtons(layoutDias, fechaSeleccionada, listaDias);
 
         final List<MaterialButton> horasSeleccionadas = new ArrayList<>();
-
         DialogUtils.setupHoraButtons(requireContext(), gridHoras, horasSeleccionadas);
 
         final String[] tipoPlaza = {null};
@@ -245,19 +244,16 @@ public class MainFragment extends Fragment {
 
             button.setOnClickListener(btn -> {
                 fechaSeleccionada[0] = fechaISO;
-
                 for (MaterialButton b : listaDias) {
                     b.setChecked(false);
                     b.setBackgroundColor(getResources().getColor(android.R.color.white));
                 }
-
                 button.setChecked(true);
                 button.setBackgroundColor(android.graphics.Color.parseColor("#CCCCCC"));
             });
 
             layoutDias.addView(button);
             listaDias.add(button);
-
             if (i == 0) button.performClick();
         }
     }
@@ -282,14 +278,14 @@ public class MainFragment extends Fragment {
 
         if (date == null || spotType == null || selectedHours.isEmpty()) {
             Toast.makeText(requireContext(),
-                    "Please select a date, spot type, and at least one hour.",
+                    getString(R.string.reservation_select_all),
                     Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (selectedHours.size() < 2) {
             Toast.makeText(requireContext(),
-                    "You must select at least two consecutive hours.",
+                    getString(R.string.reservation_min_two_hours),
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -301,7 +297,6 @@ public class MainFragment extends Fragment {
             for (int i = 0; i < selectedHours.size() - 1; i++) {
                 String[] currentParts = selectedHours.get(i).split(":");
                 String[] nextParts = selectedHours.get(i + 1).split(":");
-
                 int currentMinutes = Integer.parseInt(currentParts[0]) * 60 + Integer.parseInt(currentParts[1]);
                 int nextMinutes = Integer.parseInt(nextParts[0]) * 60 + Integer.parseInt(nextParts[1]);
 
@@ -316,7 +311,7 @@ public class MainFragment extends Fragment {
 
         if (!areConsecutive) {
             Toast.makeText(requireContext(),
-                    "Selected hours must be consecutive with no gaps.",
+                    getString(R.string.reservation_hours_consecutive),
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -325,17 +320,17 @@ public class MainFragment extends Fragment {
             String startHour = selectedHours.get(0);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
             long startMillis = sdf.parse(date + " " + startHour).getTime();
-
             long now = System.currentTimeMillis();
+
             if (startMillis < now) {
                 Toast.makeText(requireContext(),
-                        "You can't reserve a time slot in the past.",
+                        getString(R.string.reservation_time_in_past),
                         Toast.LENGTH_SHORT).show();
                 return;
             }
         } catch (Exception e) {
             Toast.makeText(requireContext(),
-                    "Error validating the selected time.",
+                    getString(R.string.reservation_time_validation_error),
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -345,7 +340,6 @@ public class MainFragment extends Fragment {
             public void onSuccess(Reserva reserva) {
                 Log.d("MainFragment", "Reservation successful");
                 dialog.dismiss();
-
                 NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
                 NavOptions navOptions = new NavOptions.Builder()
                         .setPopUpTo(R.id.mainFragment, true)
@@ -356,37 +350,34 @@ public class MainFragment extends Fragment {
             @Override
             public void onFailure() {
                 Toast.makeText(requireContext(),
-                        "The parking spot is not available at the selected time.",
+                        getString(R.string.reservation_spot_not_available),
                         Toast.LENGTH_SHORT).show();
             }
         });
     }
+
     private BitmapDescriptor createPlazaMarker(int numero) {
         View markerView = getLayoutInflater().inflate(R.layout.marker_plaza, null);
-
         TextView tvNumero = markerView.findViewById(R.id.tv_plaza_numero);
         tvNumero.setText(String.valueOf(numero));
-
         markerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         markerView.layout(0, 0, markerView.getMeasuredWidth(), markerView.getMeasuredHeight());
-
         Bitmap bitmap = Bitmap.createBitmap(markerView.getMeasuredWidth(), markerView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         markerView.draw(canvas);
-
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
+
     private void mostrarPlazasDisponibles(List<Plaza> plazas) {
         for (int i = 0; i < plazas.size(); i++) {
             Plaza plaza = plazas.get(i);
-
             LatLng ubicacion = obtenerUbicacionPlaza(plaza.getCodigo());
             if (ubicacion == null) continue;
 
             mMap.addMarker(new MarkerOptions()
                     .position(ubicacion)
                     .icon(createPlazaMarker(i + 1))
-                    .title("Plaza: " + plaza.getCodigo()));
+                    .title(getString(R.string.marker_plaza_title, plaza.getCodigo())));
         }
     }
 
@@ -397,7 +388,4 @@ public class MainFragment extends Fragment {
             default: return null;
         }
     }
-
-
-
 }

@@ -10,6 +10,7 @@ import android.widget.GridLayout;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.lksnext.parkingplantilla.R;
 
 import java.util.List;
 import java.util.Locale;
@@ -75,7 +76,7 @@ public class DialogUtils {
                         btn.setChecked(true);
                         horasSeleccionadas.add(btn);
                     } else {
-                        Toast.makeText(context, "Máximo 8 horas", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, context.getString(R.string.max_hours_limit_message), Toast.LENGTH_SHORT).show();
                     }
                 }
             });

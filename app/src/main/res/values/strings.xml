@@ -1,16 +1,17 @@
 <resources>
     <string name="app_name">Zparking</string>
-    <!--Parte de arriba-->
-    <string name="change_language">Cambiar idioma</string>
+    <!-- Top bar -->
+    <string name="change_language">Change language</string>
     <string-array name="language_options">
         <item>English</item>
         <item>Spanish</item>
         <item>Basque</item>
-        <item>Français</item>
-        <item>Deutsch</item>
+        <item>French</item>
+        <item>German</item>
         <item>Chinese</item>
     </string-array>
-    <!--Login-->
+
+    <!-- Login -->
     <string name="label_password">Password</string>
     <string name="label_email">Email</string>
     <string name="button_login">Login</string>
@@ -19,22 +20,23 @@
     <string name="hint_email">Enter your email*</string>
     <string name="hint_password">Enter your password*</string>
     <string name="forgot_password"><u>Forgot password?</u></string>
-    <string name="google_img_description">Boton google</string>
-    <string name="apple_img_description">Boton apple</string>
-    <string name="create_account">Create an account</string>"
+    <string name="google_img_description">Google button</string>
+    <string name="apple_img_description">Apple button</string>
+    <string name="create_account">Create an account</string>
     <string name="or_text">or</string>
 
-    <string name="login_error">Login error</string>
+    <string name="login_error">Login failed</string>
     <string name="login_success">Login successful</string>
     <string name="login_success_message">Welcome back!</string>
     <string name="login_error_message">Invalid email or password</string>
-    <!--Recovery-->
+
+    <!-- Recovery -->
     <string name="reset_password_title">Reset Password</string>
     <string name="label_phone">Phone</string>
     <string name="label_code">Code</string>
     <string name="label_new_password">New Password</string>
     <string name="label_confirm_password">Confirm Password</string>
-    <string name="send_email_or_sms">Send Email or sms</string>
+    <string name="send_email_or_sms">Send Email or SMS</string>
     <string name="send_code">Send Code</string>
     <string name="reset_password">Reset Password</string>
     <string name="hint_code">Enter your code*</string>
@@ -49,15 +51,14 @@
     <string name="password_recovery_success_message">A code has been sent to your email or phone</string>
     <string name="password_recovery_error_message">Please check your email or phone for the code</string>
 
-
-    <!--Oauth-->
+    <!-- OAuth -->
     <string name="default_web_client_id">399804485494-s8nj4m1tn8g5aq4dqq1kfos1bhkd786q.apps.googleusercontent.com</string>
     <string name="google_sign_in_error">Google sign in error</string>
     <string name="google_sign_in_success">Google sign in successful</string>
     <string name="google_sign_in_success_message">Welcome to Zparking!</string>
     <string name="google_sign_in_error_message">Google sign in failed, please try again</string>
 
-    <!--Register-->
+    <!-- Register -->
     <string name="register_title">Register</string>
     <string name="label_name">Name</string>
     <string name="label_surname">Surname</string>
@@ -69,21 +70,20 @@
     <string name="hint_confirm_email">Confirm your email*</string>
     <string name="register_button">Register</string>
     <string name="register_success">Registration successful</string>
-    <string name="register_error">Registration error</string>
+    <string name="register_error">Registration failed</string>
     <string name="register_success_message">You have successfully registered</string>
     <string name="register_error_message">Please check your details and try again</string>
-    <!--Main-->
-    <string name="selectDate">Selecciona una fecha</string>
 
+    <!-- Main -->
+    <string name="selectDate">Select a date</string>
     <string name="fragment_main">Main</string>
     <string name="fragment_step1">Step 1</string>
     <string name="fragment_step2">Step 2</string>
     <string name="fragment_end">End</string>
-    <string name="buscar">Buscar plazas libres</string>
-
+    <string name="buscar">Search available spots</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <!--Bottom Navigation-->
+    <!-- Bottom Navigation -->
     <string name="newres">New Reservation</string>
     <string name="reservations">My Reservations</string>
     <string name="person">Profile</string>
@@ -92,5 +92,141 @@
     <string name="vehicles">Vehicles</string>
     <string name="profile">Profile</string>
     <string name="title_activity_maps">MapsActivity</string>
+
+    <!-- Reservar Plaza -->
+    <string name="select_date_title">Select a date</string>
+    <string name="select_parking_type_title">Select the type of parking</string>
+    <string name="select_schedule_title">Select schedule</string>
+    <string name="max_hours_note">Maximum 8 hours per reservation</string>
+    <string name="continue_button">Continue</string>
+    <string name="available_days_description">Available days for booking</string>
+
+    <!-- Main Map -->
+    <string name="welcome_user">Welcome user!</string>
+    <string name="search_hint">Search location</string>
+    <string name="available_spots">Available spots</string>
+    <string name="new_reservation_description">New reservation</string>
+
+    <string name="parking_type_car">Car parking spot</string>
+    <string name="parking_type_adapted">Adapted parking spot</string>
+    <string name="parking_type_electric">Electric vehicle parking spot</string>
+    <string name="parking_type_motorbike">Motorbike parking spot</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_name">ParkingLKS Notifications</string>
+    <string name="notification_channel_description">Reservation reminder notifications</string>
+    <string name="notification_default_title">ParkingLKS</string>
+    <string name="notification_default_message">Your reservation is about to end.</string>
+    <string name="notification_title_default">ParkingLKS</string>
+    <string name="notification_start_message">Your reservation starts in 15 minutes</string>
+    <string name="notification_end30_message">Your reservation ends in 30 minutes</string>
+    <string name="notification_end15_message">Your reservation ends in 15 minutes</string>
+
+    <!-- DialogUtils -->
+    <string name="max_hours_limit_message">Maximum 8 hours</string>
+
+    <!-- MainActivity Notifications -->
+    <string name="reservas_channel_name">Reservations Channel</string>
+    <string name="reservas_channel_description">Notifications for reservation reminders</string>
+
+    <!-- ParkingAdapter -->
+    <string name="parking_type_label">Type: %1$s</string>
+    <string name="parking_na">N/A</string>
+    <string name="parking_time_range">From %1$s to %2$s</string>
+    <string name="parking_no_hours">No hours</string>
+    <string name="parking_no_reservation">No reservation</string>
+    <string name="parking_date">Date: %1$s</string>
+    <string name="parking_starts_in">Starts in: %1$s</string>
+    <string name="parking_time_remaining">Time remaining: %1$s</string>
+    <string name="parking_time_error">Time error</string>
+
+    <!-- VehicleAdapter -->
+    <string name="vehicle_plate_label">Plate: %1$s</string>
+    <string name="vehicle_lez_label">Lez: %1$s</string>
+    <string name="vehicle_type_label">Type: %1$s</string>
+
+    <!-- ChangePasswordFragment -->
+    <string name="change_password_complete_fields">Please complete both fields</string>
+    <string name="change_password_no_match">Passwords do not match</string>
+    <string name="change_password_success">Password updated successfully</string>
+
+    <!-- CodeVerificationFragment -->
+    <string name="code_verification_enter_code">Please enter the code</string>
+    <string name="code_verification_no_email">No valid email found</string>
+    <string name="code_verification_resend_success">Code resent to: %1$s</string>
+    <string name="code_verification_resend_error">Error resending code</string>
+    <string name="code_verification_verified">Code verified: %1$s</string>
+
+    <!-- MainFragment -->
+    <string name="geo_enter_address">Please enter an address</string>
+    <string name="geo_address_not_found">Address not found</string>
+    <string name="geo_address_search_error">Error searching address</string>
+    <string name="reservation_error_layout">Error in the layout</string>
+    <string name="reservation_select_all">Please select a date, spot type, and at least one hour.</string>
+    <string name="reservation_min_two_hours">You must select at least two consecutive hours.</string>
+    <string name="reservation_hours_consecutive">Selected hours must be consecutive with no gaps.</string>
+    <string name="reservation_time_in_past">You cannot reserve a time slot in the past.</string>
+    <string name="reservation_time_validation_error">Error validating the selected time.</string>
+    <string name="reservation_spot_not_available">The parking spot is not available at the selected time.</string>
+    <string name="marker_plaza_title">Spot: %1$s</string>
+
+    <!-- PasswordRecoveryFragment -->
+    <string name="recovery_enter_email_or_phone">Enter an email or phone number</string>
+    <string name="recovery_email_sent">Recovery email sent</string>
+    <string name="recovery_email_error">Error sending recovery email</string>
+    <string name="recovery_verification_success">Verification successful</string>
+    <string name="recovery_code_error">Error sending code</string>
+    <string name="recovery_code_sent">Verification code sent</string>
+
+    <!-- ProfileFragment -->
+    <string name="profile_image_upload_success">Image uploaded successfully</string>
+    <string name="profile_image_upload_error">Error uploading image</string>
+    <string name="profile_update_success">Profile updated</string>
+    <string name="profile_update_error">Error updating profile</string>
+
+    <!-- RegisterFragment -->
+    <string name="register_invalid_email">Invalid email</string>
+    <string name="register_passwords_no_match">Passwords do not match</string>
+
+    <!-- ReservationsFragment -->
+    <string name="reservation_no_address">Address not available</string>
+    <string name="reservation_deleted">Reservation deleted</string>
+    <string name="reservation_delete_error">Error deleting reservation</string>
+    <string name="save_button">Save</string>
+    <string name="select_at_least_one_hour">Select at least one hour</string>
+    <string name="reservation_time_updated">Time updated</string>
+    <string name="reservation_time_update_error">Error updating time</string>
+
+    <!-- VehiclesFragment -->
+    <string name="dialog_add_vehicle_title">Add Vehicle</string>
+    <string name="dialog_add_vehicle_positive">Add</string>
+    <string name="dialog_add_vehicle_negative">Cancel</string>
+    <string name="error_plate_required">Plate is required</string>
+    <string name="error_image_required">Please select an image</string>
+    <string name="vehicle_added_success">Vehicle added!</string>
+    <string name="vehicle_added_failure">Failed to add vehicle</string>
+
+    <string name="filter_current">Current</string>
+    <string name="filter_next">Next</string>
+    <string name="filter_finished">Finished</string>
+
+
+    <string name="your_vehicles_title">Your vehicles</string>
+    <string name="add_vehicle_description">Add vehicle</string>
+
+    <string name="parking_number_placeholder">P001</string>
+    <string name="parking_address_placeholder">Zuaztu kalea 5 Nº 2</string>
+    <string name="parking_type_placeholder">Type: Car</string>
+    <string name="parking_time_range_placeholder">From 08:00 to 10:00</string>
+    <string name="parking_time_placeholder">Remaining time: 00:00:00</string>
+    <string name="edit_button_description">Edit reservation</string>
+    <string name="delete_button_description">Delete reservation</string>
+    <string name="parking_type_default">Car</string>
+
+    <string name="vehicle_plate_placeholder">ABC-1234</string>
+    <string name="vehicle_type_placeholder">Sedan</string>
+    <string name="vehicle_lez_placeholder">LEZ: Allowed</string>
+
+
 
 </resources>

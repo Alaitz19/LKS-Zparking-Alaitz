@@ -26,10 +26,10 @@ public class NotificacionReceiver extends BroadcastReceiver {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 NotificationChannel channel = new NotificationChannel(
                         CHANNEL_ID,
-                        "ParkingLKS Notifications",
+                        context.getString(R.string.notification_channel_name),
                         NotificationManager.IMPORTANCE_HIGH
                 );
-                channel.setDescription("Notificaciones de recordatorios de reserva");
+                channel.setDescription(context.getString(R.string.notification_channel_description));
                 channel.enableLights(true);
                 channel.enableVibration(true);
                 notificationManager.createNotificationChannel(channel);
@@ -37,8 +37,8 @@ public class NotificacionReceiver extends BroadcastReceiver {
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                     .setSmallIcon(R.drawable.zparking)
-                    .setContentTitle(title != null ? title : "ParkingLKS")
-                    .setContentText(message != null ? message : "Tu reserva está por terminar.")
+                    .setContentTitle(title != null ? title : context.getString(R.string.notification_default_title))
+                    .setContentText(message != null ? message : context.getString(R.string.notification_default_message))
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setAutoCancel(true);
 

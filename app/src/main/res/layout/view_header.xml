@@ -45,7 +45,7 @@
         android:id="@+id/LabelAppName"
         android:layout_width="91dp"
         android:layout_height="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:shadowColor="#80000000"
         android:shadowDx="0"
         android:shadowDy="10"

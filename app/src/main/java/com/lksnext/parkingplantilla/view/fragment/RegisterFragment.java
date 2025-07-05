@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 
 import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.databinding.FragmentRegisterBinding;
@@ -29,28 +28,34 @@ public class RegisterFragment extends Fragment {
         binding = FragmentRegisterBinding.inflate(inflater, container, false);
         registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
-
         binding.registerButton.setOnClickListener(v -> {
             String email = binding.emailEditText.getText().toString().trim();
             String password = binding.passwordEditText.getText().toString().trim();
             String username = binding.usernameEditText.getText().toString().trim();
             String phone = binding.phoneEditText.getText().toString().trim();
             String confirmPassword = binding.confirmPasswordEditText.getText().toString().trim();
+
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                Toast.makeText(getContext(), "Email no válido", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),
+                        getString(R.string.register_invalid_email),
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
-
 
             if (!password.equals(confirmPassword)) {
-                Toast.makeText(getContext(), "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),
+                        getString(R.string.register_passwords_no_match),
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
+
             registerViewModel.register(email, password, username, phone, new Callback() {
                 @Override
                 public void onSuccess() {
                     requireActivity().runOnUiThread(() -> {
-                        Toast.makeText(getContext(), "Registro exitoso", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),
+                                getString(R.string.register_success),
+                                Toast.LENGTH_SHORT).show();
 
                         requireActivity().getSupportFragmentManager()
                                 .beginTransaction()
@@ -58,13 +63,14 @@ public class RegisterFragment extends Fragment {
                                 .addToBackStack(null)
                                 .commit();
                     });
-
                 }
 
                 @Override
                 public void onFailure() {
                     requireActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), "Error en el registro", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(getContext(),
+                                    getString(R.string.register_error),
+                                    Toast.LENGTH_SHORT).show()
                     );
                 }
             });

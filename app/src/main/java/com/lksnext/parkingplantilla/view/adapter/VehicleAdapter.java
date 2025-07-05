@@ -7,10 +7,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.WindowDecorActionBar;
 import androidx.recyclerview.widget.RecyclerView;
-import com.bumptech.glide.Glide;
 
+import com.bumptech.glide.Glide;
 import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.domain.Vehicle;
 
@@ -37,13 +36,17 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleV
     public void onBindViewHolder(@NonNull VehicleViewHolder holder, int position) {
         Vehicle vehicle = vehicles.get(position);
 
+        holder.vehiclePlate.setText(
+                holder.itemView.getContext().getString(R.string.vehicle_plate_label, vehicle.getMatricula())
+        );
 
+        holder.vehicleLez.setText(
+                holder.itemView.getContext().getString(R.string.vehicle_lez_label, vehicle.getLez())
+        );
 
-
-        holder.vehiclePlate.setText("Plate: " + vehicle.getMatricula());
-        holder.vehicleLez.setText("Lez: " + vehicle.getLez());
-        holder.vehicletype.setText("Type: " + vehicle.getMarca());
-
+        holder.vehicletype.setText(
+                holder.itemView.getContext().getString(R.string.vehicle_type_label, vehicle.getMarca())
+        );
 
         Glide.with(holder.vehicleImage.getContext())
                 .load(vehicle.getImageUrl())
@@ -65,9 +68,7 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleV
     static class VehicleViewHolder extends RecyclerView.ViewHolder {
 
         ImageView vehicleImage;
-        TextView  vehicletype, vehiclePlate, vehicleLez;
-
-
+        TextView vehicletype, vehiclePlate, vehicleLez;
 
         public VehicleViewHolder(@NonNull View itemView) {
             super(itemView);

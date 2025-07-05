@@ -79,15 +79,14 @@ public class ProfileFragment extends Fragment {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         Uri selectedImageUri = result.getData().getData();
                         if (selectedImageUri != null) {
-                            // Previsualiza localmente
                             avatarButton.setImageURI(selectedImageUri);
 
-                            // Súbela a Storage y actualiza Firestore
                             profileViewModel.uploadProfileImage(selectedImageUri, new CallbackWithResult<String>() {
                                 @Override
                                 public void onSuccess(String imageUrl) {
-                                    Toast.makeText(getActivity(), "Imagen subida correctamente", Toast.LENGTH_SHORT).show();
-                                    // Vuelve a cargar desde URL (opcional)
+                                    Toast.makeText(getActivity(),
+                                            getString(R.string.profile_image_upload_success),
+                                            Toast.LENGTH_SHORT).show();
                                     Glide.with(requireContext())
                                             .load(imageUrl)
                                             .placeholder(R.drawable.generic_avatar)
@@ -96,7 +95,9 @@ public class ProfileFragment extends Fragment {
 
                                 @Override
                                 public void onFailure(Exception e) {
-                                    Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(),
+                                            getString(R.string.profile_image_upload_error) + ": " + e.getMessage(),
+                                            Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -119,15 +120,21 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onSuccess(Boolean result) {
                     if (result) {
-                        Toast.makeText(getActivity(), "Perfil actualizado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),
+                                getString(R.string.profile_update_success),
+                                Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getActivity(), "Error al actualizar perfil", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),
+                                getString(R.string.profile_update_error),
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Exception e) {
-                    Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),
+                            getString(R.string.profile_update_error) + ": " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -139,7 +146,6 @@ public class ProfileFragment extends Fragment {
             startActivity(intent);
         });
 
-        // Sección expandible
         TextView header = view.findViewById(R.id.headerUserAccount);
         LinearLayout content = view.findViewById(R.id.contentUserAccount);
         header.setOnClickListener(v -> {

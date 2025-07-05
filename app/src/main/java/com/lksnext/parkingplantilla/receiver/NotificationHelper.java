@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.domain.Reserva;
 
 import java.text.SimpleDateFormat;
@@ -19,23 +20,41 @@ public class NotificationHelper {
 
         long notificacionInicio = startMillis - 15 * 60 * 1000;
         if (notificacionInicio > System.currentTimeMillis()) {
-            programarAlarma(context, reserva, notificacionInicio, "Tu reserva empieza en 15 minutos", "START");
+            programarAlarma(
+                    context,
+                    reserva,
+                    notificacionInicio,
+                    context.getString(R.string.notification_start_message),
+                    "START"
+            );
         }
 
         long notificacionFin30 = endMillis - 30 * 60 * 1000;
         if (notificacionFin30 > System.currentTimeMillis()) {
-            programarAlarma(context, reserva, notificacionFin30, "Tu reserva termina en 30 minutos", "END30");
+            programarAlarma(
+                    context,
+                    reserva,
+                    notificacionFin30,
+                    context.getString(R.string.notification_end30_message),
+                    "END30"
+            );
         }
 
         long notificacionFin15 = endMillis - 15 * 60 * 1000;
         if (notificacionFin15 > System.currentTimeMillis()) {
-            programarAlarma(context, reserva, notificacionFin15, "Tu reserva termina en 15 minutos", "END15");
+            programarAlarma(
+                    context,
+                    reserva,
+                    notificacionFin15,
+                    context.getString(R.string.notification_end15_message),
+                    "END15"
+            );
         }
     }
 
     private static void programarAlarma(Context context, Reserva reserva, long triggerAtMillis, String mensaje, String tipoNotificacion) {
         Intent intent = new Intent(context, NotificacionReceiver.class);
-        intent.putExtra("title", "ParkingLKS");
+        intent.putExtra("title", context.getString(R.string.notification_title_default));
         intent.putExtra("message", mensaje);
 
         int requestCode = generarRequestCode(reserva, tipoNotificacion);
@@ -86,7 +105,7 @@ public class NotificationHelper {
 
     private static void cancelarAlarma(Context context, Reserva reserva, String tipoNotificacion) {
         Intent intent = new Intent(context, NotificacionReceiver.class);
-        intent.putExtra("title", "ParkingLKS");
+        intent.putExtra("title", context.getString(R.string.notification_title_default));
 
         int requestCode = generarRequestCode(reserva, tipoNotificacion);
 
@@ -139,18 +158,17 @@ public class NotificationHelper {
 
             long notificacionInicio = startMillis - 15 * 60 * 1000;
             if (notificacionInicio > System.currentTimeMillis()) {
-
-                // Se recomienda usar programarNotificaciones(context, reserva) mejor.
+                // Aquí podrías reutilizar programarNotificaciones(context, reserva)
             }
 
             long notificacionFin30 = endMillis - 30 * 60 * 1000;
             if (notificacionFin30 > System.currentTimeMillis()) {
-                // Igual aquí, solo si reservas sin objeto Reserva.
+                // Igual aquí
             }
 
             long notificacionFin15 = endMillis - 15 * 60 * 1000;
             if (notificacionFin15 > System.currentTimeMillis()) {
-                // Igual aquí.
+                // Igual aquí
             }
         } catch (Exception e) {
             e.printStackTrace();

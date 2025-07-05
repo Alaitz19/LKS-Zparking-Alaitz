@@ -25,12 +25,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class MapFragment extends Fragment  {
+public class MapFragment extends Fragment {
     private GoogleMap mMap;
     private SearchView searchView;
 
     private final OnMapReadyCallback callback = googleMap -> {
-        mMap = googleMap; // Guarda la instancia del mapa
+        mMap = googleMap;
 
         LatLng sanSebastian = new LatLng(43.3124, -1.9839);
         float zoomLevel = 12.0f;
@@ -75,14 +75,16 @@ public class MapFragment extends Fragment  {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false; // No hacemos nada mientras se escribe
+                return false;
             }
         });
     }
 
     private void geoLocate(String locationName) {
         if (locationName == null || locationName.isEmpty()) {
-            Toast.makeText(getContext(), "Por favor, introduce una dirección", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),
+                    getString(R.string.geo_enter_address),
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -96,11 +98,15 @@ public class MapFragment extends Fragment  {
                 mMap.addMarker(new MarkerOptions().position(latLng).title(locationName));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
             } else {
-                Toast.makeText(getContext(), "No se encontró la dirección", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),
+                        getString(R.string.geo_address_not_found),
+                        Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(getContext(), "Error al buscar la dirección", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),
+                    getString(R.string.geo_address_search_error),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 }

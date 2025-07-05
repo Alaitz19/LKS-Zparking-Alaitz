@@ -45,8 +45,6 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
-
-
         // Configuración de Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -68,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                                 loginViewModel.loginWithGoogle(GoogleAuthProvider.getCredential(idToken, null));
                             }
                         } catch (ApiException e) {
-                            Toast.makeText(this, "Error en Google Sign-In", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.google_sign_in_error), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -76,12 +74,12 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel.isLogged().observe(this, logged -> {
             if (Boolean.TRUE.equals(logged)) {
-                Toast.makeText(this, "Login correcto", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } else if (Boolean.FALSE.equals(logged)) {
-                Toast.makeText(this, "Login fallido", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_SHORT).show();
             }
         });
     }

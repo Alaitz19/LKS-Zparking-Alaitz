@@ -3,13 +3,11 @@ package com.lksnext.parkingplantilla.view.activity;
 import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -48,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            CharSequence name = "ReservasChannel";
-            String description = "Notificaciones para recordatorios de reservas";
+            CharSequence name = getString(R.string.reservas_channel_name);
+            String description = getString(R.string.reservas_channel_description);
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel("ParkingLKS_Channel", name, importance);
             channel.setDescription(description);
@@ -61,13 +59,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 Log.d("MainActivity", "Plazas creadas o ya existentes.");
-
             }
 
             @Override
             public void onFailure() {
                 Log.e("MainActivity", "Error creando plazas.");
-
             }
         });
 

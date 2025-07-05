@@ -52,23 +52,24 @@ public class LoginFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
+
         binding.googleSignInButton.setOnClickListener(v -> {
             ((LoginActivity) requireActivity()).launchGoogleSignIn();
         });
 
         loginViewModel.isLogged().observe(getViewLifecycleOwner(), logged -> {
             if (Boolean.TRUE.equals(logged)) {
-                Toast toast = Toast.makeText(requireContext(), "Login correcto", Toast.LENGTH_SHORT);
-                toast.show();
-
+                Toast.makeText(requireContext(),
+                        getString(R.string.login_success),
+                        Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(requireContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } else if (Boolean.FALSE.equals(logged)) {
-                Toast toast = Toast.makeText(requireContext(), "Login fallido", Toast.LENGTH_SHORT);
-                toast.show();
-
+                Toast.makeText(requireContext(),
+                        getString(R.string.login_failed),
+                        Toast.LENGTH_SHORT).show();
             }
         });
 

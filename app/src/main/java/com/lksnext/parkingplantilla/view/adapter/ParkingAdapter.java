@@ -56,36 +56,50 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingV
 
         if (item.getReserva() != null && item.getReserva().getPlaza() != null) {
             holder.parkingNumber.setText(item.getReserva().getPlaza().getCodigo());
-            holder.parkingType.setText("Tipo: " + item.getReserva().getPlaza().getTipoPlaza().name());
+            holder.parkingType.setText(
+                    context.getString(
+                            R.string.parking_type_label,
+                            item.getReserva().getPlaza().getTipoPlaza().name()
+                    )
+            );
         } else {
-            holder.parkingNumber.setText("N/A");
-            holder.parkingType.setText("Tipo: N/A");
+            holder.parkingNumber.setText(context.getString(R.string.parking_na));
+            holder.parkingType.setText(
+                    context.getString(
+                            R.string.parking_type_label,
+                            context.getString(R.string.parking_na)
+                    )
+            );
         }
 
         holder.parkingAddress.setText(item.getAddress());
 
-        // Mostrar franja horaria
         Reserva reserva = item.getReserva();
         if (reserva != null && reserva.getHora() != null) {
             List<String> horas = reserva.getHora().getHoras();
             if (!horas.isEmpty()) {
                 String horaInicioStr = horas.get(0);
                 String horaFinStr = horas.get(horas.size() - 1);
-                holder.parkingTimeRange.setText("De " + horaInicioStr + " a " + horaFinStr);
+                holder.parkingTimeRange.setText(
+                        context.getString(R.string.parking_time_range, horaInicioStr, horaFinStr)
+                );
             } else {
-                holder.parkingTimeRange.setText("Sin horas");
+                holder.parkingTimeRange.setText(context.getString(R.string.parking_no_hours));
             }
         } else {
-            holder.parkingTimeRange.setText("Sin reserva");
+            holder.parkingTimeRange.setText(context.getString(R.string.parking_no_reservation));
         }
 
-        // ✅ Mostrar fecha siempre
         if (reserva != null && reserva.getFecha() != null) {
             String fechaFormateada = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                     .format(reserva.getFecha().toDate());
-            holder.parkingTime.setText("Fecha: " + fechaFormateada);
+            holder.parkingTime.setText(
+                    context.getString(R.string.parking_date, fechaFormateada)
+            );
         } else {
-            holder.parkingTime.setText("Fecha: N/A");
+            holder.parkingTime.setText(
+                    context.getString(R.string.parking_date, context.getString(R.string.parking_na))
+            );
         }
 
         holder.startTimer(item);
@@ -193,6 +207,7 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingV
                 @Override
                 public void run() {
                     Reserva reserva = item.getReserva();
+                    Context context = itemView.getContext();
                     if (reserva != null && reserva.getHora() != null && reserva.getFecha() != null) {
                         long now = System.currentTimeMillis();
                         List<String> horas = reserva.getHora().getHoras();
@@ -209,23 +224,29 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingV
                                 long millisFin = sdf.parse(fechaReservaStr + " " + horaFinStr).getTime();
 
                                 if (now < millisInicio) {
-                                    parkingTime.setText("Empieza en: " + formatMillis(millisInicio - now));
+                                    parkingTime.setText(
+                                            context.getString(R.string.parking_starts_in, formatMillis(millisInicio - now))
+                                    );
                                 } else if (now < millisFin) {
-                                    parkingTime.setText("Tiempo restante: " + formatMillis(millisFin - now));
+                                    parkingTime.setText(
+                                            context.getString(R.string.parking_time_remaining, formatMillis(millisFin - now))
+                                    );
                                 } else {
                                     String fechaFormateada = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                                             .format(reserva.getFecha().toDate());
-                                    parkingTime.setText("Fecha: " + fechaFormateada);
+                                    parkingTime.setText(
+                                            context.getString(R.string.parking_date, fechaFormateada)
+                                    );
                                 }
 
                             } catch (Exception e) {
-                                parkingTime.setText("Error tiempo");
+                                parkingTime.setText(context.getString(R.string.parking_time_error));
                             }
                         } else {
-                            parkingTime.setText("Sin horas");
+                            parkingTime.setText(context.getString(R.string.parking_no_hours));
                         }
                     } else {
-                        parkingTime.setText("Sin reserva");
+                        parkingTime.setText(context.getString(R.string.parking_no_reservation));
                     }
                     handler.postDelayed(this, 1000);
                 }

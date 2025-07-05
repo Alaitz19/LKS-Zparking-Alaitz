@@ -1,6 +1,5 @@
 package com.lksnext.parkingplantilla.view.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -9,14 +8,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.lksnext.parkingplantilla.R;
-import com.lksnext.parkingplantilla.view.activity.LoginActivity;
 
 import java.util.Objects;
 
@@ -39,11 +36,17 @@ public class ChangePasswordFragment extends Fragment {
             String confirmPassword = Objects.requireNonNull(confirmPasswordInput.getText()).toString().trim();
 
             if (TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
-                Toast.makeText(requireContext(), "Please complete both parameters", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(),
+                        getString(R.string.change_password_complete_fields),
+                        Toast.LENGTH_SHORT).show();
             } else if (!password.equals(confirmPassword)) {
-                Toast.makeText(requireContext(), "Passwords don't match", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(),
+                        getString(R.string.change_password_no_match),
+                        Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(requireContext(), "Contraseña actualizada correctamente", Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(),
+                        getString(R.string.change_password_success),
+                        Toast.LENGTH_LONG).show();
 
                 requireActivity().getSupportFragmentManager().popBackStack();
                 requireActivity().findViewById(R.id.loginFragmentContainer).setVisibility(View.VISIBLE);
@@ -59,5 +62,4 @@ public class ChangePasswordFragment extends Fragment {
 
         return view;
     }
-
 }

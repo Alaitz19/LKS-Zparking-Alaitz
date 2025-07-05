@@ -43,7 +43,9 @@ public class PasswordRecoveryFragment extends Fragment {
             String phone = phoneText.getText().toString().trim();
 
             if (TextUtils.isEmpty(email) && TextUtils.isEmpty(phone)) {
-                Toast.makeText(requireContext(), "Introduce un correo o número de teléfono", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(),
+                        getString(R.string.recovery_enter_email_or_phone),
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -51,7 +53,9 @@ public class PasswordRecoveryFragment extends Fragment {
                 mAuth.sendPasswordResetEmail(email)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                Toast.makeText(requireContext(), "Correo de recuperación enviado", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireContext(),
+                                        getString(R.string.recovery_email_sent),
+                                        Toast.LENGTH_SHORT).show();
                                 Bundle args = new Bundle();
                                 args.putString("email", email);
                                 CodeVerificationFragment fragment = new CodeVerificationFragment();
@@ -62,7 +66,9 @@ public class PasswordRecoveryFragment extends Fragment {
                                         .addToBackStack(null)
                                         .commit();
                             } else {
-                                Toast.makeText(requireContext(), "Error al enviar el correo", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireContext(),
+                                        getString(R.string.recovery_email_error),
+                                        Toast.LENGTH_SHORT).show();
                             }
                         });
             } else if (!TextUtils.isEmpty(phone)) {
@@ -83,17 +89,23 @@ public class PasswordRecoveryFragment extends Fragment {
                 .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     @Override
                     public void onVerificationCompleted(com.google.firebase.auth.PhoneAuthCredential phoneAuthCredential) {
-                        Toast.makeText(requireContext(), "Verificación exitosa", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(),
+                                getString(R.string.recovery_verification_success),
+                                Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onVerificationFailed(com.google.firebase.FirebaseException e) {
-                        Toast.makeText(requireContext(), "Error al enviar el código", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(),
+                                getString(R.string.recovery_code_error),
+                                Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                        Toast.makeText(requireContext(), "Código de verificación enviado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(),
+                                getString(R.string.recovery_code_sent),
+                                Toast.LENGTH_SHORT).show();
                         Bundle args = new Bundle();
                         args.putString("verificationId", verificationId);
                         CodeVerificationFragment fragment = new CodeVerificationFragment();

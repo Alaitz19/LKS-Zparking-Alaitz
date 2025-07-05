@@ -26,14 +26,13 @@
             android:scaleType="centerCrop"
             android:src="@drawable/p2" />
 
-
         <TextView
             android:id="@+id/parking_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:text="P001"
+            android:text="@string/parking_number_placeholder"
             android:textColor="#000000"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -43,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Zuaztu kalea 5 Nº 2"
+            android:text="@string/parking_address_placeholder"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="normal" />
@@ -53,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Tipo: Coche"
+            android:text="@string/parking_type_placeholder"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="normal" />
@@ -63,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="De 08:00 a 10:00"
+            android:text="@string/parking_time_range_placeholder"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="normal" />
@@ -73,11 +72,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Tiempo restante: 00:00:00"
+            android:text="@string/parking_time_placeholder"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="normal" />
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -90,7 +88,7 @@
                 android:layout_height="48dp"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/button_border"
-                android:contentDescription="Edit"
+                android:contentDescription="@string/edit_button_description"
                 android:padding="8dp"
                 android:src="@android:drawable/ic_menu_edit"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -105,7 +103,7 @@
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/button_border_red"
                 android:backgroundTint="#FF6F6F"
-                android:contentDescription="Delete"
+                android:contentDescription="@string/delete_button_description"
                 android:padding="8dp"
                 android:src="@android:drawable/ic_delete"
                 app:layout_constraintBottom_toBottomOf="parent"

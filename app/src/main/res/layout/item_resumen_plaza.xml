@@ -27,6 +27,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingTop="4dp"
-        android:text="Coche"
+        android:text="@string/parking_type_default"
         android:textSize="14sp"/>
 </LinearLayout>

@@ -15,6 +15,7 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_marginBottom="8dp">
+
         <Button
             android:id="@+id/btn_filter_encurso"
             android:layout_width="0dp"
@@ -24,7 +25,7 @@
             android:paddingVertical="12dp"
             android:backgroundTint="@color/teal_300"
             android:textColor="@android:color/white"
-            android:text="Actual" />
+            android:text="@string/filter_current" />
 
         <Button
             android:id="@+id/btn_filter_siguientes"
@@ -35,7 +36,7 @@
             android:paddingVertical="12dp"
             android:backgroundTint="@color/teal_300"
             android:textColor="@android:color/white"
-            android:text="Next" />
+            android:text="@string/filter_next" />
 
         <Button
             android:id="@+id/btn_filter_terminadas"
@@ -45,11 +46,8 @@
             android:paddingVertical="12dp"
             android:backgroundTint="@color/teal_300"
             android:textColor="@android:color/white"
-            android:text="Finished" />
-
-
+            android:text="@string/filter_finished" />
     </LinearLayout>
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_reservations"

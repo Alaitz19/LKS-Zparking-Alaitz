@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -80,7 +79,7 @@ public class VehiclesFragment extends Fragment {
 
     private void showAddVehicleDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Add Vehicle");
+        builder.setTitle(getString(R.string.dialog_add_vehicle_title));
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_vehicle, null);
 
@@ -93,14 +92,13 @@ public class VehiclesFragment extends Fragment {
 
         builder.setView(dialogView);
 
-        builder.setPositiveButton("Add", (dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_add_vehicle_positive), (dialog, which) -> {
             String plate = editTextPlate.getText().toString().trim();
             String pollutionType = spinnerPollution.getSelectedItem().toString();
             String selectedType = spinnerType.getSelectedItem().toString();
 
-
             if (plate.isEmpty()) {
-                Toast.makeText(requireContext(), "Plate is required", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.error_plate_required), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -113,23 +111,23 @@ public class VehiclesFragment extends Fragment {
                         new Callback() {
                             @Override
                             public void onSuccess() {
-                                Toast.makeText(requireContext(), "Vehicle added!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireContext(), getString(R.string.vehicle_added_success), Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onFailure() {
-                                Toast.makeText(requireContext(), "Failed to add vehicle", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireContext(), getString(R.string.vehicle_added_failure), Toast.LENGTH_SHORT).show();
                             }
                         }
                 );
             } else {
-                Toast.makeText(requireContext(), "Please select an image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.error_image_required), Toast.LENGTH_SHORT).show();
             }
 
             selectedImageUri = null;
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> {
+        builder.setNegativeButton(getString(R.string.dialog_add_vehicle_negative), (dialog, which) -> {
             dialog.dismiss();
             selectedImageUri = null;
         });

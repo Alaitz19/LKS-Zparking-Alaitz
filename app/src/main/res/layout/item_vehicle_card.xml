@@ -24,7 +24,7 @@
             android:id="@+id/vehicle_plate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ABC-1234"
+            android:text="@string/vehicle_plate_placeholder"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Sedán"
+            android:text="@string/vehicle_type_placeholder"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="normal" />
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="LEZ: Permitido"
+            android:text="@string/vehicle_lez_placeholder"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
 

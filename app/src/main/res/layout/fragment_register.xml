@@ -12,14 +12,13 @@
         android:layout_height="wrap_content"
         android:paddingBottom="32dp">
 
-
         <!-- Título Registro -->
         <TextView
             android:id="@+id/titleRegister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="56dp"
-            android:text="Create Account"
+            android:text="@string/register_title"
             android:textColor="@color/black"
             android:textSize="28sp"
             android:textStyle="bold"
@@ -66,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Username"
+            android:text="@string/label_name"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="14sp"
@@ -79,7 +78,7 @@
             android:id="@+id/usernameInputLayout"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:hint="Enter your username"
+            android:hint="@string/hint_name"
             app:boxStrokeColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/labelUsername"
             app:layout_constraintStart_toStartOf="parent"
@@ -93,13 +92,13 @@
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Label Teléfono -->
+        <!-- Label Phone -->
         <TextView
             android:id="@+id/labelPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Phone Number (optional)"
+            android:text="@string/label_phone_number"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="14sp"
@@ -107,12 +106,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Input Teléfono -->
+        <!-- Input Phone -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/phoneInputLayout"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:hint="e.g. 123456789"
+            android:hint="@string/hint_phone_number"
             app:boxStrokeColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/labelPhone"
             app:layout_constraintStart_toStartOf="parent"
@@ -200,7 +199,7 @@
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Register"
+            android:text="@string/register_button"
             android:backgroundTint="@color/blue"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/confirmPasswordInputLayout"
@@ -213,7 +212,7 @@
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Back"
+            android:text="@string/back_to_login"
             android:backgroundTint="@color/gray"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/registerButton"
