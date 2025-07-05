@@ -25,9 +25,6 @@ public class LoginViewModel extends ViewModel {
         return logged;
     }
 
-    public LiveData<String> getUserName() {
-        return userName;
-    }
 
     public void loginUser(String email, String password) {
         repository.login(email, password, new Callback() {

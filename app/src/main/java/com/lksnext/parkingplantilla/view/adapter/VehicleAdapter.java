@@ -21,7 +21,6 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleV
     private List<Vehicle> vehicles;
     private final OnDeleteClickListener deleteClickListener;
 
-    // Interfaz para manejar clics de eliminación
     public interface OnDeleteClickListener {
         void onDeleteClick(Vehicle vehicle);
     }

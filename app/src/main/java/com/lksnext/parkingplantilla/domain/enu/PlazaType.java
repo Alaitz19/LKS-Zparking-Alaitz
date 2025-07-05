@@ -1,5 +1,7 @@
 package com.lksnext.parkingplantilla.domain.enu;
 
+import androidx.annotation.NonNull;
+
 public enum PlazaType {
     COCHE("Coche"),
     DISCAPACITADO("Discapacitado"),
@@ -16,6 +18,7 @@ public enum PlazaType {
         return type;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return type;

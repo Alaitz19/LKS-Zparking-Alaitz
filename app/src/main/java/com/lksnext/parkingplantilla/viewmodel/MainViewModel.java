@@ -47,7 +47,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void cargarPlazasLibres() {
-        repository.getPlazasLibres(new CallbackWithResult<List<Plaza>>() {
+        repository.getPlazasLibres(new CallbackWithResult<>() {
             @Override
             public void onSuccess(List<Plaza> plazas) {
                 plazasLibres.postValue(plazas);
@@ -61,7 +61,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void cargarResumenPlazasAhora() {
-        repository.getResumenPlazasLibresAhora(new CallbackWithResult<Map<String, Integer>>() {
+        repository.getResumenPlazasLibresAhora(new CallbackWithResult<>() {
             @Override
             public void onSuccess(Map<String, Integer> result) {
                 resumenPlazas.postValue(result);

@@ -33,7 +33,7 @@ public class RegisterFragment extends Fragment {
 
         FragmentRegisterBinding binding = FragmentRegisterBinding.inflate(inflater, container, false);
 
-        // ✅ Inyección con Factory
+
         DataRepository repo = new DataRepository(
                 FirebaseFirestore.getInstance(),
                 FirebaseAuth.getInstance()

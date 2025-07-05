@@ -47,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
                     .commit();
         }
 
-        // ✅ Inyectar DataRepository y Factory
         DataRepository repository = new DataRepository(
                 FirebaseFirestore.getInstance(),
                 FirebaseAuth.getInstance()

@@ -34,7 +34,7 @@ public class ReservationsViewModel extends ViewModel {
     }
 
     public void cargarReservas(String uid) {
-        repo.getReservasUsuario(uid, new CallbackWithResult<List<Reserva>>() {
+        repo.getReservasUsuario(uid, new CallbackWithResult<>() {
             @Override
             public void onSuccess(List<Reserva> result) {
                 todasLasReservas = result;
