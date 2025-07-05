@@ -16,16 +16,17 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.lksnext.parkingplantilla.domain.Callback;
+import com.lksnext.parkingplantilla.domain.CallbackWithReserva;
 import com.lksnext.parkingplantilla.domain.CallbackWithResult;
 import com.lksnext.parkingplantilla.domain.Hora;
 import com.lksnext.parkingplantilla.domain.Plaza;
 import com.lksnext.parkingplantilla.domain.Reserva;
 import com.lksnext.parkingplantilla.domain.enu.PlazaType;
+import com.lksnext.parkingplantilla.receiver.NotificationHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import  com.lksnext.parkingplantilla.receiver.NotificationHelper;
 public class DataRepository {
     private static final String KEY_ID = "idReserva";
     private static final String KEY_FECHA = "fecha";
@@ -257,7 +258,7 @@ public class DataRepository {
         return mAuth.getCurrentUser();
     }
 
-    public void comprobarYCrearReserva(Context context, String fecha, List<String> horas, String tipoPlaza, Callback callback) {
+    public void comprobarYCrearReserva(Context context, String fecha, List<String> horas, String tipoPlaza, CallbackWithReserva callback) {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) {
             callback.onFailure();
@@ -283,6 +284,57 @@ public class DataRepository {
                 })
                 .addOnFailureListener(e -> callback.onFailure());
     }
+
+    private void buscarPlazaLibre(Context context, List<String> codigos, int index, String fecha, List<String> horas, CallbackWithReserva callback, FirebaseUser user, String tipoPlaza) {
+        if (index >= codigos.size()) {
+            callback.onFailure();
+            return;
+        }
+
+        String plazaCodigo = codigos.get(index);
+
+        db.collection("reservas")
+                .whereEqualTo(KEY_FECHA, fecha)
+                .whereEqualTo(KEY_PLAZA, plazaCodigo)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (existeSolapamiento(querySnapshot, horas)) {
+                        buscarPlazaLibre(context, codigos, index + 1, fecha, horas, callback, user, tipoPlaza);
+                        return;
+                    }
+
+                    Map<String, Object> reservaData = new HashMap<>();
+                    reservaData.put(KEY_FECHA, fecha);
+                    reservaData.put(KEY_USUARIO, user.getEmail());
+                    reservaData.put(KEY_UUID, user.getUid());
+                    reservaData.put(KEY_PLAZA, plazaCodigo);
+                    reservaData.put(KEY_HORA, horas);
+                    reservaData.put(KEY_TIPO_PLAZA, tipoPlaza);
+
+                    db.collection("reservas").add(reservaData)
+                            .addOnSuccessListener(r -> {
+                                String idGenerado = r.getId();
+                                db.collection("reservas").document(idGenerado).update(KEY_ID, idGenerado);
+
+                                db.collection("plazas").document(plazaCodigo)
+                                        .update("ocupada", true)
+                                        .addOnSuccessListener(aVoid -> {
+                                            // ✅ Construye Reserva real para devolverla
+                                            Plaza plaza = new Plaza(plazaCodigo, parseTipoPlaza(tipoPlaza));
+                                            Hora hora = new Hora(horas);
+                                            Timestamp fechaTimestamp = parseFecha(fecha);
+                                            Reserva reserva = new Reserva(idGenerado, fechaTimestamp, user.getEmail(), user.getUid(), plaza, hora);
+
+                                            NotificationHelper.programarNotificaciones(context, reserva);
+
+                                            callback.onSuccess(reserva);
+                                        })
+                                        .addOnFailureListener(e -> callback.onFailure());
+                            })
+                            .addOnFailureListener(e -> callback.onFailure());
+                });
+    }
+
 
 
     private void buscarPlazaLibre(Context context, List<String> codigos, int index, String fecha, List<String> horas, Callback callback, FirebaseUser user, String tipoPlaza) {

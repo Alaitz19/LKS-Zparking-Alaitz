@@ -1,4 +1,3 @@
-// app/src/main/java/com/lksnext/parkingplantilla/viewmodel/LoginViewModel.java
 package com.lksnext.parkingplantilla.viewmodel;
 
 import androidx.lifecycle.LiveData;
@@ -52,8 +51,6 @@ public class LoginViewModel extends ViewModel {
                 if (user != null) {
                     userName.setValue(user.getEmail());
 
-                    // 🔑 Crear o actualizar usuario en Firestore
-
                 }
             }
             @Override
@@ -64,16 +61,6 @@ public class LoginViewModel extends ViewModel {
         });
     }
 
-    public void logout() {
-        logged.setValue(Boolean.FALSE);
-        userName.setValue(null);
-    }
 
-    public void clearUserName() {
-        userName.setValue(null);
-    }
 
-    public void clearLoginStatus() {
-        logged.setValue(null);
-    }
 }

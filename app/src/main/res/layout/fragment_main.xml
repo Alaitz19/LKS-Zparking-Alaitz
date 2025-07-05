@@ -18,6 +18,7 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
+    <!-- SearchView para buscar ubicación -->
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
@@ -26,17 +27,17 @@
         android:layout_marginRight="50dp"
         android:layout_marginBottom="16dp"
         android:background="#DDDDDD"
-        android:hint="Buscar ubicación"
         android:queryHint="Buscar ubicación"
         app:defaultQueryHint="Buscar ubicación" />
 
-    <!-- Aquí sustituimos MapView por WebView -->
+    <!-- Mapa usando SupportMapFragment -->
+    <FrameLayout
+        android:id="@+id/map_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-
-
-    <!-- Botón para abrir el diálogo de filtro -->
-
-
+    <!-- Botón flotante para nueva reserva -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_new_reservation"
         android:layout_width="wrap_content"
@@ -45,9 +46,6 @@
         android:layout_margin="24dp"
         android:contentDescription="New Reservation"
         app:srcCompat="@android:drawable/ic_input_add"
-        app:backgroundTint="@android:color/holo_purple"
-        />
-
-
+        app:backgroundTint="@android:color/holo_purple" />
 
 </LinearLayout>

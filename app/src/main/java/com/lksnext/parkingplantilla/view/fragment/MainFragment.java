@@ -1,26 +1,41 @@
 package com.lksnext.parkingplantilla.view.fragment;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
+import android.widget.GridLayout;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import com.google.android.material.button.MaterialButton;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.lksnext.parkingplantilla.R;
+import com.lksnext.parkingplantilla.domain.Callback;
+import com.lksnext.parkingplantilla.domain.CallbackWithReserva;
+import com.lksnext.parkingplantilla.domain.Reserva;
 import com.lksnext.parkingplantilla.util.DialogUtils;
 import com.lksnext.parkingplantilla.viewmodel.MainViewModel;
-import com.lksnext.parkingplantilla.domain.Callback;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,17 +44,95 @@ import java.util.Locale;
 
 public class MainFragment extends Fragment {
 
+    private GoogleMap mMap;
+    private SearchView searchView;
     private MainViewModel viewModel;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+    private final OnMapReadyCallback callback = googleMap -> {
+        mMap = googleMap;
 
+        LatLng sanSebastian = new LatLng(43.3124, -1.9839);
+        float zoomLevel = 12.0f;
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sanSebastian, zoomLevel));
+
+        LatLng parqueEmpresarialZuatzu = new LatLng(43.2980445, -2.0072874);
+        googleMap.addMarker(new MarkerOptions()
+                .position(parqueEmpresarialZuatzu)
+                .title("Parking del Parque Empresarial de Zuatzu"));
+    };
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_main, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // ViewModel
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
-        setupFloatingButton(view);
+        // SearchView
+        searchView = view.findViewById(R.id.searchView);
+        setupSearchView();
 
-        return view;
+        // Mapa embebido dinámico
+        SupportMapFragment mapFragment = (SupportMapFragment)
+                getChildFragmentManager().findFragmentById(R.id.map_container);
+        if (mapFragment == null) {
+            mapFragment = SupportMapFragment.newInstance();
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.map_container, mapFragment)
+                    .commit();
+        }
+        mapFragment.getMapAsync(callback);
+
+        // FloatingActionButton
+        setupFloatingButton(view);
+    }
+
+    private void setupSearchView() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                geoLocate(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    private void geoLocate(String locationName) {
+        if (locationName == null || locationName.isEmpty()) {
+            Toast.makeText(getContext(), "Por favor, introduce una dirección", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        try {
+            List<Address> addressList = geocoder.getFromLocationName(locationName, 1);
+            if (addressList != null && !addressList.isEmpty()) {
+                Address address = addressList.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+                mMap.addMarker(new MarkerOptions().position(latLng).title(locationName));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
+            } else {
+                Toast.makeText(getContext(), "No se encontró la dirección", Toast.LENGTH_SHORT).show();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Error al buscar la dirección", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setupFloatingButton(View view) {
@@ -57,7 +150,7 @@ public class MainFragment extends Fragment {
         MaterialButton btnContinuar = dialogView.findViewById(R.id.btn_continuar);
 
         if (layoutDias == null || gridHoras == null || btnContinuar == null) {
-            android.widget.Toast.makeText(requireContext(), "Error in the layout", android.widget.Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Error in the layout", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -68,7 +161,6 @@ public class MainFragment extends Fragment {
         final List<MaterialButton> horasSeleccionadas = new ArrayList<>();
 
         DialogUtils.setupHoraButtons(requireContext(), gridHoras, horasSeleccionadas);
-
 
         final String[] tipoPlaza = {null};
         setupTipoPlazaSelection(dialogView, tipoPlaza);
@@ -92,7 +184,7 @@ public class MainFragment extends Fragment {
             String fechaISO = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date.getTime());
 
             MaterialButton button = new MaterialButton(requireContext(), null);
-            button.setBackgroundColor(getResources().getColor(android.R.color.white)); // Desmarcado: blanco
+            button.setBackgroundColor(getResources().getColor(android.R.color.white));
             button.setText(buttonText);
             button.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             button.setTextSize(14);
@@ -111,17 +203,17 @@ public class MainFragment extends Fragment {
 
                 for (MaterialButton b : listaDias) {
                     b.setChecked(false);
-                    b.setBackgroundColor(getResources().getColor(android.R.color.white)); // Todos a blanco
+                    b.setBackgroundColor(getResources().getColor(android.R.color.white));
                 }
 
                 button.setChecked(true);
-                button.setBackgroundColor(android.graphics.Color.parseColor("#CCCCCC")); // Seleccionado: gris
+                button.setBackgroundColor(android.graphics.Color.parseColor("#CCCCCC"));
             });
 
             layoutDias.addView(button);
             listaDias.add(button);
 
-            if (i == 0) button.performClick(); // Selección por defecto
+            if (i == 0) button.performClick();
         }
     }
 
@@ -144,23 +236,21 @@ public class MainFragment extends Fragment {
         }
 
         if (date == null || spotType == null || selectedHours.isEmpty()) {
-            android.widget.Toast.makeText(requireContext(),
+            Toast.makeText(requireContext(),
                     "Please select a date, spot type, and at least one hour.",
-                    android.widget.Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (selectedHours.size() < 2) {
-            android.widget.Toast.makeText(requireContext(),
+            Toast.makeText(requireContext(),
                     "You must select at least two consecutive hours.",
-                    android.widget.Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Sort the hours
         selectedHours.sort(String::compareTo);
 
-        // Check that the selected hours are consecutive
         boolean areConsecutive = true;
         try {
             for (int i = 0; i < selectedHours.size() - 1; i++) {
@@ -180,13 +270,12 @@ public class MainFragment extends Fragment {
         }
 
         if (!areConsecutive) {
-            android.widget.Toast.makeText(requireContext(),
+            Toast.makeText(requireContext(),
                     "Selected hours must be consecutive with no gaps.",
-                    android.widget.Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Check that the first hour is not in the past
         try {
             String startHour = selectedHours.get(0);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
@@ -194,28 +283,25 @@ public class MainFragment extends Fragment {
 
             long now = System.currentTimeMillis();
             if (startMillis < now) {
-                android.widget.Toast.makeText(requireContext(),
+                Toast.makeText(requireContext(),
                         "You can't reserve a time slot in the past.",
-                        android.widget.Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
-
         } catch (Exception e) {
-            android.widget.Toast.makeText(requireContext(),
+            Toast.makeText(requireContext(),
                     "Error validating the selected time.",
-                    android.widget.Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // If all checks pass, continue with reservation
-        viewModel.reservarSiLibre(requireContext(), date, selectedHours, spotType, new Callback() {
+        viewModel.reservarSiLibre(requireContext(), date, selectedHours, spotType, new CallbackWithReserva() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(Reserva reserva) {
                 Log.d("MainFragment", "Reservation successful");
                 dialog.dismiss();
 
                 NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
-
                 NavOptions navOptions = new NavOptions.Builder()
                         .setPopUpTo(R.id.mainFragment, true)
                         .build();
@@ -224,14 +310,10 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onFailure() {
-                android.widget.Toast.makeText(requireContext(),
+                Toast.makeText(requireContext(),
                         "The parking spot is not available at the selected time.",
-                        android.widget.Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-
-
-
 }

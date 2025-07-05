@@ -22,27 +22,26 @@ public class NotificacionReceiver extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Crea el canal si es necesario (Android 8+)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "ParkingLKS Notifications",
-                    NotificationManager.IMPORTANCE_HIGH
-            );
-            channel.setDescription("Notificaciones de recordatorios de reserva");
-            if (notificationManager != null) {
+        if (notificationManager != null) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(
+                        CHANNEL_ID,
+                        "ParkingLKS Notifications",
+                        NotificationManager.IMPORTANCE_HIGH
+                );
+                channel.setDescription("Notificaciones de recordatorios de reserva");
+                channel.enableLights(true);
+                channel.enableVibration(true);
                 notificationManager.createNotificationChannel(channel);
             }
-        }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.zparking) // Icono de tu app
-                .setContentTitle(title != null ? title : "ParkingLKS")
-                .setContentText(message != null ? message : "Tu reserva está por terminar.")
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.zparking) // Asegúrate de que sea un icono válido
+                    .setContentTitle(title != null ? title : "ParkingLKS")
+                    .setContentText(message != null ? message : "Tu reserva está por terminar.")
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setAutoCancel(true);
 
-        if (notificationManager != null) {
             notificationManager.notify((int) System.currentTimeMillis(), builder.build());
         }
     }

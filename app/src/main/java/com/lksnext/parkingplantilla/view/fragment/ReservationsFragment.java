@@ -26,6 +26,7 @@ import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.domain.Callback;
 import com.lksnext.parkingplantilla.domain.ParkingItem;
 import com.lksnext.parkingplantilla.domain.Reserva;
+import com.lksnext.parkingplantilla.receiver.NotificationHelper;
 import com.lksnext.parkingplantilla.view.adapter.ParkingAdapter;
 import com.lksnext.parkingplantilla.viewmodel.ReservationsViewModel;
 
@@ -110,6 +111,7 @@ public class ReservationsFragment extends Fragment {
                             public void onSuccess() {
                                 adapter.removeItem(position);
                                 Toast.makeText(getContext(), "Reserva eliminada", Toast.LENGTH_SHORT).show();
+                                NotificationHelper.cancelarNotificaciones(requireContext(), reserva);
                             }
 
                             @Override

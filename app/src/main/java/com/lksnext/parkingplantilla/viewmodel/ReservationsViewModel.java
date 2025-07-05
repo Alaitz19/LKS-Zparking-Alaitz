@@ -14,6 +14,7 @@ import com.lksnext.parkingplantilla.domain.Callback;
 import com.lksnext.parkingplantilla.domain.CallbackWithResult;
 import com.lksnext.parkingplantilla.domain.Reserva;
 import com.lksnext.parkingplantilla.receiver.NotificacionReceiver;
+import com.lksnext.parkingplantilla.receiver.NotificationHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -143,44 +144,11 @@ public class ReservationsViewModel extends ViewModel {
             return 0L;
         }
     }
-
-
     public void programarNotificaciones(Context context, Reserva reserva) {
-        long startMillis = calcularInicioMillis(reserva);
-        long endMillis = calcularFinMillis(reserva);
-
-        long notificacionInicio = startMillis - 15 * 60 * 1000;
-        if (notificacionInicio > System.currentTimeMillis()) {
-            programarAlarma(context, notificacionInicio, "Tu reserva empieza en 15 minutos");
-        }
-
-        long notificacionFin30 = endMillis - 30 * 60 * 1000;
-        if (notificacionFin30 > System.currentTimeMillis()) {
-            programarAlarma(context, notificacionFin30, "Tu reserva termina en 30 minutos");
-        }
-
-        long notificacionFin15 = endMillis - 15 * 60 * 1000;
-        if (notificacionFin15 > System.currentTimeMillis()) {
-            programarAlarma(context, notificacionFin15, "Tu reserva termina en 15 minutos");
-        }
+        NotificationHelper.programarNotificaciones(context, reserva);
     }
 
-    private void programarAlarma(Context context, long triggerAtMillis, String mensaje) {
-        Intent intent = new Intent(context, NotificacionReceiver.class);
-        intent.putExtra("title", "ParkingLKS");
-        intent.putExtra("message", mensaje);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                context,
-                (int) System.currentTimeMillis(),
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-        );
 
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
-        }
-    }
 
 }
