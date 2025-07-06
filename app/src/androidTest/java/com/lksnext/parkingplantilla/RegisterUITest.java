@@ -5,7 +5,6 @@ import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
 
-import android.os.Bundle;
 
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -26,7 +25,7 @@ public class RegisterUITest {
 
         FragmentScenario.launchInContainer(
                 RegisterFragment.class,
-                (Bundle) null,
+                null,
                 R.style.Theme_ParkingLKS
         );
     }
