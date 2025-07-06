@@ -76,7 +76,7 @@ public class DataRepository {
                 });
     }
 
-    private void crearUsuarioFirestoreSiNoExiste(FirebaseUser user) {
+    public void crearUsuarioFirestoreSiNoExiste(FirebaseUser user) {
         DocumentReference userRef = db.collection(FirestoreConstants.USERS).document(user.getUid());
         userRef.get().addOnSuccessListener(snapshot -> {
             if (!snapshot.exists()) {
@@ -128,7 +128,7 @@ public class DataRepository {
         if (user != null && user.getDisplayName() != null && !user.getDisplayName().isEmpty()) {
             return user.getDisplayName() + "!";
         }
-        return "Usuario!";
+        return "User!";
     }
 
     public void logout() {

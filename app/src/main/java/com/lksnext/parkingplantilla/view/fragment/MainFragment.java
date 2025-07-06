@@ -58,7 +58,7 @@ public class MainFragment extends Fragment {
 
     private GoogleMap mMap;
     private SearchView searchView;
-    private MainViewModel viewModel;
+    public MainViewModel viewModel;
 
     private final OnMapReadyCallback callback = googleMap -> {
         mMap = googleMap;
@@ -294,7 +294,7 @@ public class MainFragment extends Fragment {
         if (btnElectrico != null) btnElectrico.setOnClickListener(b -> tipoPlaza[0] = "Electrico");
     }
 
-    private void handleContinuarClick(String date, String spotType, List<MaterialButton> selectedButtons, android.app.AlertDialog dialog) {
+    public void handleContinuarClick(String date, String spotType, List<MaterialButton> selectedButtons, android.app.AlertDialog dialog) {
         List<String> selectedHours = new ArrayList<>();
         for (MaterialButton b : selectedButtons) {
             selectedHours.add(b.getText().toString());
@@ -364,7 +364,7 @@ public class MainFragment extends Fragment {
             public void onSuccess(Reserva reserva) {
                 Log.d("MainFragment", "Reservation successful");
                 dialog.dismiss();
-                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+                NavController navController = Navigation.findNavController(requireView());
                 NavOptions navOptions = new NavOptions.Builder()
                         .setPopUpTo(R.id.mainFragment, true)
                         .build();

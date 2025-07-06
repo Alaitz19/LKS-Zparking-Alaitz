@@ -13,7 +13,7 @@ public class Reserva {
     private final String usuario;
     private final String uuid;
     private final Plaza plaza;
-    private final Hora hora;
+    private Hora hora;
 
     public Reserva( String idReserva, Timestamp fecha, @NonNull String usuario, @NonNull String uuid, @NonNull Plaza plaza, @NonNull Hora hora) {
         this.idReserva = idReserva;
@@ -84,5 +84,4 @@ public class Reserva {
                 ", hora=" + hora +
                 '}';
     }
-
 }

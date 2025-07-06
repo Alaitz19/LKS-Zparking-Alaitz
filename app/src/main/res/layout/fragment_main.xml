@@ -31,13 +31,14 @@
         android:queryHint="@string/search_hint"
         app:defaultQueryHint="@string/search_hint" />
 
-    <!-- Mapa usando SupportMapFragment -->
+
     <FrameLayout
         android:id="@+id/map_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <!-- Texto de plazas -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,6 +48,7 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
+    <!-- Resumen plazas -->
     <LinearLayout
         android:id="@+id/layout_resumen_plazas"
         android:layout_width="match_parent"

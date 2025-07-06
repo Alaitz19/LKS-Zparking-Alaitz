@@ -37,11 +37,20 @@ import java.util.List;
 public class ReservationsFragment extends Fragment {
 
     private final List<ParkingItem> listaDeItems = new ArrayList<>();
+    private ReservationsViewModel reservationsViewModel;
+    private ReservationsViewModelFactory viewModelFactory;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_reservations, container, false);
+    }
+    public void setViewModelFactory(ReservationsViewModelFactory factory) {
+        this.viewModelFactory = factory;
+    }
+
+    public void setViewModel(ReservationsViewModel viewModel) {
+        this.reservationsViewModel = viewModel;
     }
 
     @Override
@@ -52,12 +61,17 @@ public class ReservationsFragment extends Fragment {
         ParkingAdapter adapter = new ParkingAdapter(requireContext(), listaDeItems);
         recyclerView.setAdapter(adapter);
 
-        DataRepository repo = new DataRepository(
-                FirebaseFirestore.getInstance(),
-                FirebaseAuth.getInstance()
-        );
-        ReservationsViewModelFactory factory = new ReservationsViewModelFactory(repo);
-        ReservationsViewModel reservationsViewModel = new ViewModelProvider(this, factory).get(ReservationsViewModel.class);
+        if (reservationsViewModel == null) {
+            DataRepository repo = new DataRepository(
+                    FirebaseFirestore.getInstance(),
+                    FirebaseAuth.getInstance()
+            );
+
+            if (viewModelFactory == null) {
+                viewModelFactory = new ReservationsViewModelFactory(repo);
+            }
+            reservationsViewModel = new ViewModelProvider(this, viewModelFactory).get(ReservationsViewModel.class);
+        }
 
         Button btnTerminadas = view.findViewById(R.id.btn_filter_terminadas);
         Button btnSiguientes = view.findViewById(R.id.btn_filter_siguientes);
