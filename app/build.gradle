@@ -122,4 +122,53 @@ dependencies {
             force 'com.google.protobuf:protobuf-javalite:3.25.1'
         }
     }
-}
+    jacoco {
+        toolVersion = "0.8.10"
+    }
+
+    task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+        group = "Reporting"
+        description = "Generate Jacoco coverage reports"
+
+        reports {
+            xml.required = true
+            html.required = true
+        }
+
+        def fileFilter = [
+                '**/R.class',
+                '**/R$*.class',
+                '**/BuildConfig.*',
+                '**/Manifest*.*',
+                '**/*Test*.*',
+                '**/*$ViewInjector*.*',
+                '**/*$ViewBinder*.*',
+                'android/**/*.*'
+        ]
+
+        def debugTree = fileTree(
+                dir: "$buildDir/tmp/kotlin-classes/debug",
+                excludes: fileFilter
+        )
+
+        def mainSrc = "$projectDir/src/main/java"
+
+        sourceDirectories.setFrom(files([mainSrc]))
+        classDirectories.setFrom(
+                files([debugTree]).collect {
+                    fileTree(dir: it, excludes: fileFilter)
+                }
+        )
+
+        executionData.setFrom(fileTree(dir: buildDir, includes: [
+                'jacoco/testDebugUnitTest.exec',
+                'outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec'
+        ]))
+
+        doLast {
+            println "✅ Jacoco report task completed!"
+        }
+    }
+
+    }
+
