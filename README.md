@@ -1,15 +1,18 @@
 # 🚗 LKS-Zparking
 
-**LKS-Zparking** es una applicacion movil para el aula de empresa de LKS next. El sistema permite a los usuarios consultar, reservar y gestionar plazas de parking de forma eficiente, moderna y visualmente atractiva.
+**LKS-Zparking** es una aplicación móvil para el aula de empresa de LKS Next.  
+El sistema permite a los usuarios consultar, reservar y gestionar plazas de parking de forma eficiente, moderna y visualmente atractiva.
+
+**Versión actual:** `v1.0.0`
 
 ---
 
 ## 🧹 Tecnologías utilizadas
 
-* **Frontend**: Prototipado en [Figma](https://www.figma.com/design/SxYk3acdpqNDgLus4lfpCv/LKS-Zparking-Alaitz?node-id=0-1&t=o4VmHH44NGnsZ5mi-1)
-* **Backend**: Java con Android
-* **Base de datos**: Firebase
-* **Autenticación e integraciones**: APIs de Google para OAuth y Firebase
+- **Frontend**: Prototipado en [Figma](https://www.figma.com/design/SxYk3acdpqNDgLus4lfpCv/LKS-Zparking-Alaitz?node-id=0-1&t=o4VmHH44NGnsZ5mi-1)
+- **Backend**: Java con Android
+- **Base de datos**: Firebase
+- **Autenticación e integraciones**: APIs de Google para OAuth y Firebase
 
 ---
 
@@ -25,38 +28,32 @@ Puedes acceder al prototipo interactivo desde el siguiente enlace:
 
 ## 🚀 Funcionalidades principales
 
-* Oauth con google y recuperación de contraseña con firebase.
-* Consulta de disponibilidad de plazas de parking.
-* Reserva y cancelación de plazas.
-* Gestión de usuarios y roles.
-* Visualización clara del estado del parking (ocupado, libre, reservado).
-* (Opcional: integración con sensores o APIs externas para datos en tiempo real.)
+- Oauth con Google y recuperación de contraseña con Firebase.
+- Consulta de disponibilidad de plazas de parking.
+- Reserva y cancelación de plazas.
+- Gestión de usuarios y roles.
+- Visualización clara del estado del parking (ocupado, libre, reservado).
+- Añadir tu propio vehículo.
+- Configurar y personalizar tu perfil.
+- *(Opcional)*: Integración con sensores o APIs externas para datos en tiempo real.
+
+---
+
+## 🎥 Demos en acción
+
+A continuación puedes ver algunas demostraciones del funcionamiento de **LKS-Zparking**:
+
+![Demo 1](docs/Demo1.gif)  
+![Demo 2](docs/Demo3.gif)  
+![Demo 3](docs/Demo4.gif)  
+![Demo 4](docs/Demo5.gif)  
 
 ---
 
 ## 📦 Instalación
 
-1. Clona el repositorio:
+Solo tienes que clonar el repositorio:
 
    ```bash
    git clone https://github.com/Alaitz19/lks-zparking.git
    cd lks-zparking
-   ```
-
-2. Instala las dependencias:
-
-
-
-3. Inicia la aplicación:
-
-   
-
-> Nota: Asegúrate de tener configuradas las variables de entorno necesarias para conectar con la base de datos o servicios externos.
-
----
-
-
-
-## 🧑‍💻 Autoría
-
-Desarrollado por **Alaitz**.
