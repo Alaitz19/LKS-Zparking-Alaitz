@@ -49,7 +49,7 @@ public class RegisterUITest {
         onView(withId(R.id.passwordEditText)).perform(typeText("password123"), closeSoftKeyboard());
         onView(withId(R.id.confirmPasswordEditText)).perform(typeText("password123"), closeSoftKeyboard());
         onView(withId(R.id.registerButton)).perform(click());
-        // Si quieres comprobar el Toast, necesitarías un custom matcher.
+
     }
 
     @Test
@@ -60,12 +60,12 @@ public class RegisterUITest {
         onView(withId(R.id.passwordEditText)).perform(typeText("password123"), closeSoftKeyboard());
         onView(withId(R.id.confirmPasswordEditText)).perform(typeText("differentPass"), closeSoftKeyboard());
         onView(withId(R.id.registerButton)).perform(click());
-        // Validar Toast con custom matcher si lo necesitas
+
     }
 
     @Test
     public void testClickBackButton() {
         onView(withId(R.id.backButton)).perform(click());
-        // No falla: FragmentScenario se encarga de destruir correctamente
+
     }
 }
