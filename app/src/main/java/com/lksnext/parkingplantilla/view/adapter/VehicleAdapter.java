@@ -46,21 +46,21 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleV
                 holder.itemView.getContext().getString(R.string.vehicle_plate_label, vehicle.getMatricula())
         );
 
+        holder.vehicleType.setText(
+                holder.itemView.getContext().getString(R.string.vehicle_type_label, vehicle.getTipo())
+        );
+
         holder.vehicleLez.setText(
                 holder.itemView.getContext().getString(R.string.vehicle_lez_label, vehicle.getLez())
         );
 
-        holder.vehicleType.setText(
-                holder.itemView.getContext().getString(R.string.vehicle_type_label, vehicle.getMarca())
-        );
-
         Glide.with(holder.vehicleImage.getContext())
-                .load(vehicle.getImageUrl())
+                .load(vehicle.getImagenUrl())
                 .placeholder(R.drawable.ic_launcher_background)
                 .centerCrop()
                 .into(holder.vehicleImage);
 
-        // Configura el botón de eliminar
+
         holder.btnDelete.setOnClickListener(v -> {
             if (deleteClickListener != null) {
                 deleteClickListener.onDeleteClick(vehicle);
